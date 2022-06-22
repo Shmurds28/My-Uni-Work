@@ -92,6 +92,6 @@ a {
 
 @layer components{
   .navLink{
-    @apply cursor-pointer text-[#000] font-semibold text-lg hover:text-[#F9B42A] hover:font-bold
+    @apply cursor-pointer text-[#000] font-semibold text-sm hover:text-[#F9B42A] hover:font-bold
   }
 }

@@ -19,6 +19,11 @@ function Navbar() {
         </div>
 
         <div className=" flex space-x-5 middle-nav">
+            <Link href="/modules" className="navLink">
+                <a className="navLink">
+                    Modules
+                </a>
+            </Link>
             <Link href="/about">
                 <a className="navLink cursor-pointer">
                     About Us
@@ -30,6 +35,8 @@ function Navbar() {
                     Help
                 </a>
             </Link>
+
+            
         </div>
         <div className="flex space-x-5 end-nav">
             <Link href="/dashboard">
