@@ -25,7 +25,7 @@ export default function Home() {
           </div>
       </div>
 
-      <div className=" lg:px-44 px-20 grid grid-col-1 lg:grid-cols-2 gap-40 bg-[#F9FAFB] py-10">
+      <div className=" lg:px-44 px-4 grid grid-col-1 lg:grid-cols-2 gap-10 lg:gap-40 bg-[#F9FAFB] py-10">
           <div className="flex flex-col space-y-5">
             <h1 className="text-[#000] text-3xl font-bold">
               Choosing honours modules made easier.

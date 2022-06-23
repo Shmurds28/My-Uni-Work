@@ -1,8 +1,8 @@
 import React from 'react'
 
-function Module() {
+function Module({dashboardPage}) {
   return (
-    <div className="border p-3 bg-[#F9FAFB]">
+    <div className="border p-3 bg-[#F9FAFB] cursor-pointer">
         <h1 className="text-[#333] font-semibold text-lg mb-3">
             WEUV401 - Usability Engineering
         </h1>
@@ -35,9 +35,18 @@ function Module() {
         </p>
 
         <div className="mb-1">
-            <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90">
-                Add to schedule
-            </button>
+            {dashboardPage &&(
+                <button className="bg-red-400 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90">
+                    Remove
+                </button>
+            )}
+
+            {!dashboardPage &&(
+                 <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90">
+                    Add to schedule
+                </button>
+            )}
+           
             <button className="bg-[#F9B42A] hidden mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90">
                 Edit Module
             </button>

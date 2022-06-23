@@ -39,7 +39,7 @@ function Navbar() {
             
         </div>
         <div className="flex space-x-5 end-nav">
-            <Link href="/dashboard">
+            <Link href="/dashboard/schedule">
                 <a className="navLink">
                     Dashboard
                 </a>
