@@ -8,9 +8,14 @@ import Footer from '../components/Footer'
 import MenuIcon from '@heroicons/react/solid'
 import readingImg from '../public/reading.png'
 import { BookOpenIcon } from '@heroicons/react/solid';
+import { modalState } from '../atoms/modalAtom';
+import { useRecoilState } from 'recoil';
 
 
 export default function Home() {
+
+  const [isOpen, setIsOpen] = useRecoilState(modalState); 
+
   return (
     <div className="h-screen">
       <Head>
@@ -84,7 +89,7 @@ export default function Home() {
       {/* Most chosen modules section */}
 
         
-
+      
       {/* <Footer /> */}
     </div>
   )

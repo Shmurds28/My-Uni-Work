@@ -9,31 +9,15 @@ import MenuIcon from '@heroicons/react/solid'
 import readingImg from '../../public/reading.png'
 import { BookOpenIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
-import Module from '../../components/Module';
-import { addAssessment, addModule, modalState } from '../../atoms/modalAtom';
+import Lecturer from '../../components/Lecturer';
 import { useRecoilState } from 'recoil';
+import { addLecturer, modalState } from '../../atoms/modalAtom';
 import MyModal from '../../components/Modal';
-import { collection, onSnapshot, query } from 'firebase/firestore';
-import { db } from '../../firebase';
-import { useEffect, useState } from 'react';
 
 
-export default function modules() {
+export default function lecturers() {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
-  const [isAddModule, setIsAddModule] = useRecoilState(addModule);
-  const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
-  const [modules, setModules] = useState([]);
-
-  useEffect(
-    () => 
-    onSnapshot(
-      query(collection(db, 'modules')),
-      (snapshot) => {
-        setModules(snapshot.docs);
-      }
-    ),
-    [db]
-  );
+  const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
 
   return (
     <div className="h-screen">
@@ -44,7 +28,7 @@ export default function modules() {
       </Head>
 
       <Navbar />
-      <div className="lg:flex space-x-0">
+      <div className="lg:flex space-x-0 h-full">
           {/* sidebar area  */}
           <div className="bg-[#F9FAFB] lg:p-3 p-1 lg:w-72 flex lg:flex-col mr-0">
             <Link href="/dashboard/schedule">
@@ -54,13 +38,13 @@ export default function modules() {
             </Link>
 
             <Link href="/dashboard/modules" >
-                  <a className="text-lg p-2 rounded-sm bg-white font-semibold">
+                  <a className="text-lg p-2 rounded-sm font-semibold">
                       Selected Modules
                   </a>
             </Link>
 
             <Link href="/dashboard/lecturers" >
-                  <a className="text-lg p-2 rounded-sm font-semibold">
+                  <a className="text-lg p-2 rounded-sm bg-white font-semibold">
                       Lecturers
                   </a>
             </Link>
@@ -73,39 +57,32 @@ export default function modules() {
           </div>
 
           {/* content area */}
-
-          <div className="flex flex-col lg:px-10 mt-4 space-y-2 mb-6 w-full">
-            <div className="lg:flex m-2 items-center justify-between">
+          <div className="px-6 flex flex-col gap-2 m-4 w-full">
+          <div className="lg:flex m-2 items-center justify-between">
               <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">
-                  Selected Modules     
+                  Honours Lecturers     
               </p>
                 <div className="flex flex-col lg:flex-row lg:items-center justify-end gap-1">
                   <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
                       " onClick={(e) =>{
                         setIsOpen(true);
-                        setIsAddModule(true);
+                        setIsAddLecturer(true);
                       }} >
-                      Add Module
+                      Add Lecturer
                   </button> 
-                  <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
-                      " onClick={(e) =>{
-                        setIsOpen(true);
-                        setIsAddAssessment(true);
-                      }} >
-                      Add assessment
-                  </button> 
+                
                   
                  </div>
             </div>
-            
-            {modules.map(module =>(
-              <Module dashboardPage key={module.id} module={module.data()} />
-            ))}
+            <Lecturer />
+            <Lecturer />
+            <Lecturer />
+            <Lecturer />
+            <Lecturer />
           </div>
-          
       </div>
         
-      {/* Modal */}
+         {/* Modal */}
       {isOpen && <MyModal/>}
 
       {/* <Footer /> */}

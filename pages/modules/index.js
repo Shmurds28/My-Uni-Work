@@ -5,15 +5,46 @@ import img from '../../../logosamples/1.JPG'
 import welcomeImg from "../../public/welcome.png";
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
-import MenuIcon, { SearchIcon } from '@heroicons/react/solid'
+import MenuIcon, { ChatIcon, SearchIcon } from '@heroicons/react/solid'
 import readingImg from '../../public/reading.png'
 import { BookOpenIcon } from '@heroicons/react/solid';
 import Module from '../../components/Module';
 import Link from 'next/link';
-
+import { modalState, addModule } from '../../atoms/modalAtom';
+import {useRecoilState} from 'recoil';
+import Modal from '../../components/Modal';
+import { useEffect, useState } from 'react';
+import { db, storage } from "../../firebase";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+  onSnapshot,
+  query,
+} from "@firebase/firestore";
 
 export default function Modules() {
+  const [isOpen, setIsOpen] = useRecoilState(modalState);
+  const [isAddModule, setIsAddModule] = useRecoilState(addModule);
+  const [modules, setModules] = useState([]);
+
+   // get modules form firebase
+   useEffect( 
+    () =>
+    onSnapshot(
+      query(collection(db, 'modules')),
+      (snapshot) => {
+        setModules(snapshot.docs);
+      }
+    ),
+    [db]
+  );
+
+
   return (
+
     <div className="h-screen">
       <Head>
         <title>My Uni Work | Modules</title>
@@ -22,10 +53,7 @@ export default function Modules() {
       </Head>
 
       <Navbar />
-      {/* <div className="home">
-          <div className="welcome-text">
-          </div>
-      </div> */}
+
 
       {/* Heading and filter options section */}
       <div className="mt-8 lg:px-24 px-2 flex flex-col lg:flex-row lg:items-center justify-between space-y-3">
@@ -50,25 +78,36 @@ export default function Modules() {
 
          {/* Buttons */}
         <div className="flex items-center">
-            <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90">
+
+            <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
+                " onClick={(e) =>{
+                  // alert("Hello!");
+                  console.log("wtf is wrong here???!");
+                  setIsOpen(true);
+                  setIsAddModule(true);
+                  console.log("2: wtf is wrong here???!");
+                }} >
                 Add Module
             </button>            
         </div>
 
       </div>
+      <div>
+        {/* <Modal />  */}
+      </div>
       
       {/* Modules list */}
       <div className="flex flex-col lg:px-24 px-2 mt-4 space-y-2 mb-6">
-        <Module />
-        <Module />
-        <Module />
-        <Module />
-        <Module />
+        {modules.map(module =>(
+          <Module key={module.id} module={module.data()}/>
+        ))}
+        
+
 
       </div>
      
-      
-      {/* <Footer /> */}
-    </div>
+      {isOpen && <Modal/>}
+       {/* <Footer /> */}
+     </div>
   )
 }
