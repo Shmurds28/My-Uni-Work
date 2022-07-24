@@ -27,7 +27,6 @@ function Signup() {
                 .then((userCredential) => {
                       // Signed in 
                       user = userCredential.user;
-                      console.log("userrrrr:" + user.uid);
                       // ...
                   });
 

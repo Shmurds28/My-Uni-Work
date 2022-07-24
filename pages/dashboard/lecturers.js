@@ -13,6 +13,7 @@ import Lecturer from '../../components/Lecturer';
 import { useRecoilState } from 'recoil';
 import { addLecturer, modalState } from '../../atoms/modalAtom';
 import MyModal from '../../components/Modal';
+import DashboardSidebar from '../../components/DashboardSidebar';
 
 
 export default function lecturers() {
@@ -30,31 +31,7 @@ export default function lecturers() {
       <Navbar />
       <div className="lg:flex space-x-0 h-full">
           {/* sidebar area  */}
-          <div className="bg-[#F9FAFB] lg:p-3 p-1 lg:w-72 flex lg:flex-col mr-0">
-            <Link href="/dashboard/schedule">
-                  <a className="lg:text-lg text-md p-2 rounded-sm lg:font-semibold font-semibold">
-                      Workload schedule
-                  </a>
-            </Link>
-
-            <Link href="/dashboard/modules" >
-                  <a className="text-lg p-2 rounded-sm font-semibold">
-                      Selected Modules
-                  </a>
-            </Link>
-
-            <Link href="/dashboard/lecturers" >
-                  <a className="text-lg p-2 rounded-sm bg-white font-semibold">
-                      Lecturers
-                  </a>
-            </Link>
-
-            <Link href="/dashboard/recommendations" >
-                  <a className="text-lg p-2 rounded-smfont-semibold">
-                      Recommendations
-                  </a>
-            </Link>
-          </div>
+          <DashboardSidebar lecturers/>
 
           {/* content area */}
           <div className="px-6 flex flex-col gap-2 m-4 w-full">

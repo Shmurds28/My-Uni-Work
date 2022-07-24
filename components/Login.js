@@ -11,6 +11,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const {signIn} = useUserAuth();
+    const {user}= useUserAuth(); 
 
     const doLogin = async (e) => {
         e.preventDefault();
@@ -22,7 +23,7 @@ function Login() {
           await signIn(email, password)
                   .then((userCredential) => {
                     // Signed in 
-    
+                    user = userCredential.user;
                     // ...
                 });
 

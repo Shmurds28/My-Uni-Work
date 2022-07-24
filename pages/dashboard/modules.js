@@ -10,6 +10,7 @@ import { collection, doc, getDoc, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useEffect, useState } from 'react';
 import { useUserAuth } from '../../context/UserAuthContext';
+import DashboardSidebar from '../../components/DashboardSidebar';
 
 
 export default function modules() {
@@ -49,68 +50,44 @@ export default function modules() {
       </Head>
 
       <Navbar />
-      <div className="lg:flex space-x-0 h-full">
-          {/* sidebar area  */}
-          <div className="bg-[#F9FAFB] lg:p-3 p-1 lg:w-72 flex lg:flex-col mr-0">
-            <Link href="/dashboard/schedule">
-                  <a className="lg:text-lg text-md p-2 rounded-sm lg:font-semibold font-semibold">
-                      Workload schedule
-                  </a>
-            </Link>
+        <div className="lg:flex space-x-0 h-full">
+            {/* sidebar area  */}
+            <DashboardSidebar  modules/>
 
-            <Link href="/dashboard/modules" >
-                  <a className="text-lg p-2 rounded-sm bg-white font-semibold">
-                      Selected Modules
-                  </a>
-            </Link>
+            {/* content area */}
 
-            <Link href="/dashboard/lecturers" >
-                  <a className="text-lg p-2 rounded-sm font-semibold">
-                      Lecturers
-                  </a>
-            </Link>
+            <div className="flex flex-col lg:px-10 mt-4 space-y-2 mb-6 w-full">
+              <div className="lg:flex m-2 items-center justify-between">
+                <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">
+                    Selected Modules     
+                </p>
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-end gap-1">
+                    <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
+                        " onClick={(e) =>{
+                          setIsOpen(true);
+                          setIsAddModule(true);
+                        }} >
+                        Add Module
+                    </button> 
+                    <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
+                        " onClick={(e) =>{
+                          setIsOpen(true);
+                          setIsAddAssessment(true);
+                        }} >
+                        Add assessment
+                    </button> 
+                    
+                  </div>
+              </div>
+              
+              {/* <h1>{modules.length}</h1> */}
 
-            <Link href="/dashboard/recommendations" >
-                  <a className="text-lg p-2 rounded-smfont-semibold">
-                      Recommendations
-                  </a>
-            </Link>
-          </div>
-
-          {/* content area */}
-
-          <div className="flex flex-col lg:px-10 mt-4 space-y-2 mb-6 w-full">
-            <div className="lg:flex m-2 items-center justify-between">
-              <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">
-                  Selected Modules     
-              </p>
-                <div className="flex flex-col lg:flex-row lg:items-center justify-end gap-1">
-                  <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
-                      " onClick={(e) =>{
-                        setIsOpen(true);
-                        setIsAddModule(true);
-                      }} >
-                      Add Module
-                  </button> 
-                  <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
-                      " onClick={(e) =>{
-                        setIsOpen(true);
-                        setIsAddAssessment(true);
-                      }} >
-                      Add assessment
-                  </button> 
-                  
-                 </div>
+              {modules.map(module =>(
+                <Module dashboardPage key={module.moduleCode} module={module} />
+              ))}
             </div>
             
-            {/* <h1>{modules.length}</h1> */}
-
-            {modules.map(module =>(
-              <Module dashboardPage key={module.moduleCode} module={module} />
-            ))}
-          </div>
-          
-      </div>
+        </div>
         
       {/* Modal */}
       {isOpen && <MyModal/>}

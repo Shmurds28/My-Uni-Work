@@ -40,6 +40,13 @@ function Module({dashboardPage, module}) {
             {module.credits}
         </p>
 
+        <p className="mb-1">
+            <span className="text-[#333] font-semibold text-base mr-2">
+                Core Module: 
+            </span>
+            {module.compulsory ? "YES" : "NO"}
+        </p>
+
         <div className="mb-1">
             {(dashboardPage && !module.compulsory) &&(
                 <button className="bg-red-400 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90">

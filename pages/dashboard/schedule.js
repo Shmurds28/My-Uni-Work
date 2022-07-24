@@ -10,6 +10,7 @@ import readingImg from '../../public/reading.png'
 import { BookOpenIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import Week from '../../components/Week';
+import DashboardSidebar from '../../components/DashboardSidebar';
 
 
 export default function schedule() {
@@ -24,31 +25,7 @@ export default function schedule() {
       <Navbar />
       <div className="lg:flex space-x-0 h-full">
           {/* sidebar area  */}
-          <div className="bg-[#F9FAFB] lg:p-3 p-1 lg:w-72 flex lg:flex-col mr-0">
-            <Link href="/dashboard/schedule">
-                  <a className="lg:text-lg text-md p-2 bg-white rounded-sm lg:font-semibold font-semibold">
-                      Workload schedule
-                  </a>
-            </Link>
-
-            <Link href="/dashboard/modules" >
-                  <a className="text-lg p-2 rounded-sm font-semibold">
-                      Selected Modules
-                  </a>
-            </Link>
-
-            <Link href="/dashboard/lecturers" >
-                  <a className="text-lg p-2 rounded-sm font-semibold">
-                      Lecturers
-                  </a>
-            </Link>
-
-            <Link href="/dashboard/recommendations" >
-                  <a className="text-lg p-2 rounded-smfont-semibold">
-                      Recommendations
-                  </a>
-            </Link>
-          </div>
+          <DashboardSidebar schedule />
 
           {/* content area */}
           <div className="flex flex-col lg:px-10 mt-4 space-y-2 mb-6 w-full">
