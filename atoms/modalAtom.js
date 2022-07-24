@@ -18,4 +18,14 @@ export const addAssessment = atom({
 export const addLecturer = atom({
     key: "addLecturer",
     default: false,
-})
+});
+
+export const signup = atom({
+    key: "signup",
+    default: false,
+});
+
+export const login = atom({
+    key: "login",
+    default: false,
+});

@@ -2,11 +2,15 @@ import '../styles/globals.css'
 import {
   RecoilRoot
 } from 'recoil';
+import { UserAuthContextProvider } from '../context/UserAuthContext';
 
 function MyApp({ Component, pageProps }) {
   return (
     <RecoilRoot>
-      <Component {...pageProps} />
+      <UserAuthContextProvider>
+        <Component {...pageProps} />
+      </UserAuthContextProvider>
+      
     </RecoilRoot>
   )
 }

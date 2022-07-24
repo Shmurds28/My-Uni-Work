@@ -1,16 +1,20 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { addAssessment, addLecturer, addModule, modalState } from '../atoms/modalAtom'
+import { addAssessment, addLecturer, addModule, login, modalState, signup } from '../atoms/modalAtom'
 import AddLecturer from './AddLecturer';
 import AddAssessment from './AddAssessment';
 import AddModule from './AddModule';
+import Signup from './Signup';
+import Login from './Login';
 
 export default function MyModal() {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [isAddModule, setIsAddModule] = useRecoilState(addModule);
   const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
   const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
+  const [isSignup, setIsSignup] = useRecoilState(signup);
+  const [isLogin, setIsLogin] = useRecoilState(login);
 
   return (
     <>
@@ -30,6 +34,8 @@ export default function MyModal() {
           setIsAddModule(false);
           setIsAddAssessment(false);
           setIsAddLecturer(false);
+          setIsSignup(false);
+          setIsLogin(false);
         }} >
           <Transition.Child
             as={Fragment}
@@ -69,6 +75,14 @@ export default function MyModal() {
                  {/* Add Lecturer Modal Content  */}
                  {isAddLecturer && (
                     <AddLecturer />
+                 )}
+
+                 {isSignup && (
+                    <Signup />  
+                 )}
+
+                 {isLogin && (
+                  <Login />
                  )}
 
                 </Dialog.Panel>

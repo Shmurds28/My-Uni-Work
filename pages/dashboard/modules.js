@@ -1,37 +1,56 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../../styles/Home.module.css'
-import img from '../../../logosamples/1.JPG' 
-import welcomeImg from "../../public/welcome.png";
 import Navbar from '../../components/Navbar'
-import Footer from '../../components/Footer'
-import MenuIcon from '@heroicons/react/solid'
-import readingImg from '../../public/reading.png'
-import { BookOpenIcon } from '@heroicons/react/solid';
+import Footer from '../../components/Footer';
 import Link from 'next/link';
 import Module from '../../components/Module';
 import { addAssessment, addModule, modalState } from '../../atoms/modalAtom';
 import { useRecoilState } from 'recoil';
 import MyModal from '../../components/Modal';
-import { collection, onSnapshot, query } from 'firebase/firestore';
+import { collection, doc, getDoc, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useEffect, useState } from 'react';
+import { useUserAuth } from '../../context/UserAuthContext';
 
 
 export default function modules() {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [isAddModule, setIsAddModule] = useRecoilState(addModule);
   const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
-  const [modules, setModules] = useState([]);
+  // const [modules, setModules] = useState([]);
+  const {user} = useUserAuth();
+  var modules = [];
 
   useEffect(
-    () => 
-    onSnapshot(
-      query(collection(db, 'modules')),
-      (snapshot) => {
-        setModules(snapshot.docs);
-      }
-    ),
+    () => {
+
+      const moduleRef = getDoc(doc(db, "modules", "WHPV400")).then(module => {
+        modules.push(module);
+      });
+
+      // const docRef = doc(db, "users", "C6mDOot5ldbeRjOHHO5e0THdMvF2");
+
+
+      // getDoc(docRef).then(docSnap =>{
+      //   const mods = docSnap.data().modules;
+
+      //   var userModules = [];
+      //   mods.forEach(mod =>{
+      //     const moduleRef = doc(db, 'modules', mod);
+      //     getDoc(moduleRef).then(modSnap =>{
+      //       modules.push(modSnap);
+      //     });
+      //   });
+        
+      //   // setModules(userModules);
+      //   console.log(modules);
+    
+      // });
+
+      // setModules(mods);
+      // console.log("Modules")
+     
+
+    },
     [db]
   );
 
@@ -98,8 +117,8 @@ export default function modules() {
                  </div>
             </div>
             
-            {modules.map(module =>(
-              <Module dashboardPage key={module.id} module={module.data()} />
+            {modules.forEach(module =>(
+              <Module dashboardPage key={module.data().id} module={module.data()} />
             ))}
           </div>
           

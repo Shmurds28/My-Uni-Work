@@ -3,8 +3,34 @@ import Image from 'next/image';
 import logo from '../../2.png';
 import Link from 'next/link';
 import {MenuIcon} from '@heroicons/react/solid';
+import { modalState, signup, login } from '../atoms/modalAtom';
+import { useRecoilState } from 'recoil';
+import { useUserAuth } from '../context/UserAuthContext';
+import MyModal from './Modal';
 
 function Navbar() {
+    const [isOpen, setIsOpen]= useRecoilState(modalState); 
+    const [isSignup, setIsSignup] = useRecoilState(signup);
+    const [isLogin, setIsLogin] = useRecoilState(login);
+    const {user} = useUserAuth();
+    const {SignOut} = useUserAuth();
+
+    console.log(user);
+
+    const doLogin = () => {
+        setIsOpen(true);
+        setIsLogin(true);
+    }
+
+    const doSignup = () => {
+        setIsOpen(true);
+        setIsSignup(true);
+    }
+
+    const doSignOut = () => {
+        SignOut();
+    }
+
   return (
     <div className="mt-2 px-4 flex items-center justify-between h-20 border-b border-gray-100">
         <div className="cursor-pointer">
@@ -38,19 +64,44 @@ function Navbar() {
 
             
         </div>
-        <div className="flex space-x-5 end-nav">
-            <Link href="/dashboard/schedule">
-                <a className="navLink">
-                    Dashboard
-                </a>
 
-            </Link>
-            <Link href="/login" className="navLink">
-                <a className="navLink">
-                    Login
-                </a>
-            </Link>
-        </div>
+            {user != null && (
+                <div className="flex space-x-5 end-nav">
+                     <Link href="/dashboard/schedule">
+                        <a className="navLink">
+                            Dashboard   
+                        </a>
+        
+                    </Link>
+
+                    {/* <Link href="/" className="navLink"> */}
+                        <a className="navLink" onClick={doSignOut}>
+                            SignOut
+                        </a>
+                    {/* </Link> */}
+                </div>
+            )} 
+
+            {user == null && (
+                <div className="flex space-x-5 end-nav">
+                    {/* <Link href="/dashboard/schedule" className="navLink"> */}
+                        <a className="navLink" onClick={doLogin}>
+                            Login
+                        </a>
+                    {/* </Link> */}
+
+                    {/* <Link href="/dashboard/schedule" className="navLink"> */}
+                        <a className="navLink" onClick={doSignup}>
+                            Signup
+                        </a>
+                    {/* </Link> */}
+
+                   
+                </div>
+            )}  
+
+             {/* Modal */}
+             {isOpen && <MyModal/>}     
     </div>
   )
 }

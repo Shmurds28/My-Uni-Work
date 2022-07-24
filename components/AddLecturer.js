@@ -1,3 +1,4 @@
+const defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/myuniwork-b6880.appspot.com/o/lecturers%2Fdefault.png?alt=media&token=0964f992-c91c-4b10-9122-62240a88abef";
 import React, { useState } from 'react';
 import { db, storage } from "../firebase";
 import {
@@ -12,6 +13,8 @@ import {
 } from "@firebase/firestore";
 import { useRecoilState } from 'recoil';
 import { addLecturer, modalState } from '../atoms/modalAtom';
+import {defaultImage} from '../public/default.png' 
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 
 function AddLecturer() {
     const [title, setTitle] = useState("Mr");
@@ -27,11 +30,22 @@ function AddLecturer() {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
 
+    const addImage = (e) => {
+      const reader = new FileReader();
+      if(e.target.files[0]){
+        reader.readAsDataURL(e.target.files[0]);
+      }
+
+      reader.onload = (readerEvent) =>{
+        setSelectedFile(readerEvent.target.result);
+      }
+    }
+
     const postLecturer = async () => {
         if(loading) return;
         setLoading(true);
     
-        await setDoc(doc(db, 'lecturers', staffNum), {
+        const docRef = await setDoc(doc(db, 'lecturers', staffNum), {
           title: title,
           initials: initials,
           firstName: firstName,
@@ -40,6 +54,22 @@ function AddLecturer() {
           telephone: telephone,
           office: office,
         });
+
+        const imageRef = ref(storage, `lecturers/${staffNum}/image`);
+
+        if(selectedFile){
+          await uploadString(imageRef, selectedFile, 'data_url').then(async () => {
+            const downloadUrl = await getDownloadURL(imageRef);
+
+            await updateDoc(doc(db, "lecturers", staffNum), {
+              image: downloadUrl,
+            });
+          });
+        }else{
+          await updateDoc(doc(db, 'lecturers', staffNum), {
+            image: defaultImageUrl,
+        });
+        }
     
         setLoading(false);
         setIsOpen(false);
@@ -142,7 +172,7 @@ function AddLecturer() {
              <span className=" block text-sm font-semibold text-slate-700">
                Staff photo
              </span>
-             <input type="file" name="office" accept="image/*" className=" rounded-md mt-1 mb-1 w-full px-3 py-1 bg-white border shadow-sm border-slate-300" />
+             <input onChange={addImage} type="file" name="office" accept="image/*" className=" rounded-md mt-1 mb-1 w-full px-3 py-1 bg-white border shadow-sm border-slate-300" />
           </label>
          </div>
          

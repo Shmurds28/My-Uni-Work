@@ -110,6 +110,7 @@ function AddModule() {
              <select value={semester} onChange= {(e) => setSemester(e.target.value)} name="semester" id="semester" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
                <option value="Semester 1">Semester 1</option>
                <option value="Semester 2">Semester 2</option>
+               <option value="Year">Year</option>
              </select>
           </label>
          </div>
@@ -132,8 +133,9 @@ function AddModule() {
              <select value={lecturer} onChange= {(e) => setLecturer(e.target.value)} name="lecturer" id="lecturer" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
                <option value=""></option>
                {lecturers.map(lecturer => (
-                 <option value={lecturer.data().id}>{lecturer.data().initials} {lecturer.data().surname}</option>
+                 <option value={lecturer.data().title+ " "+ lecturer.data().firstName+ " "+lecturer.data().surname}>{lecturer.data().initials} {lecturer.data().surname}</option>
                ))}
+               <option value="Supervised">Supervised</option>
              </select>
           </label>
          </div>

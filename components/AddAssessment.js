@@ -49,7 +49,7 @@ function AddAssessment() {
           submissionWeek: submissionWeek,
           weighting: weighting,
         });
-            
+
         setLoading(false);
         setIsOpen(false);
         setIsAddAssessment(false);
@@ -145,7 +145,7 @@ function AddAssessment() {
           </label>
          </div>
      </div>
-  </div>
+    </div>
   )
 }
 
