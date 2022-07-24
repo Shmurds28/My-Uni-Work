@@ -41,7 +41,7 @@ function Module({dashboardPage, module}) {
         </p>
 
         <div className="mb-1">
-            {dashboardPage &&(
+            {(dashboardPage && !module.compulsory) &&(
                 <button className="bg-red-400 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90">
                     Remove
                 </button>

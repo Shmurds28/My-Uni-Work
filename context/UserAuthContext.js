@@ -8,38 +8,6 @@ import {
 } from 'firebase/auth';
 import auth from '../firebase';
 
-
-// export function signUp(email, password){
-//     createUserWithEmailAndPassword(getAuth(), email, password)
-//     .then((userCredential) => {
-//         // Signed in 
-//         const user = userCredential.user;
-//         console.log(user);
-//         // ...
-//     })
-//     .catch((error) => {
-//         console.log(error);
-//         const errorCode = error.code;
-//         const errorMessage = error.message;
-//         // ..
-//     });  
-// }
-
-// export function signIn(email, password){
-//     signInWithEmailAndPassword(getAuth(), email, password)
-//     .then((userCredential) => {
-//         // Signed in 
-//         const user = userCredential.user;
-//         console.log(user);
-//         console.log("Done")
-//         // ...
-//     })
-//     .catch((error) => {
-//         const errorCode = error.code;
-//         const errorMessage = error.message;
-//     });
-// }
-
 const userAuthContext = createContext();
 
 
@@ -48,7 +16,7 @@ export function UserAuthContextProvider({children}){
     const auth = getAuth();
 
     function signUp(email, password, isAdmin){
-        return createUserWithEmailAndPassword(auth, email, password, isAdmin);
+        return createUserWithEmailAndPassword(auth, email, password);
         // .then((userCredential) => {
         //     // Signed in 
         //     const user = userCredential.user;

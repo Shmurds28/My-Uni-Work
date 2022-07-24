@@ -22,8 +22,7 @@ function Login() {
           await signIn(email, password)
                   .then((userCredential) => {
                     // Signed in 
-                    user = userCredential.user;
-                    console.log("userrrrr:" + user.uid);
+    
                     // ...
                 });
 

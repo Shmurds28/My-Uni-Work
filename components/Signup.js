@@ -23,7 +23,7 @@ function Signup() {
       setError("");
 
       try{
-        await signUp(email, password, false)
+        await signUp(email, password)
                 .then((userCredential) => {
                       // Signed in 
                       user = userCredential.user;
@@ -36,7 +36,10 @@ function Signup() {
             firstname: firstName,
             lastName: lastName,
             modules: modules,
+            isAdmin: false,
         });
+
+
 
         setIsOpen(false);
         setIsSignup(false);
