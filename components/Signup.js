@@ -36,7 +36,7 @@ function Signup() {
                         firstname: firstName,
                         lastName: lastName,
                         modules: modules,
-                        isAdmin: false,
+                        isAdmin: true,
                     });
                     router.push("/dashboard/schedule");
                     // ...

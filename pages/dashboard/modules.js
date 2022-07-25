@@ -30,12 +30,23 @@ export default function modules() {
       (userSnapshot) => {
         const userModules = userSnapshot.data().modules;
         setUserInfo(userSnapshot.data());
-        userModules.forEach(userModule => {
-          getDoc(doc(db, 'modules', userModule)).then(moduleDoc => {
-              setModules(modules => [...modules, moduleDoc.data()]);
+        if(userSnapshot.data().isAdmin){
+          onSnapshot(
+            query(collection(db, 'modules')),
+            (snapshot) => {
+              setModules(snapshot.docs);
+            }
+          )
+        }else{
+          userModules.forEach(userModule => {
+            getDoc(doc(db, 'modules', userModule)).then(moduleDoc => {
+                setModules(modules => [...modules, moduleDoc]);
+            });
+  
           });
+        }
 
-        });
+        
 
       }
     ),
@@ -51,13 +62,15 @@ export default function modules() {
       </Head>
 
       <Navbar />
-        <div className="lg:flex space-x-0 h-full">
-            {/* sidebar area  */}
-            <DashboardSidebar  modules/>
+      <div className="lg:flex space-x-0 h-full">
+          {/* sidebar area  */}
+          <div>
+          <DashboardSidebar modules />
+          </div>
+          
 
-            {/* content area */}
-
-            <div className="flex flex-col lg:px-10 mt-4 space-y-2 mb-6 w-full">
+          {/* content area */}
+          <div className="flex flex-col lg:px-10 mt-4 space-y-2 mb-6 w-full">
               <div className="lg:flex m-2 items-center justify-between">
                 <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">
                     Selected Modules     
@@ -86,7 +99,7 @@ export default function modules() {
               {/* <h1>{modules.length}</h1> */}
 
               {modules.map(module =>(
-                <Module dashboardPage key={module.moduleCode} module={module} />
+                <Module dashboardPage key={module.data().moduleCode} module={module.data()} />
               ))}
             </div>
             

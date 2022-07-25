@@ -49,7 +49,9 @@ export function UserAuthContextProvider({children}){
             //     const errorCode = error.code;
             //     const errorMessage = error.message;
             // });
-        // })
+        // }).catch((error) => {
+        //     console.error(error.message);
+        // });
         
     }
 
@@ -71,9 +73,7 @@ export function UserAuthContextProvider({children}){
                 setUser(currentUser);
                 
            });
-           return () =>{
-            unsubscribe();
-           }
+           return unsubscribe();
         },
         []
     );

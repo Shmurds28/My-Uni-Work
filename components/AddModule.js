@@ -12,7 +12,7 @@ import {
   query,
   setDoc
 } from "@firebase/firestore";
-import { Router } from 'next/router';
+import { Router, useRouter } from 'next/router';
 
 function AddModule() {
     const [moduleName, setModuleName] = useState("");
@@ -28,6 +28,7 @@ function AddModule() {
     const [isAddModule, setIsAddModule] = useRecoilState(addModule);
     const [modules, setModules] = useState([]);
     const [lecturers, setLecturers] = useState([]);
+    const router = useRouter();
   
   
     useEffect(
@@ -79,7 +80,7 @@ function AddModule() {
       setCredits(-1);
       setDescription("");
       setPrerequisites(null);
-      Router.reload(window.location.pathname)
+      router.reload(window.location.pathname)
     };
 
   return (
@@ -191,7 +192,7 @@ function AddModule() {
                  " onClick={(e) =>{
                    setIsOpen(false);
                    setIsAddModule(false);
-                   Router.reload(window.location.pathname)
+                   router.reload(window.location.pathname)
                  }} >
                  Cancel
              </button>   
