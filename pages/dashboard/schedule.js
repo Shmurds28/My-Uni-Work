@@ -207,7 +207,7 @@ export default function schedule() {
                     </div>
             )}
 
-          {semester === "Year" && (
+            {semester === "Year" && (
                <div className="flex flex-col gap-8">
                   {/* Year */}
                     <div className="flex flex-col border p-1 shadow">

@@ -8,8 +8,8 @@ import {
     setPersistence,
     browserSessionPersistence
 } from 'firebase/auth';
-import auth from '../firebase';
-import { doc, query } from 'firebase/firestore';
+import auth, { db } from '../firebase';
+import { doc, onSnapshot, query } from 'firebase/firestore';
 
 const userAuthContext = createContext();
 
@@ -69,12 +69,7 @@ export function UserAuthContextProvider({children}){
         () => {
           const unsubscribe = onAuthStateChanged(auth, (currentUser) =>{
                 setUser(currentUser);
-                onSnapshot(
-                    query(doc(db, "users", currentUser.uid)),
-                        (userSnapshot) => {
-                            setUserInfo(userSnapshot);
-                        }
-                    );
+                
            });
            return () =>{
             unsubscribe();

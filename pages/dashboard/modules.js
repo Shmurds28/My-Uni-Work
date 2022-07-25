@@ -18,16 +18,18 @@ export default function modules() {
   const [isAddModule, setIsAddModule] = useRecoilState(addModule);
   const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
   const [modules, setModules] = useState([]);
-  const {user} = useUserAuth();
+  const {user, userInfo, setUser, setUserInfo} = useUserAuth();
   // var modules = [];
 
-  // get modules form firebase
+  // get modules form firebase  
+
   useEffect(
     () => 
     onSnapshot(
       query(doc(db, "users", user.uid)),
       (userSnapshot) => {
         const userModules = userSnapshot.data().modules;
+        setUserInfo(userSnapshot.data());
         userModules.forEach(userModule => {
           getDoc(doc(db, 'modules', userModule)).then(moduleDoc => {
               setModules(modules => [...modules, moduleDoc.data()]);
@@ -60,7 +62,8 @@ export default function modules() {
                 <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">
                     Selected Modules     
                 </p>
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-end gap-1">
+                 {userInfo?.isAdmin && (
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-end gap-1">
                     <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
                         " onClick={(e) =>{
                           setIsOpen(true);
@@ -76,7 +79,8 @@ export default function modules() {
                         Add assessment
                     </button> 
                     
-                  </div>
+                    </div>
+                 )}
               </div>
               
               {/* <h1>{modules.length}</h1> */}

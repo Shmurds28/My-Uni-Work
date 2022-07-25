@@ -8,6 +8,7 @@ import AddModule from './AddModule';
 import Signup from './Signup';
 import Login from './Login';
 import Router from 'next/router'
+import { XIcon } from '@heroicons/react/solid';
 
 export default function MyModal() {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
@@ -37,7 +38,7 @@ export default function MyModal() {
           setIsAddLecturer(false);
           setIsSignup(false);
           setIsLogin(false);
-          Router.reload(window.location.pathname)
+          // Router.reload(window.location.pathname)
         }} >
           <Transition.Child
             as={Fragment}
@@ -62,8 +63,17 @@ export default function MyModal() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white pt-1 p-6 text-left align-middle shadow-xl transition-all">
  
+
+                  <div className="flex items-center justify-end h-9 p-0 m-0">
+                  <div
+                    className="w-9 h-9 flex items-center justify-end xl:px-0"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <XIcon className="h-[28px] text-[#333] cursor-pointer" />
+                  </div>
+                  </div>
                  {/* Add module modal content */}
                  {isAddModule && (
                   <AddModule />

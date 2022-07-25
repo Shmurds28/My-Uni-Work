@@ -17,12 +17,16 @@ import DashboardSidebar from '../../components/DashboardSidebar';
 import { useEffect, useState } from 'react';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../../firebase';
+import { useUserAuth } from '../../context/UserAuthContext';
+import { useRouter } from 'next/router';
 
 
 export default function lecturers() {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
   const [lecturers, setLecturers] = useState([]);
+  const {userInfo} = useUserAuth();
+  const router = useRouter();
 
   useEffect( 
     () =>
@@ -55,17 +59,19 @@ export default function lecturers() {
               <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">
                   Honours Lecturers     
               </p>
-                <div className="flex flex-col lg:flex-row lg:items-center justify-end gap-1">
-                  <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
-                      " onClick={(e) =>{
-                        setIsOpen(true);
-                        setIsAddLecturer(true);
-                      }} >
-                      Add Lecturer
-                  </button> 
-                
-                  
-                 </div>
+
+                {userInfo?.isAdmin && (
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-end gap-1">
+                    <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
+                        " onClick={(e) =>{
+                          setIsOpen(true);
+                          setIsAddLecturer(true);
+                        }} >
+                        Add Lecturer
+                    </button>  
+                  </div>
+                )}
+     
             </div>
             <div className="flex flex-col">
                 {lecturers.map(lecturer =>(

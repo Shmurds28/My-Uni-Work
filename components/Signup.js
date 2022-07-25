@@ -13,45 +13,43 @@ function Signup() {
     const [password, setPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [error, setError] = useState("");
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const {signUp} = useUserAuth();
-    const {user} = useUserAuth();
+    const {user, userInfo} = useUserAuth();
     const [modules, setModules] = useState(["WHPV400","WRHV411"]);
     const router = useRouter();
 
     const doSignup = async (e) => {
       e.preventDefault();
-
-      setError("");
+      setIsLoading(true);
+      setError(null);
 
       try{
         await signUp(email, password)
-                .then((userCredential) => {
-                      // Signed in 
-                      user = userCredential.user;
-                      router.push("/dashboard/schedule");
-                      // ...
-                  });
-
-        setDoc(doc(db, "users", user.uid),{
-            email: email,
-            firstname: firstName,
-            lastName: lastName,
-            modules: modules,
-            isAdmin: false,
-        });
-
-
-
-        setIsOpen(false);
-        setIsSignup(false);
-        setEmail("");
-        setPassword("");
-        setFirstName("");
-        setLastName("");
+              .then((userCredential) => {
+                    // Signed in 
+                    user = userCredential.user;                     
+                      
+                    userInfo = setDoc(doc(db, "users", user.uid),{
+                        email: email,
+                        firstname: firstName,
+                        lastName: lastName,
+                        modules: modules,
+                        isAdmin: false,
+                    });
+                    router.push("/dashboard/schedule");
+                    // ...
+                });
+                setIsOpen(false);
+                setIsSignup(false);
+                setEmail("");
+                setPassword("");
+                setFirstName("");
+                setLastName("");
 
       }catch(err){
-        setError(err.message);
+        setError(err.code);
       }
 
       // Router.reload(window.location.pathname)
@@ -59,9 +57,13 @@ function Signup() {
 
   return (
     <div className="">
-    <h1 className="text-xl font-bold flex items-center justify-center pb-8">Signup</h1>
-     <div className="lg:grid lg:grid-cols-1 lg:gap-3">
-
+    <h1 className="text-4xl font-bold flex items-center justify-center pb-8">Signup</h1>
+     <form className="lg:grid lg:grid-cols-1 lg:gap-3" onSubmit={doSignup}>
+            {error && (
+              <div className=" text-red-500 text-center rounded">
+                <span>{error}</span>
+              </div>
+            )}
          <div>
            <label className="block">
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
@@ -118,7 +120,7 @@ function Signup() {
              </button>   
           </label>
          </div>
-     </div>
+     </form>
     </div>
   )
 }

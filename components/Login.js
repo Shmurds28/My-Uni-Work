@@ -3,6 +3,8 @@ import { useRecoilState } from 'recoil';
 import { modalState, login } from '../atoms/modalAtom';
 import { useUserAuth } from '../context/UserAuthContext';
 import Router, { useRouter } from "next/router";
+import { db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 
 function Login() {
@@ -10,40 +12,56 @@ function Login() {
     const [isLogin, setIsLogin] = useRecoilState(login);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const {signIn} = useUserAuth();
-    const {user}= useUserAuth(); 
+    const {user, setUserInfo, userInfo} = useUserAuth(); 
     const router = useRouter();
 
     const doLogin = async (e) => {
         e.preventDefault();
-        setError("");
-        setIsOpen(false);
-        setIsLogin(false);
+        setIsLoading(true);
+        setError(null)   
 
         try{
           await signIn(email, password)
                   .then((userCredential) => {
                     // Signed in 
                     user = userCredential.user;
-                    router.push('/dashboard/schedule');
-                    setEmail("");
-                    setPassword("");
+                    getDoc(doc(db, "users", userCredential.user.uid)).then((userSnapshot) => {
+                      userInfo = userSnapshot.data();
+                    }).catch((error) => {
+                      setError(error.code);
+                    });
+
                     // ...
-                });
+          });
+          router.push('/dashboard/schedule');
+          setEmail("");
+          setPassword("");
+          setIsOpen(false);
+          setIsLogin(false);
+          setIsLoading(false);
+
 
         }catch(err){
-          console.log(err.message);
-          setError(err.message);
+          // console.log(err.name);
+          setError(err.code);
         } 
+
 
         // Router.reload(window.location.pathname)
     }
 
   return (
     <div className="">
-    <h1 className="text-xl font-bold flex items-center justify-center pb-8">Login</h1>
-     <div className="lg:grid lg:grid-cols-1 lg:gap-3">
+    <h1 className="text-4xl font-bold flex items-center justify-center pb-4">Login</h1>
+     <form className="lg:grid lg:grid-cols-1 lg:gap-3" onSubmit={doLogin}>
+          {error && (
+            <div className=" text-red-500 text-center rounded">
+              <span>{error}</span>
+            </div>
+          )}
          <div>
            <label className="block">
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
@@ -65,7 +83,7 @@ function Login() {
          <div className="m-1">
            <label className="block">
              <button className="bg-[#103A5C] w-full text-white font-semibold p-3 rounded-md hover:opacity-90
-                 " onClick={doLogin} >
+                 "  >
                  Login
              </button>   
           </label>
@@ -82,7 +100,7 @@ function Login() {
              </button>   
           </label>
          </div>
-     </div>
+     </form>
     </div>
   )
 }
