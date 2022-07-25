@@ -28,7 +28,6 @@ export default function modules() {
       query(doc(db, "users", user.uid)),
       (userSnapshot) => {
         const userModules = userSnapshot.data().modules;
-        const mods = [];
         userModules.forEach(userModule => {
           getDoc(doc(db, 'modules', userModule)).then(moduleDoc => {
               setModules(modules => [...modules, moduleDoc.data()]);

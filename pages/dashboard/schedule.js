@@ -11,9 +11,65 @@ import { BookOpenIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import Week from '../../components/Week';
 import DashboardSidebar from '../../components/DashboardSidebar';
+import { useUserAuth } from '../../context/UserAuthContext';
+import { db } from '../../firebase';
+import { useEffect, useState } from 'react';
+import { collection, doc, getDocs, onSnapshot, query } from 'firebase/firestore';
 
 
 export default function schedule() {
+  const {user} = useUserAuth();
+  const [semester1Ass, setsemester1Ass] = useState([]);
+  const [semester2Ass, setsemester2Ass] = useState([]);
+  const [yearAss, setyearAss] = useState([]);
+  const [weeks1, setWeeks1] = useState([]);
+  const [weeks2, setWeeks2] = useState([]);
+  const [weeksY, setWeeksY] = useState([]);
+  const [semester, setSemester] = useState("Semester 1");
+  
+  //Get distinct weeks 
+  useEffect(
+    () => 
+      onSnapshot(
+        query(doc(db, "users", user.uid)), (userSnapshot) =>{
+          const userModules = userSnapshot.data().modules;
+          userModules.forEach(userModule =>{
+            getDocs(collection(db, 'modules', userModule, "assessments")).then(assessments =>{
+                assessments.forEach(assessment =>{
+                  if(assessment.data().semester == "Semester 1"){
+                    setsemester1Ass(semester1Ass => [...semester1Ass, assessment.data()]);
+                    if(weeks1.indexOf(assessment.data().submissionWeek) == -1){
+                      setWeeks1(weeks1 => [...weeks1, assessment.data().submissionWeek]);
+                      weeks1.sort();
+                    }
+
+                  }else if(assessment.data().semester == "Semester 2"){
+                    setsemester2Ass(semester2Ass => [...semester2Ass, assessment.data()]);
+                    if(weeks2.indexOf(assessment.data().submissionWeek) == -1){
+                      setWeeks2(weeks2 => [...weeks2, assessment.data().submissionWeek]);
+                      weeks2.sort();
+                    }
+                  }else{
+                    setyearAss(yearAss => [...yearAss, assessment.data()]);
+                    if(weeksY.indexOf(assessment.data().submissionWeek) == -1){
+                      setWeeksY(weeksY => [...weeksY, assessment.data().submissionWeek]);
+                      weeksY.sort();
+                    }
+                  }
+                });
+            });
+          });
+        }
+      ),
+      [db]
+  )
+  
+  const removeDuplicates = (arr) =>  {
+    return arr.filter((item,
+        index) => arr.indexOf(item) == index);
+  }
+  console.log(weeks1);
+
   return (
     <div className="h-full">
       <Head>
@@ -25,25 +81,187 @@ export default function schedule() {
       <Navbar />
       <div className="lg:flex space-x-0 h-full">
           {/* sidebar area  */}
+          <div>
           <DashboardSidebar schedule />
+          </div>
+          
 
           {/* content area */}
           <div className="flex flex-col lg:px-10 mt-4 space-y-2 mb-6 w-full">
             <div className="lg:flex m-2 items-center justify-between">
-              <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">
+              <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333] text-center">
                   Provisional Workload Schedule   
               </p>
+
+              <div>
+           <label className="block">
+             <span className=" block text-sm font-semibold text-slate-700">
+               Sort by Semester
+             </span>
+             <select value={semester} onChange= {(e) => setSemester(e.target.value)} name="semester" id="semester" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
+               <option value="Semester 1">Semester 1</option>
+               <option value="Semester 2">Semester 2</option>
+               <option value="Year">Year</option>
+             </select>
+          </label>
+         </div>
                 
             </div>
+
+            {semester === "Semester 1" && (
+               <div className="flex flex-col gap-8">
+               <div className="flex flex-col border p-1 shadow">
+                 <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 1</h1> 
+                 <div className="flex flex-col gap-4">
+                 {weeks1.length == 0 && (
+                     <p className="ml-10 font-base text-md">No Submissions...</p>
+                   )}
+
+                   {removeDuplicates(weeks1).sort().map(week => (
+                       <Week week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                   ))}
+                 </div>
+               
+               </div>
+             
             
-            <div className="flex flex-col gap-4">
-              <Week />
-              <Week />
-              <Week />
-              <Week />
-            </div>
+
+             {/* Semester 2 */}
+             <div className="flex flex-col border p-1 shadow">
+               <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 2</h1> 
+                 <div className="flex flex-col gap-4">
+                 {weeks2.length == 0 && (
+                     <p className="ml-10 font-base text-md">No Submissions...</p>
+                   )}
+                   {removeDuplicates(weeks2).sort().map(week => (
+                         <Week week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
+                     ))}
+                 </div>
+               
+             </div>
+
+             {/* Year */}
+             <div className="flex flex-col border p-1 shadow">
+               <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Year</h1> 
+                 <div className="flex flex-col gap-4">
+                   {weeksY.length == 0 && (
+                     <p className="ml-10 font-base text-md">No Submissions...</p>
+                   )}
+                   {removeDuplicates(weeksY).sort().map(week => (
+                         <Week week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
+                     ))}
+                 </div>
+               
+              </div>
+
+              </div>
+            )}
+
+            {semester === "Semester 2" && (
+              
+              
+               <div className="flex flex-col gap-8">
+                  {/* Semester 2 */}
+                  <div className="flex flex-col border p-1 shadow">
+                    <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 2</h1> 
+                      <div className="flex flex-col gap-4">
+                      {weeks2.length == 0 && (
+                          <p className="ml-10 font-base text-md">No Submissions...</p>
+                        )}
+                        {removeDuplicates(weeks2).sort().map(week => (
+                              <Week week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                      </div>
+                    
+                  </div>
+
+                  {/* Semester 1 */}
+                  <div className="flex flex-col border p-1 shadow">
+                    <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 1</h1> 
+                    <div className="flex flex-col gap-4">
+                    {weeks1.length == 0 && (
+                        <p className="ml-10 font-base text-md">No Submissions...</p>
+                      )}
+
+                      {removeDuplicates(weeks1).sort().map(week => (
+                          <Week week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                      ))}
+                    </div>
+                  
+                  </div>
+
+                  {/* Year */}
+                  <div className="flex flex-col border p-1 shadow">
+                    <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Year</h1> 
+                      <div className="flex flex-col gap-4">
+                        {weeksY.length == 0 && (
+                          <p className="ml-10 font-base text-md">No Submissions...</p>
+                        )}
+                        {removeDuplicates(weeksY).sort().map(week => (
+                              <Week week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                      </div>
+                    
+                    </div>
+
+                    </div>
+            )}
+
+          {semester === "Year" && (
+               <div className="flex flex-col gap-8">
+                  {/* Year */}
+                    <div className="flex flex-col border p-1 shadow">
+                      <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Year</h1> 
+                        <div className="flex flex-col gap-4">
+                          {weeksY.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                          )}
+                          {removeDuplicates(weeksY).sort().map(week => (
+                                <Week week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
+                            ))}
+                        </div>
+                      
+                      </div>
+
+                {/* Semester 1 */}
+               <div className="flex flex-col border p-1 shadow">
+                 <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 1</h1> 
+                 <div className="flex flex-col gap-4">
+                 {weeks1.length == 0 && (
+                     <p className="ml-10 font-base text-md">No Submissions...</p>
+                   )}
+
+                   {removeDuplicates(weeks1).sort().map(week => (
+                       <Week week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                   ))}
+                 </div>
+               
+               </div>
+             
+            
+
+                {/* Semester 2 */}
+                <div className="flex flex-col border p-1 shadow">
+                  <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 2</h1> 
+                    <div className="flex flex-col gap-4">
+                    {weeks2.length == 0 && (
+                        <p className="ml-10 font-base text-md">No Submissions...</p>
+                      )}
+                      {removeDuplicates(weeks2).sort().map(week => (
+                            <Week week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
+                        ))}
+                    </div>
+                  
+                </div>
+
+              </div>
+            )}
+
+           
           
           </div>
+            
+            
       </div>
         
 

@@ -7,6 +7,7 @@ import { modalState, signup, login } from '../atoms/modalAtom';
 import { useRecoilState } from 'recoil';
 import { useUserAuth } from '../context/UserAuthContext';
 import MyModal from './Modal';
+import { Router, useRouter } from 'next/router';
 
 function Navbar() {
     const [isOpen, setIsOpen]= useRecoilState(modalState); 
@@ -14,6 +15,7 @@ function Navbar() {
     const [isLogin, setIsLogin] = useRecoilState(login);
     const {user} = useUserAuth();
     const {SignOut} = useUserAuth();
+    const router = useRouter();
 
     console.log(user);
 
@@ -29,6 +31,7 @@ function Navbar() {
 
     const doSignOut = () => {
         SignOut();
+        router.push("/");
     }
 
   return (

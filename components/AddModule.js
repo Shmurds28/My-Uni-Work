@@ -12,6 +12,7 @@ import {
   query,
   setDoc
 } from "@firebase/firestore";
+import { Router } from 'next/router';
 
 function AddModule() {
     const [moduleName, setModuleName] = useState("");
@@ -78,6 +79,7 @@ function AddModule() {
       setCredits(-1);
       setDescription("");
       setPrerequisites(null);
+      Router.reload(window.location.pathname)
     };
 
   return (
@@ -189,6 +191,7 @@ function AddModule() {
                  " onClick={(e) =>{
                    setIsOpen(false);
                    setIsAddModule(false);
+                   Router.reload(window.location.pathname)
                  }} >
                  Cancel
              </button>   

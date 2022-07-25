@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useRecoilState } from 'recoil';
 import { modalState, login } from '../atoms/modalAtom';
 import { useUserAuth } from '../context/UserAuthContext';
+import Router, { useRouter } from "next/router";
 
 
 function Login() {
@@ -12,6 +13,7 @@ function Login() {
     const [error, setError] = useState("");
     const {signIn} = useUserAuth();
     const {user}= useUserAuth(); 
+    const router = useRouter();
 
     const doLogin = async (e) => {
         e.preventDefault();
@@ -24,15 +26,18 @@ function Login() {
                   .then((userCredential) => {
                     // Signed in 
                     user = userCredential.user;
+                    router.push('/dashboard/schedule');
+                    setEmail("");
+                    setPassword("");
                     // ...
                 });
 
-         
-          setEmail("");
-          setPassword("");
         }catch(err){
+          console.log(err.message);
           setError(err.message);
         } 
+
+        // Router.reload(window.location.pathname)
     }
 
   return (
@@ -71,7 +76,7 @@ function Login() {
              <button className="bg-red-400 w-full text-white font-semibold p-3 rounded-md hover:opacity-90
                  " onClick={(e) =>{
                    setIsOpen(false);
-                   
+                   Router.reload(window.location.pathname);
                  }} >
                  Cancel
              </button>   

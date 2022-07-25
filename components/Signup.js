@@ -1,4 +1,5 @@
 import { addDoc, doc, setDoc } from 'firebase/firestore';
+import { Router, useRouter } from 'next/router';
 import React, { useState } from 'react'
 import { useRecoilState } from 'recoil';
 import { modalState, signup } from '../atoms/modalAtom';
@@ -16,6 +17,7 @@ function Signup() {
     const {signUp} = useUserAuth();
     const {user} = useUserAuth();
     const [modules, setModules] = useState(["WHPV400","WRHV411"]);
+    const router = useRouter();
 
     const doSignup = async (e) => {
       e.preventDefault();
@@ -27,6 +29,7 @@ function Signup() {
                 .then((userCredential) => {
                       // Signed in 
                       user = userCredential.user;
+                      router.push("/dashboard/schedule");
                       // ...
                   });
 
@@ -51,7 +54,7 @@ function Signup() {
         setError(err.message);
       }
 
-      
+      // Router.reload(window.location.pathname)
     }
 
   return (
@@ -109,7 +112,7 @@ function Signup() {
              <button className="bg-red-400 w-full text-white font-semibold p-3 rounded-md hover:opacity-90
                  " onClick={(e) =>{
                    setIsOpen(false);
-                   
+                   Router.reload(window.location.pathname);
                  }} >
                  Cancel
              </button>   

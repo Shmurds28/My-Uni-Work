@@ -14,11 +14,27 @@ import { useRecoilState } from 'recoil';
 import { addLecturer, modalState } from '../../atoms/modalAtom';
 import MyModal from '../../components/Modal';
 import DashboardSidebar from '../../components/DashboardSidebar';
+import { useEffect, useState } from 'react';
+import { collection, onSnapshot, query } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 
 export default function lecturers() {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
+  const [lecturers, setLecturers] = useState([]);
+
+  useEffect( 
+    () =>
+    onSnapshot(
+      query(collection(db, 'lecturers')),
+      (snapshot) => {
+        setLecturers(snapshot.docs);
+      }
+    ),
+    [db]
+  );
+
 
   return (
     <div className="h-screen">
@@ -51,11 +67,12 @@ export default function lecturers() {
                   
                  </div>
             </div>
-            <Lecturer />
-            <Lecturer />
-            <Lecturer />
-            <Lecturer />
-            <Lecturer />
+            <div className="flex flex-col">
+                {lecturers.map(lecturer =>(
+                  <Lecturer key={lecturer.data().id} lecturer={lecturer.data()}/>
+                ))}
+        
+            </div>
           </div>
       </div>
         

@@ -29,6 +29,7 @@ export default function Modules() {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [isAddModule, setIsAddModule] = useRecoilState(addModule);
   const [modules, setModules] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
 
    // get modules form firebase
    useEffect( 
@@ -41,6 +42,10 @@ export default function Modules() {
     ),
     [db]
   );
+
+  const doSearch = () => {
+
+  }
 
 
   return (
@@ -62,19 +67,23 @@ export default function Modules() {
            Browse honours modules offered.     
         </p>
         {/* Search modulese section */}
-        <div className="max-w-xs border rounded-md">
-            <div className="relative p-0 rounded-md w-full">
-                <div className="absolute inset-y-0 pl-3 flex items-center pointer-events-none">
-                  <SearchIcon className="h-6 w-6 text-gray-500" />
+        <form className="p-0 m-0" onSubmit={doSearch}>
+          <div className="max-w-xs border rounded-md">
+              <div className="relative p-0 rounded-md w-full">
+                  <div className="absolute inset-y-0 pl-3 flex items-center pointer-events-none">
+                    <SearchIcon className="h-6 w-6 text-gray-500" />
+                  </div>
+                  
+                  <input 
+                    className="bg-[#F9FAFB] p-3 block w-full pl-10 sm:text-sm 
+                        border-gray-300 focus:ring-black 
+                        focus:border-black rounded-md shadow-sm" 
+                        type="text"
+                        placeholder="Search Module"/>
                 </div>
-                <input 
-                  className="bg-[#F9FAFB] p-3 block w-full pl-10 sm:text-sm 
-                      border-gray-300 focus:ring-black 
-                      focus:border-black rounded-md shadow-sm" 
-                      type="text"
-                      placeholder="Search Module"/>
-              </div>
-         </div>
+          </div>
+        </form>
+       
 
          {/* Buttons */}
         <div className="flex items-center">
@@ -105,6 +114,7 @@ export default function Modules() {
 
 
       </div>
+      <br />
      
       {isOpen && <Modal/>}
        {/* <Footer /> */}

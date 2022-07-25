@@ -4,15 +4,19 @@ import {
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged,
-    getAuth
+    getAuth,
+    setPersistence,
+    browserSessionPersistence
 } from 'firebase/auth';
 import auth from '../firebase';
+import { doc, query } from 'firebase/firestore';
 
 const userAuthContext = createContext();
 
 
 export function UserAuthContextProvider({children}){
     const [user, setUser] = useState(null);
+    const [userInfo, setUserInfo] = useState(null);
     const auth = getAuth();
 
     function signUp(email, password, isAdmin){
@@ -32,18 +36,21 @@ export function UserAuthContextProvider({children}){
     }
 
     function signIn(email, password){
-        return signInWithEmailAndPassword(auth, email, password);
-        // .then((userCredential) => {
-        //     // Signed in 
-        //     const user = userCredential.user;
-        //     console.log(user);
-        //     console.log("Done")
-        //     // ...
+        // setPersistence(auth, browserSessionPersistence).then(() => {
+            return signInWithEmailAndPassword(auth, email, password);
+            // .then((userCredential) => {
+            //     // Signed in 
+            //     const user = userCredential.user;
+            //     console.log(user);
+            //     console.log("Done")
+            //     // ...
+            // })
+            // .catch((error) => {
+            //     const errorCode = error.code;
+            //     const errorMessage = error.message;
+            // });
         // })
-        // .catch((error) => {
-        //     const errorCode = error.code;
-        //     const errorMessage = error.message;
-        // });
+        
     }
 
     function SignOut(){
@@ -51,6 +58,7 @@ export function UserAuthContextProvider({children}){
         // Sign-out successful.
         console.log("Sign-out successful");
         setUser(null);
+        setUserInfo(null);
 
         }).catch((error) => {
         // An error happened.
@@ -61,6 +69,12 @@ export function UserAuthContextProvider({children}){
         () => {
           const unsubscribe = onAuthStateChanged(auth, (currentUser) =>{
                 setUser(currentUser);
+                onSnapshot(
+                    query(doc(db, "users", currentUser.uid)),
+                        (userSnapshot) => {
+                            setUserInfo(userSnapshot);
+                        }
+                    );
            });
            return () =>{
             unsubscribe();
@@ -69,7 +83,7 @@ export function UserAuthContextProvider({children}){
         []
     );
 
-    return <userAuthContext.Provider value={{user, signUp, signIn, SignOut, setUser}}>{children}</userAuthContext.Provider>
+    return <userAuthContext.Provider value={{user, userInfo, signUp, signIn, SignOut, setUser, setUserInfo}}>{children}</userAuthContext.Provider>
 }
 
 export function useUserAuth() {

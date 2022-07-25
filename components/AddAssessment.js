@@ -10,8 +10,10 @@ import {
   updateDoc,
   onSnapshot,
   query,
-  setDoc
+  setDoc,
+  getDoc
 } from "@firebase/firestore";
+import { Router } from 'next/router';
 
 function AddAssessment() {
     const [moduleCode, setModuleCode] = useState("");
@@ -19,9 +21,9 @@ function AddAssessment() {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
     const [modules, setModules] = useState([]);
-    const [submissionWeek, setSubmissionWeek] = useState("");
+    const [submissionWeek, setSubmissionWeek] = useState(1);
     const [weighting, setWeighting] = useState(0);
-    const [assessmentType, setAssessmentType] = useState("");
+    const [assessmentType, setAssessmentType] = useState("Quizz");
     const [repeat, setRepeat] = useState("");
   
     useEffect(
@@ -29,8 +31,7 @@ function AddAssessment() {
         onSnapshot(
           query(collection(db, 'modules')),
           (snapshot) =>{
-            setModules(snapshot.docs);
-            
+            setModules(snapshot.docs);  
           },
         ),
         [db]
@@ -41,14 +42,48 @@ function AddAssessment() {
     
         if(loading) return;
         setLoading(true);
-    
-        await addDoc(collection(db, "modules", moduleCode, "assessments"), {
-          // moduleCode: moduleCode,
-          type: assessmentType,
-          repeat: repeat,
-          submissionWeek: submissionWeek,
-          weighting: weighting,
+        var semester = "";
+        var moduleName = "";
+        var duration = 0;
+        await getDoc(doc(db, 'modules', moduleCode)).then(moduleDoc => {
+          semester = moduleDoc.data().semester;
+          moduleName = moduleDoc.data().moduleName;
+          duration = moduleDoc.data().duration;
         });
+
+        if(repeat == "Weekly"){
+          for(var i = submissionWeek; i < duration; i++){
+            await addDoc(collection(db, "modules", moduleCode, "assessments"), {
+              moduleName: moduleName,
+              type: assessmentType,
+              repeat: repeat,
+              submissionWeek: i,
+              weighting: weighting,
+              semester: semester,
+            });
+          }
+        }else if(repeat == "Every two weeks"){
+          for(var i = submissionWeek; i < duration; i += 2){
+            await addDoc(collection(db, "modules", moduleCode, "assessments"), {
+              moduleName: moduleName,
+              type: assessmentType,
+              repeat: repeat,
+              submissionWeek: i,
+              weighting: weighting,
+              semester: semester,
+            });
+          }
+
+        }else{
+          await addDoc(collection(db, "modules", moduleCode, "assessments"), {
+            moduleName: moduleName,
+            type: assessmentType,
+            repeat: repeat,
+            submissionWeek: submissionWeek,
+            weighting: weighting,
+            semester: semester,
+          });
+        }
 
         setLoading(false);
         setIsOpen(false);
@@ -57,6 +92,7 @@ function AddAssessment() {
         setWeighting(0);
         setAssessmentType("");
         setSubmissionWeek("");
+        Router.reload(window.location.pathname)
       }
 
   return (
@@ -115,9 +151,9 @@ function AddAssessment() {
                Repeat assessment
              </span>
              <select value={repeat} onChange= {(e) => setRepeat(e.target.value)} name="repeat" id="repeat" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
-               <option value="once">Once</option>
-               <option value="weekly">Weekly</option>
-               <option value="weekly">Every two weeks</option>
+               <option value="Once">Once</option>
+               <option value="Weekly">Weekly</option>
+               <option value="Every two weeks">Every two weeks</option>
              </select>
           </label>
          </div>
@@ -139,6 +175,7 @@ function AddAssessment() {
                  " onClick={(e) =>{
                    setIsOpen(false);
                    setIsAddModule(false);
+                   Router.reload(window.location.pathname);
                  }} >
                  Cancel
              </button>   

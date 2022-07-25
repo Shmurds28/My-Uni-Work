@@ -7,6 +7,7 @@ import AddAssessment from './AddAssessment';
 import AddModule from './AddModule';
 import Signup from './Signup';
 import Login from './Login';
+import Router from 'next/router'
 
 export default function MyModal() {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
@@ -36,6 +37,7 @@ export default function MyModal() {
           setIsAddLecturer(false);
           setIsSignup(false);
           setIsLogin(false);
+          Router.reload(window.location.pathname)
         }} >
           <Transition.Child
             as={Fragment}

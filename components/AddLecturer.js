@@ -15,6 +15,7 @@ import { useRecoilState } from 'recoil';
 import { addLecturer, modalState } from '../atoms/modalAtom';
 import {defaultImage} from '../public/default.png' 
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import { Router } from 'next/router';
 
 function AddLecturer() {
     const [title, setTitle] = useState("Mr");
@@ -82,7 +83,7 @@ function AddLecturer() {
         setTelephone("");
         setOffice("");
         setSelectedFile(null);
-        
+        Router.reload(window.location.pathname)
     }
 
   return (
@@ -193,6 +194,7 @@ function AddLecturer() {
                  " onClick={(e) =>{
                    setIsOpen(false);
                    setIsAddLecturer(false);
+                   Router.reload(window.location.pathname);
                  }} >
                  Cancel
              </button>   
