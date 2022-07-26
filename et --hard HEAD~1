@@ -1,0 +1,65 @@
+[33mcommit 4367556e7d90de5a148a2d84c3328ae441ac2b14[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Simamkele <simamkelengcasane28@gmail.com>
+Date:   Mon Jul 25 18:49:01 2022 +0200
+
+    delete module and admin functions
+
+[33mcommit c70b143773a98ba150e262d0c292a7f5659aceb0[m
+Author: Simamkele <simamkelengcasane28@gmail.com>
+Date:   Mon Jul 25 17:40:02 2022 +0200
+
+    Authorisation
+
+[33mcommit 13d42894aaa6ae1f40e6b6aa4510be6eb22f033a[m
+Author: Simamkele <simamkelengcasane28@gmail.com>
+Date:   Mon Jul 25 12:39:35 2022 +0200
+
+    update dashboard
+
+[33mcommit 2d105d4ba18ab05263f0359aebf10122e3328025[m
+Author: Simamkele <simamkelengcasane28@gmail.com>
+Date:   Sun Jul 24 16:21:43 2022 +0200
+
+    Create dashboard sidebar
+
+[33mcommit 52d565f56f29225741dbecae8e872bf0bb2e13c5[m
+Author: Simamkele <simamkelengcasane28@gmail.com>
+Date:   Sun Jul 24 15:57:39 2022 +0200
+
+    get selected modules for user
+
+[33mcommit 7ebd79cfdd2bf2848e1000d246428741a7547997[m
+Author: Simamkele <simamkelengcasane28@gmail.com>
+Date:   Sun Jul 24 14:06:13 2022 +0200
+
+    authentication
+
+[33mcommit dcb72f27b259d4bcd6f2acec3f2d3e4abb846f11[m
+Author: Simamkele <simamkelengcasane28@gmail.com>
+Date:   Sat Jul 23 14:40:11 2022 +0200
+
+    Add module/assessment/lecturer to database
+
+[33mcommit 8c605813153f2407679da55ba649184ccf01cc06[m
+Author: Simamkele <simamkelengcasane28@gmail.com>
+Date:   Thu Jun 23 16:09:29 2022 +0200
+
+    dashbord selected modules
+
+[33mcommit 16ce47ce01965034172fe43e1aec418891581d5c[m
+Author: Simamkele <simamkelengcasane28@gmail.com>
+Date:   Wed Jun 22 17:05:17 2022 +0200
+
+    Modules page design
+
+[33mcommit 3dcafe4de0c0c6fbbc80b0d953faff37db5f8f76[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Simamkele <simamkelengcasane28@gmail.com>
+Date:   Tue Jun 21 22:08:24 2022 +0200
+
+    Home page & Navbar
+
+[33mcommit 79ee265c8b487619854bdba804d94c3d1e5f59a8[m
+Author: Simamkele <simamkelengcasane28@gmail.com>
+Date:   Tue Jun 21 13:54:33 2022 +0200
+
+    Initial commit from Create Next App

@@ -21,13 +21,26 @@ function Login() {
     const doLogin = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        setError(null)   
+        setError(null)  
+        
+        if(!email && !password) {
+          setError("Please enter your email and password");
+          return;
+        }else if(!password){
+          setError("Please enter your password");
+          return;
+        }else if(!email){
+          setError("Please enter your email");
+          return;
+        }
 
         try{
           await signIn(email, password)
                   .then((userCredential) => {
                     // Signed in 
                     user = userCredential.user;
+                    // console.log("USER!!!!!!!!!!!!!!!!1");
+                    // console.log(user);
                     getDoc(doc(db, "users", userCredential.user.uid)).then((userSnapshot) => {
                       userInfo = userSnapshot.data();
                     }).catch((error) => {
@@ -36,13 +49,13 @@ function Login() {
 
                     // ...
           });
-          router.push('/dashboard/schedule');
+          
           setEmail("");
           setPassword("");
           setIsOpen(false);
           setIsLogin(false);
           setIsLoading(false);
-
+          router.push('/');
 
         }catch(err){
           // console.log(err.name);

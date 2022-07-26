@@ -21,15 +21,20 @@ function Module({dashboardPage, module}) {
         }
         getDoc(doc(db, "users", user.uid)).then( async(userDoc) => {
             var userModules = userDoc.data().modules;
-            setUserInfo(userDoc.data());
-            userModules.push(module.moduleCode);
-            await updateDoc(doc(db, "users", user.uid),{
-                modules: userModules,
-            });
+
+            if(userModules.length < 8) {
+                setUserInfo(userDoc.data());
+                userModules.push(module.moduleCode);
+                await updateDoc(doc(db, "users", user.uid),{
+                    modules: userModules,
+                });
+            }
+           
         });
 
     }
 
+    // Remove module from Schedule
     const removeFromSchedule = async() =>{
         getDoc(doc(db, "users", user.uid)).then( async(userDoc) => {
             var userModules = userDoc.data().modules;
@@ -44,6 +49,7 @@ function Module({dashboardPage, module}) {
         });
     }
 
+    // Delete module 
     const deleteModule = async() => {
         await deleteDoc(doc(db, "modules", module.moduleCode));
         router.reload(window.location.pathname);
@@ -104,13 +110,13 @@ function Module({dashboardPage, module}) {
                 </button>
             )}
 
-            {userInfo.isAdmin && (
+            {userInfo?.isAdmin && (
                 <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90">
                 Edit Module
                 </button>
             )}
 
-           {userInfo.isAdmin &&(
+           {userInfo?.isAdmin &&(
             <button className="bg-red-400 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                 onClick={deleteModule}>
                 Delete Module

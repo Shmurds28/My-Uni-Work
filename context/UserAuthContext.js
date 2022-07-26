@@ -5,8 +5,6 @@ import {
     signOut,
     onAuthStateChanged,
     getAuth,
-    setPersistence,
-    browserSessionPersistence
 } from 'firebase/auth';
 import auth, { db } from '../firebase';
 import { doc, onSnapshot, query } from 'firebase/firestore';
@@ -17,41 +15,15 @@ const userAuthContext = createContext();
 export function UserAuthContextProvider({children}){
     const [user, setUser] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
+    const [loading, setLoading] = useState(true);
     const auth = getAuth();
 
     function signUp(email, password, isAdmin){
         return createUserWithEmailAndPassword(auth, email, password);
-        // .then((userCredential) => {
-        //     // Signed in 
-        //     const user = userCredential.user;
-        //     console.log(user);
-        //     // ...
-        // })
-        // .catch((error) => {
-        //     console.log(error);
-        //     const errorCode = error.code;
-        //     const errorMessage = error.message;
-        //     // ..
-        // }); 
     }
 
     function signIn(email, password){
-        // setPersistence(auth, browserSessionPersistence).then(() => {
             return signInWithEmailAndPassword(auth, email, password);
-            // .then((userCredential) => {
-            //     // Signed in 
-            //     const user = userCredential.user;
-            //     console.log(user);
-            //     console.log("Done")
-            //     // ...
-            // })
-            // .catch((error) => {
-            //     const errorCode = error.code;
-            //     const errorMessage = error.message;
-            // });
-        // }).catch((error) => {
-        //     console.error(error.message);
-        // });
         
     }
 
@@ -69,16 +41,16 @@ export function UserAuthContextProvider({children}){
 
     useEffect(
         () => {
-          const unsubscribe = onAuthStateChanged(auth, (currentUser) =>{
+          const unsubscribe = onAuthStateChanged(auth, async (currentUser) =>{
                 setUser(currentUser);
-                
+                setLoading(false);
            });
            return unsubscribe();
         },
         []
     );
 
-    return <userAuthContext.Provider value={{user, userInfo, signUp, signIn, SignOut, setUser, setUserInfo}}>{children}</userAuthContext.Provider>
+    return <userAuthContext.Provider value={{user, userInfo, signUp, signIn, SignOut, setUser, setUserInfo}}>{!loading && children}</userAuthContext.Provider>
 }
 
 export function useUserAuth() {
