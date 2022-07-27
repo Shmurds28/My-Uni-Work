@@ -56,6 +56,7 @@ function Login() {
           setIsLogin(false);
           setIsLoading(false);
           router.push('/');
+          router.reload(window.location.pathname);
 
         }catch(err){
           // console.log(err.name);
@@ -71,9 +72,10 @@ function Login() {
     <h1 className="text-4xl font-bold flex items-center justify-center pb-4">Login</h1>
      <form className="lg:grid lg:grid-cols-1 lg:gap-3" onSubmit={doLogin}>
           {error && (
-            <div className=" text-red-500 text-center rounded">
+            <div className=" text-red-500 col-span-2 text-center rounded">
               <span>{error}</span>
             </div>
+            
           )}
          <div>
            <label className="block">
@@ -107,6 +109,7 @@ function Login() {
              <button className="bg-red-400 w-full text-white font-semibold p-3 rounded-md hover:opacity-90
                  " onClick={(e) =>{
                    setIsOpen(false);
+                   setIsLogin(false);
                    Router.reload(window.location.pathname);
                  }} >
                  Cancel

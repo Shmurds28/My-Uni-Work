@@ -29,3 +29,8 @@ export const login = atom({
     key: "login",
     default: false,
 });
+
+export const viewModule = atom({
+    key: "viewModule",
+    default: false,
+});

@@ -114,7 +114,7 @@ function Signup() {
              <button className="bg-red-400 w-full text-white font-semibold p-3 rounded-md hover:opacity-90
                  " onClick={(e) =>{
                    setIsOpen(false);
-                   Router.reload(window.location.pathname);
+                  //  Router.reload(window.location.pathname);
                  }} >
                  Cancel
              </button>   

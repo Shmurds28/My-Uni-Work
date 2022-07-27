@@ -44,6 +44,21 @@ export default function Modules() {
   );
 
   const doSearch = () => {
+    if(!searchInput) return;
+
+    // onSnapshot(
+    //   query(collection(db, 'modules'), where("moduleCode", "==", searchInput) ),
+    //   (snapshot) => {
+    //     setModules(snapshot.docs);
+    //   }
+    // );
+
+    // onSnapshot(
+    //   query(collection(db, 'modules'), where("moduleName", "==", searchInput) ),
+    //   (snapshot) => {
+    //     setModules(snapshot.docs);
+    //   }
+    // );
 
   }
 

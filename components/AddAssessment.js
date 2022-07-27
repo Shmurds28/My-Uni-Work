@@ -13,7 +13,7 @@ import {
   setDoc,
   getDoc
 } from "@firebase/firestore";
-import { Router } from 'next/router';
+import { Router, useRouter } from 'next/router';
 
 function AddAssessment() {
     const [moduleCode, setModuleCode] = useState("");
@@ -24,7 +24,9 @@ function AddAssessment() {
     const [submissionWeek, setSubmissionWeek] = useState(1);
     const [weighting, setWeighting] = useState(0);
     const [assessmentType, setAssessmentType] = useState("Quizz");
-    const [repeat, setRepeat] = useState("");
+    const [repeat, setRepeat] = useState("Once");
+    const [error, setError] = useState(null);
+    const router = useRouter();
   
     useEffect(
       () => 
@@ -38,10 +40,19 @@ function AddAssessment() {
     );
 
     const postAssessment = async (e) =>{
-        e.preventDefault();
+        // e.preventDefault();
+
     
         if(loading) return;
         setLoading(true);
+        setError(null);
+
+        if(!moduleCode || !type || !weighting){
+          setError("Missing required Fields");
+          setLoading(false);
+          return;
+        }
+
         var semester = "";
         var moduleName = "";
         var duration = 0;
@@ -50,6 +61,8 @@ function AddAssessment() {
           moduleName = moduleDoc.data().moduleName;
           duration = moduleDoc.data().duration;
         });
+
+        
 
         if(repeat == "Weekly"){
           for(var i = submissionWeek; i < duration; i++){
@@ -85,6 +98,7 @@ function AddAssessment() {
           });
         }
 
+        router.reload(window.location.pathname);
         setLoading(false);
         setIsOpen(false);
         setIsAddAssessment(false);
@@ -92,13 +106,18 @@ function AddAssessment() {
         setWeighting(0);
         setAssessmentType("");
         setSubmissionWeek("");
-        Router.reload(window.location.pathname)
+        
       }
 
   return (
     <div className="">
     <h1 className="text-xl font-bold flex items-center justify-center pb-8">Add Module Assessment</h1>
      <div className="lg:grid lg:grid-cols-2 lg:gap-3">
+        {error && (
+                <div className="col-span-2 text-red-500 text-center rounded">
+                  <span>{error}</span>
+                </div>
+        )}
          <div>
            <label className="block">
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
@@ -175,7 +194,7 @@ function AddAssessment() {
                  " onClick={(e) =>{
                    setIsOpen(false);
                    setIsAddModule(false);
-                   Router.reload(window.location.pathname);
+                   router.reload(window.location.pathname);
                  }} >
                  Cancel
              </button>   

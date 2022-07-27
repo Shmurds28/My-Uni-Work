@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { addAssessment, addLecturer, addModule, modalState } from '../atoms/modalAtom'
 import { db, storage } from "../firebase";
+import {Multiselect} from 'multiselect-react-dropdown';
 import {
   addDoc,
   collection,
@@ -13,22 +14,25 @@ import {
   setDoc
 } from "@firebase/firestore";
 import { Router, useRouter } from 'next/router';
+import { MultiSelect } from 'react-multi-select-component';
 
 function AddModule() {
-    const [moduleName, setModuleName] = useState("");
-    const [moduleCode, setModuleCode] = useState("");
+    const [moduleName, setModuleName] = useState(null);
+    const [moduleCode, setModuleCode] = useState(null);
     const [semester, setSemester] = useState("Semester 1");
     const [duration, setDuration] = useState(0);
-    const [lecturer, setLecturer] = useState("L2");
-    const [credits, setCredits] = useState(-1);
-    const [prerequisites, setPrerequisites] = useState("none");
-    const [description, setDescription] = useState("");
+    const [lecturer, setLecturer] = useState("");
+    const [credits, setCredits] = useState(0);
+    const [prerequisites, setPrerequisites] = useState([]);
+    const [description, setDescription] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isAddModule, setIsAddModule] = useRecoilState(addModule);
     const [modules, setModules] = useState([]);
     const [lecturers, setLecturers] = useState([]);
+    const [error, setError] = useState(null);
     const router = useRouter();
+    
   
   
     useEffect(
@@ -42,6 +46,7 @@ function AddModule() {
         ),
         [db]
     );
+
   
     useEffect(
       () => 
@@ -57,6 +62,17 @@ function AddModule() {
     const postModule = async () => {
       if(loading) return;
       setLoading(true);
+
+      var pre = [];
+      prerequisites.map(prerequisite => {
+        pre.push(prerequisite.value);
+      });
+
+      if(!description || !moduleName || !moduleCode ){
+        setError("Missing required fields!");
+        setLoading(false);
+        return;
+      }
   
       const docRef = await setDoc(doc(db, 'modules', moduleCode), {
           moduleCode: moduleCode,
@@ -65,7 +81,7 @@ function AddModule() {
           duration: duration,
           lecturer: lecturer,
           credits: credits,
-          prerequisites: prerequisites,
+          prerequisites: pre,
           description: description,
       }); 
   
@@ -83,10 +99,30 @@ function AddModule() {
       router.reload(window.location.pathname)
     };
 
+    const options = () => {
+      var moduleData = []; 
+      modules.forEach((module => moduleData.push(module.data())));
+
+      var data = [];
+      for (var i = 0; i < moduleData.length; i++) {
+        data.push(
+          {label: moduleData[i].moduleCode, value:moduleData[i].moduleCode}
+        );
+      }
+
+      return data;
+    }
+    
+
   return (
     <div className="">
     <h1 className="text-xl font-bold flex items-center justify-center pb-8">Add Module</h1>
      <div className="lg:grid lg:grid-cols-1 lg:gap-3">
+        {error && (
+                <div className="col-span-2 text-red-500 text-center rounded">
+                  <span>{error}</span>
+                </div>
+        )}
          <div>
            <label className="block">
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
@@ -158,11 +194,12 @@ function AddModule() {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Prerequisites
              </span>
-             <select value={prerequisites} onChange= {(e) => setPrerequisites(e.target.value)} multiple size="3" name="prerequisites" id="prerequisites" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
-               {modules.map(module => (
-                 <option value={module.data().moduleCode}>{module.data().moduleCode}</option>
-               ))}
-             </select>
+             <MultiSelect
+                options={options}
+                value={prerequisites}
+                onChange={setPrerequisites}
+                labelledBy="Select"
+              />
           </label>
          </div>
        
@@ -180,7 +217,7 @@ function AddModule() {
          <div className="m-1">
            <label className="block">
              <button className="bg-[#103A5C] w-full text-white font-semibold p-3 rounded-md hover:opacity-90
-                 " onClick={postModule} >
+                 " onClick={postModule}>
                  Add Module
              </button>   
           </label>

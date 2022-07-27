@@ -1,7 +1,7 @@
-import { getDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { getDoc, doc, updateDoc, deleteDoc, onSnapshot, query, collection } from 'firebase/firestore';
 import React from 'react'
 import { useRecoilState } from 'recoil';
-import { addAssessment, login, modalState } from '../atoms/modalAtom';
+import { addAssessment, login, modalState, viewModule } from '../atoms/modalAtom';
 import { useUserAuth } from '../context/UserAuthContext';
 import { db } from '../firebase';
 import MyModal from './Modal';
@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 function Module({dashboardPage, module}) {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isLogin, setIsLogin] = useRecoilState(login);
+    const [isViewModule, setIsViewModule] = useRecoilState(viewModule);
     const {user, userInfo, setUserInfo} = useUserAuth();
     const router = useRouter() 
 
@@ -43,7 +44,7 @@ function Module({dashboardPage, module}) {
             await updateDoc(doc(db, "users", user.uid),{
                 modules: mods,
             });
-            router.reload(window.location.pathname)
+            // router.reload(window.location.pathname)
         }).catch(err => {
             console.log(err);
         });
@@ -52,7 +53,7 @@ function Module({dashboardPage, module}) {
     // Delete module 
     const deleteModule = async() => {
         await deleteDoc(doc(db, "modules", module.moduleCode));
-        router.reload(window.location.pathname);
+        // router.reload(window.location.pathname);
     }
 
   return (
@@ -95,7 +96,19 @@ function Module({dashboardPage, module}) {
             {module.compulsory ? "YES" : "NO"}
         </p>
 
-        <div className="mb-1">
+        {/* <div className="mb-1">
+            <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
+                onClick={() =>{
+                    setIsOpen(true);
+                    setIsViewModule(true);
+                } 
+                }>
+                View module
+            </button>
+        </div> */}
+
+        {viewModule && (
+            <div className="mb-1">
             {(dashboardPage && !module.compulsory && !userInfo?.isAdmin) &&(
                 <button className="bg-red-400 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                     onClick={removeFromSchedule}>
@@ -103,7 +116,7 @@ function Module({dashboardPage, module}) {
                 </button>
             )}
 
-            {(!dashboardPage && !module.compulsory) &&(
+            {(!dashboardPage && !module.compulsory && isViewModule) &&(
                  <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                     onClick={addToSchedule}>
                     Add to schedule
@@ -122,13 +135,14 @@ function Module({dashboardPage, module}) {
                 Delete Module
             </button>
            )}
-            
+   
+          </div>
+        )}
 
             
-        </div>
 
          {/* Modal */}
-      {isOpen && <MyModal key={module.moduleCode} modCode={module.moduleCode}/>}
+      {isOpen && <MyModal key={module.moduleCode} module={module}/>}
        
     </div>
   )

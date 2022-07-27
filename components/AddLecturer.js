@@ -15,21 +15,23 @@ import { useRecoilState } from 'recoil';
 import { addLecturer, modalState } from '../atoms/modalAtom';
 import {defaultImage} from '../public/default.png' 
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import { Router } from 'next/router';
+import { Router, useRouter } from 'next/router';
 
 function AddLecturer() {
     const [title, setTitle] = useState("Mr");
-    const [initials, setInitials] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [surname, setSurname] = useState("");
-    const [email, setEmail] = useState("");
-    const [telephone, setTelephone] = useState("");
-    const [office, setOffice] = useState("");
+    const [initials, setInitials] = useState(null);
+    const [firstName, setFirstName] = useState(null);
+    const [surname, setSurname] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [telephone, setTelephone] = useState(null);
+    const [office, setOffice] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [staffNum, setStaffNum] = useState("");
+    const [staffNum, setStaffNum] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
+    const [error, setError] = useState(null);
+    const router = useRouter();
 
     const addImage = (e) => {
       const reader = new FileReader();
@@ -45,6 +47,13 @@ function AddLecturer() {
     const postLecturer = async () => {
         if(loading) return;
         setLoading(true);
+        setError(null);
+
+        if(!title || !initials || !firstName || !surname || !email){
+          setLoading(false);
+          setError("Missing required fields");
+          return;
+        }
     
         const docRef = await setDoc(doc(db, 'lecturers', staffNum), {
           title: title,
@@ -72,6 +81,7 @@ function AddLecturer() {
         });
         }
     
+        router.reload(window.location.pathname);
         setLoading(false);
         setIsOpen(false);
         setIsAddLecturer(false);
@@ -83,13 +93,18 @@ function AddLecturer() {
         setTelephone("");
         setOffice("");
         setSelectedFile(null);
-        Router.reload(window.location.pathname)
+        
     }
 
   return (
     <div className="">
     <h1 className="text-xl font-bold flex items-center justify-center pb-8">Add Lecturer</h1>
      <div className="lg:grid lg:grid-cols-2 lg:gap-3">
+     {error && (
+                <div className="col-span-2 text-red-500 text-center rounded">
+                  <span>{error}</span>
+                </div>
+        )}
          <div>
            <label className="block">
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
@@ -194,7 +209,7 @@ function AddLecturer() {
                  " onClick={(e) =>{
                    setIsOpen(false);
                    setIsAddLecturer(false);
-                   Router.reload(window.location.pathname);
+                   router.reload(window.location.pathname);
                  }} >
                  Cancel
              </button>   

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image';
 import logo from '../../2.png';
 import Link from 'next/link';
@@ -8,14 +8,31 @@ import { useRecoilState } from 'recoil';
 import { useUserAuth } from '../context/UserAuthContext';
 import MyModal from './Modal';
 import { Router, useRouter } from 'next/router';
+import { doc, onSnapshot, query } from 'firebase/firestore';
+import { db } from '../firebase';
 
 function Navbar() {
     const [isOpen, setIsOpen]= useRecoilState(modalState); 
     const [isSignup, setIsSignup] = useRecoilState(signup);
     const [isLogin, setIsLogin] = useRecoilState(login);
-    const {user} = useUserAuth();
+    const {user, userInfo, setUserInfo} = useUserAuth();
     const {SignOut} = useUserAuth();
     const router = useRouter();
+
+    useEffect(
+        () => 
+        {
+            if(user){
+                onSnapshot(
+                    query(doc(db, "users", user?.uid)),
+                    (userSnapshot) => {
+                    setUserInfo(userSnapshot.data());    
+                    }
+                ),
+                [db]
+            }
+        }
+    )
 
     console.log(user);
 
@@ -33,6 +50,15 @@ function Navbar() {
         SignOut();
         router.push("/");
     }
+
+    const dashboardLink = () => {
+        if(userInfo?.isAdmin){
+            return "dashboard/modules"
+        }else{
+            return "dashboard/schedule"
+        }
+    }
+    
 
   return (
     <div className="mt-2 px-4 flex items-center justify-between h-20 border-b border-gray-100">
@@ -70,7 +96,7 @@ function Navbar() {
 
             {user != null && (
                 <div className="flex space-x-5 end-nav">
-                     <Link href="/dashboard/schedule">
+                     <Link href={dashboardLink()}>
                         <a className="navLink">
                             Dashboard   
                         </a>

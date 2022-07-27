@@ -5,7 +5,7 @@ import defaultImage from '../public/default.png'
 
 function Lecturer({lecturer}) {
   return (
-    <div className="flex flex-col lg:flex-row gap-4 p-6 bg-[#F9FAFB] cursor-pointer rounded-md shadow">
+    <div className="flex flex-col lg:flex-row gap-4 p-6 bg-[#F9FAFB] cursor-pointer rounded-md shadow mb-4">
         <img src={lecturer?.image} className=" rounded-md max-h-[200px]"/>
         <div>
             <h1 className="text-lg font-bold text-[#333]">

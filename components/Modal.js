@@ -1,22 +1,24 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { addAssessment, addLecturer, addModule, login, modalState, signup } from '../atoms/modalAtom'
+import { addAssessment, addLecturer, addModule, login, modalState, signup, viewModule } from '../atoms/modalAtom'
 import AddLecturer from './AddLecturer';
 import AddAssessment from './AddAssessment';
 import AddModule from './AddModule';
 import Signup from './Signup';
 import Login from './Login';
-import Router from 'next/router'
+import {useRouter} from 'next/router'
 import { XIcon } from '@heroicons/react/solid';
 
-export default function MyModal() {
+export default function MyModal({module}) {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [isAddModule, setIsAddModule] = useRecoilState(addModule);
   const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
   const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
   const [isSignup, setIsSignup] = useRecoilState(signup);
   const [isLogin, setIsLogin] = useRecoilState(login);
+  const [isViewModule, setIsViewModule] = useRecoilState(viewModule);
+  const router = useRouter();
 
   return (
     <>
@@ -38,7 +40,9 @@ export default function MyModal() {
           setIsAddLecturer(false);
           setIsSignup(false);
           setIsLogin(false);
-          // Router.reload(window.location.pathname)
+          setIsViewModule(false);
+
+          router.reload(window.location.pathname);
         }} >
           <Transition.Child
             as={Fragment}
@@ -69,7 +73,16 @@ export default function MyModal() {
                   <div className="flex items-center justify-end h-9 p-0 m-0">
                   <div
                     className="w-9 h-9 flex items-center justify-end xl:px-0"
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                      setIsOpen(false);
+                      setIsAddModule(false);
+                      setIsAddAssessment(false);
+                      setIsAddLecturer(false);
+                      setIsSignup(false);
+                      setIsLogin(false);
+                      setIsViewModule(false);
+                      router.reload(window.location.pathname)
+                    }}
                   >
                     <XIcon className="h-[28px] text-[#333] cursor-pointer" />
                   </div>
@@ -95,6 +108,12 @@ export default function MyModal() {
 
                  {isLogin && (
                   <Login />
+                 )}
+
+                 {isViewModule && (
+                  <div>
+                    <h1 className="text-center font-bold text-3xl">{module.moduleName}</h1>
+                  </div>
                  )}
 
                 </Dialog.Panel>

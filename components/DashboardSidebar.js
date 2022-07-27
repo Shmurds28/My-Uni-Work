@@ -1,9 +1,25 @@
+import { doc, onSnapshot, query } from 'firebase/firestore';
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
+import { db } from '../firebase';
 
 function DashboardSidebar({lecturers, schedule, recommendations, modules}) {
-    const {userInfo} = useUserAuth();
+    const {user, userInfo, setUserInfo} = useUserAuth();
+
+useEffect(
+    () => 
+    onSnapshot(
+        query(doc(db, "users", user.uid)),
+        (userSnapshot) => {
+        const userModules = userSnapshot.data().modules;
+        setUserInfo(userSnapshot.data());    
+        }
+    ),
+    [db]
+)
+
+
   return (
     <div className="bg-[#F9FAFB] lg:p-3 p-1 lg:w-72 flex lg:flex-col mr-0 lg:h-full">
 
