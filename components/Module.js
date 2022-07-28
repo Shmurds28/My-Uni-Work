@@ -23,15 +23,22 @@ function Module({dashboardPage, module}) {
         getDoc(doc(db, "users", user.uid)).then( async(userDoc) => {
             var userModules = userDoc.data().modules;
 
+            if(userModules.indexOf(module.moduleCode) != -1) {
+                alert("Module already added");
+                return;
+            }
+
             if(userModules.length < 8) {
                 setUserInfo(userDoc.data());
                 userModules.push(module.moduleCode);
                 await updateDoc(doc(db, "users", user.uid),{
                     modules: userModules,
                 });
+                router.reload(window.location.pathname);
             }
            
         });
+        
 
     }
 
@@ -44,7 +51,7 @@ function Module({dashboardPage, module}) {
             await updateDoc(doc(db, "users", user.uid),{
                 modules: mods,
             });
-            // router.reload(window.location.pathname)
+            router.reload(window.location.pathname);
         }).catch(err => {
             console.log(err);
         });
@@ -53,7 +60,7 @@ function Module({dashboardPage, module}) {
     // Delete module 
     const deleteModule = async() => {
         await deleteDoc(doc(db, "modules", module.moduleCode));
-        // router.reload(window.location.pathname);
+        router.reload(window.location.pathname);
     }
 
   return (
@@ -116,7 +123,7 @@ function Module({dashboardPage, module}) {
                 </button>
             )}
 
-            {(!dashboardPage && !module.compulsory && isViewModule) &&(
+            {(!dashboardPage && !module.compulsory) &&(
                  <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                     onClick={addToSchedule}>
                     Add to schedule

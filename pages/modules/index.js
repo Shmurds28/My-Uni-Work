@@ -23,6 +23,7 @@ import {
   updateDoc,
   onSnapshot,
   query,
+  where,
 } from "@firebase/firestore";
 
 export default function Modules() {
@@ -43,21 +44,27 @@ export default function Modules() {
     [db]
   );
 
-  const doSearch = () => {
+  const doSearch = (e) => {
+    e.preventDefault();
     if(!searchInput) return;
 
+    const modCodeDoc = query(collection(db, 'modules'), where("moduleCode", "==", searchInput) );
+    const modNameDoc = query(collection(db, 'modules'), where("moduleName", "==", searchInput));
+
+    const mods = []; mods.push(modCodeDoc); mods.push(modNameDoc);
+    console.log(mods);
+    setModules(mods);
     // onSnapshot(
     //   query(collection(db, 'modules'), where("moduleCode", "==", searchInput) ),
     //   (snapshot) => {
+    //     console.log("Done!");
     //     setModules(snapshot.docs);
+    //     query(collection(db, 'modules'), where("moduleName", "==", searchInput))
     //   }
     // );
 
     // onSnapshot(
-    //   query(collection(db, 'modules'), where("moduleName", "==", searchInput) ),
-    //   (snapshot) => {
-    //     setModules(snapshot.docs);
-    //   }
+      
     // );
 
   }
@@ -89,7 +96,7 @@ export default function Modules() {
                     <SearchIcon className="h-6 w-6 text-gray-500" />
                   </div>
                   
-                  <input 
+                  <input value={searchInput} onChange={(e) =>setSearchInput(e.target.value)} 
                     className="bg-[#F9FAFB] p-3 block w-full pl-10 sm:text-sm 
                         border-gray-300 focus:ring-black 
                         focus:border-black rounded-md shadow-sm" 
@@ -119,6 +126,12 @@ export default function Modules() {
       <div>
         {/* <Modal />  */}
       </div>
+
+      {modules.length <= 0 && (
+        <div className="text-center flex items-center justify-center mt-8">
+          <p className="text-base font-semibold">No modules found...</p>
+        </div>
+      )}
       
       {/* Modules list */}
       <div className="flex flex-col lg:px-24 px-2 mt-4 space-y-2 mb-6">

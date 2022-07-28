@@ -47,11 +47,11 @@ function AddAssessment() {
         setLoading(true);
         setError(null);
 
-        if(!moduleCode || !type || !weighting){
-          setError("Missing required Fields");
-          setLoading(false);
-          return;
-        }
+        // if(!moduleCode || !assessmentType || !weighting){
+        //   setError("Missing required Fields");
+        //   setLoading(false);
+        //   return;
+        // }
 
         var semester = "";
         var moduleName = "";
@@ -63,25 +63,24 @@ function AddAssessment() {
         });
 
         
-
         if(repeat == "Weekly"){
-          for(var i = submissionWeek; i < duration; i++){
+          for(var i = submissionWeek; i <  parseInt(duration); i++){
             await addDoc(collection(db, "modules", moduleCode, "assessments"), {
               moduleName: moduleName,
               type: assessmentType,
               repeat: repeat,
-              submissionWeek: i,
+              submissionWeek: parseInt(i),
               weighting: weighting,
               semester: semester,
             });
           }
         }else if(repeat == "Every two weeks"){
-          for(var i = submissionWeek; i < duration; i += 2){
+          for(var i = submissionWeek; i < parseInt(duration); i += 2){
             await addDoc(collection(db, "modules", moduleCode, "assessments"), {
               moduleName: moduleName,
               type: assessmentType,
               repeat: repeat,
-              submissionWeek: i,
+              submissionWeek: parseInt(i),
               weighting: weighting,
               semester: semester,
             });
@@ -92,7 +91,7 @@ function AddAssessment() {
             moduleName: moduleName,
             type: assessmentType,
             repeat: repeat,
-            submissionWeek: submissionWeek,
+            submissionWeek: parseInt(submissionWeek),
             weighting: weighting,
             semester: semester,
           });

@@ -43,9 +43,8 @@ export default function Home() {
                 <div className="flex flex-col space-y-2">
                     <h1 className="text-[#333] text-2xl font-bold">Learn more about modules offered</h1>
                     <p className="text-md">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Eos cumque quod nostrum sed quisquam repellat quae eius dicta! Consectetur, ad?
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, rem.
+                      A list of all modules offered at honours has been collected. Read more about the modules
+                      and see which would best suit your schedule.
                     </p>
                 </div>
 
@@ -58,9 +57,8 @@ export default function Home() {
                 <div className="flex flex-col space-y-2">
                     <h1 className="text-[#333] text-2xl font-bold">Add modules to your schedule</h1>
                     <p className="text-md">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Eos cumque quod nostrum sed quisquam repellat quae eius dicta! Consectetur, ad?
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, rem.
+                      Select and add the modules you wish to register for to your own personalised schedule from the list 
+                      of elective modules given to you.
                     </p>
                 </div>
                 
@@ -71,11 +69,10 @@ export default function Home() {
                     <Image src={readingImg} width={70} height={70} className="rounded"/> */}
                 </div>
                 <div className="flex flex-col space-y-2">
-                    <h1 className="text-[#333] text-2xl font-bold">View work schedule</h1>
+                    <h1 className="text-[#333] text-2xl font-bold">Personalised Workload Schedule</h1>
                     <p className="text-md">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Eos cumque quod nostrum sed quisquam repellat quae eius dicta! Consectetur, ad?
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, rem.
+                      A personalised workload schedule is created for you from the modules you have selected with mandatory
+                      modules already selected for you.
                     </p>
                 </div>
                 
