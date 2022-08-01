@@ -7,7 +7,7 @@ import { db } from '../firebase';
 import MyModal from './Modal';
 import { useRouter } from 'next/router';
 
-function Module({dashboardPage, module}) {
+function Module({dashboardPage, module, modulePage}) {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isLogin, setIsLogin] = useRecoilState(login);
     const [isViewModule, setIsViewModule] = useRecoilState(viewModule);
@@ -74,8 +74,8 @@ function Module({dashboardPage, module}) {
     }
 
   return (
-    <div className="border p-3 bg-[#F9FAFB] cursor-pointer shadow">
-        <h1 className="text-[#333] font-semibold text-lg mb-3">
+    <div className={`${modulePage && "mx-4 md:mx-40 lg:mx-80 lg:my-8"} border p-3 bg-[#F9FAFB] cursor-pointer shadow`} onClick={() => router.push(`/modules/${module.moduleCode}`)}>
+        <h1 className={`text-[#333] font-semibold mb-3 ${modulePage? "text-3xl text-center mb-8": "text-lg"}`}>
             {module.moduleCode} - {module.moduleName}
         </h1>
         <p className="mb-1">
@@ -124,7 +124,7 @@ function Module({dashboardPage, module}) {
             </button>
         </div> */}
 
-        {viewModule && (
+     
             <div className="mb-1">
             {(dashboardPage && !module.compulsory && !userInfo?.isAdmin) &&(
                 <button className="bg-[#F9FAFB] border border-gray-500 mr-4 text-black font-semibold p-3 rounded-md hover:opacity-90"
@@ -140,13 +140,13 @@ function Module({dashboardPage, module}) {
                 </button>
             )}
 
-            {userInfo?.isAdmin && (
+            {userInfo?.isAdmin && modulePage && (
                 <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90">
                 Edit Module
                 </button>
             )}
 
-           {userInfo?.isAdmin &&(
+           {userInfo?.isAdmin && modulePage &&(
             <button className="bg-[#F9FAFB] border border-gray-500 mr-4 text-black font-semibold p-3 rounded-md hover:opacity-90"
                 onClick={deleteModule}>
                 Delete Module
@@ -154,7 +154,6 @@ function Module({dashboardPage, module}) {
            )}
    
           </div>
-        )}
 
             
 

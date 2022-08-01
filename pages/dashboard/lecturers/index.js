@@ -1,23 +1,15 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../../styles/Home.module.css'
-import img from '../../../logosamples/1.JPG' 
-import welcomeImg from "../../public/welcome.png";
-import Navbar from '../../components/Navbar'
-import Footer from '../../components/Footer'
-import MenuIcon from '@heroicons/react/solid'
-import readingImg from '../../public/reading.png'
-import { BookOpenIcon } from '@heroicons/react/solid';
-import Link from 'next/link';
-import Lecturer from '../../components/Lecturer';
+import Navbar from '../../../components/Navbar'
+import Footer from '../../../components/Footer'
+import Lecturer from '../../../components/Lecturer';
 import { useRecoilState } from 'recoil';
-import { addLecturer, modalState } from '../../atoms/modalAtom';
-import MyModal from '../../components/Modal';
-import DashboardSidebar from '../../components/DashboardSidebar';
+import { addLecturer, modalState } from '../../../atoms/modalAtom';
+import MyModal from '../../../components/Modal';
+import DashboardSidebar from '../../../components/DashboardSidebar';
 import { useEffect, useState } from 'react';
 import { collection, onSnapshot, query } from 'firebase/firestore';
-import { db } from '../../firebase';
-import { useUserAuth } from '../../context/UserAuthContext';
+import { db } from '../../../firebase';
+import { useUserAuth } from '../../../context/UserAuthContext';
 import { useRouter } from 'next/router';
 
 
@@ -86,7 +78,7 @@ export default function lecturers({id}) {
       </div>
         
          {/* Modal */}
-      {/* {isOpen && <MyModal/>} */}
+      {isOpen && <MyModal/>}
 
       {/* <Footer /> */}
     </div>

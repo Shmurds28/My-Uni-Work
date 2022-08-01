@@ -1,4 +1,3 @@
-const defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/myuniwork-b6880.appspot.com/o/lecturers%2Fdefault.png?alt=media&token=0964f992-c91c-4b10-9122-62240a88abef";
 import React, { useEffect, useState } from 'react';
 import { db, storage } from "../firebase";
 import {
@@ -20,8 +19,8 @@ import { Router, useRouter } from 'next/router';
 
 export const EditLecturer = ({lecturer, lecturerId}) => {
     const [title, setTitle] = useState("");
-    const [initials, setInitials] = useState("");
-    const [firstName, setFirstName] = useState("");
+    var [initials, setInitials] = useState("");
+    var [firstName, setFirstName] = useState("");
     const [surname, setSurname] = useState("");
     const [email, setEmail] = useState("");
     const [telephone, setTelephone] = useState("");
@@ -33,13 +32,20 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
     const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
     const [error, setError] = useState(null);
     const router = useRouter();
+    const [defaultImage, setDefaultImage] = useState(null);
 
     useEffect(() => {
+      if(!lecturer) return;
      
       setStaffNum(lecturerId);
-      // getDoc(doc(db, 'lecturers', lecturerId)).then(lectDoc => {
-      //     console.log(lectDoc.data());
-      // });
+      setInitials(lecturer.initials);
+      setTitle(lecturer.title);
+      setFirstName(lecturer.firstName);
+      setSurname(lecturer.surname);
+      setEmail(lecturer.email);
+      setTelephone(lecturer.telephone);
+      setOffice(lecturer.office);
+      setDefaultImage(lecturer.image);
 
     });
 
@@ -56,56 +62,54 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
 
     const postLecturer = async () => {
 
-        // alert(lecturerId);
-        console.log(lecturer);
-        // if(loading) return;
-        // setLoading(true);
-        // setError(null);
+        if(loading) return;
+        setLoading(true);
+        setError(null);
 
-        // if(!title || !initials || !firstName || !surname || !email){
-        //   setLoading(false);
-        //   setError("Missing required fields");
-        //   return;
-        // }
+        if(!title || !initials || !firstName || !surname || !email){
+          setLoading(false);
+          setError("Missing required fields");
+          return;
+        }
     
-        // const docRef = await setDoc(doc(db, 'lecturers', staffNum), {
-        //   title: title,
-        //   initials: initials,
-        //   firstName: firstName,
-        //   surname: surname,
-        //   email: email,
-        //   telephone: telephone,
-        //   office: office,
-        // });
+        const docRef = await setDoc(doc(db, 'lecturers', staffNum), {
+          title: title,
+          initials: initials,
+          firstName: firstName,
+          surname: surname,
+          email: email,
+          telephone: telephone,
+          office: office,
+        });
 
-        // const imageRef = ref(storage, `lecturers/${staffNum}/image`);
+        const imageRef = ref(storage, `lecturers/${staffNum}/image`);
 
-        // if(selectedFile){
-        //   await uploadString(imageRef, selectedFile, 'data_url').then(async () => {
-        //     const downloadUrl = await getDownloadURL(imageRef);
+        if(selectedFile){
+          await uploadString(imageRef, selectedFile, 'data_url').then(async () => {
+            const downloadUrl = await getDownloadURL(imageRef);
 
-        //     await updateDoc(doc(db, "lecturers", staffNum), {
-        //       image: downloadUrl,
-        //     });
-        //   });
-        // }else{
-        //   await updateDoc(doc(db, 'lecturers', staffNum), {
-        //     image: defaultImageUrl,
-        // });
-        // }
+            await updateDoc(doc(db, "lecturers", staffNum), {
+              image: downloadUrl,
+            });
+          });
+        }else{
+          await updateDoc(doc(db, 'lecturers', staffNum), {
+            image: defaultImage,
+        });
+        }
     
-        // router.reload(window.location.pathname);
-        // setLoading(false);
-        // setIsOpen(false);
-        // setIsAddLecturer(false);
-        // setTitle("Mr");
-        // setInitials("");
-        // setFirstName("");
-        // setSurname("");
-        // setEmail("");
-        // setTelephone("");
-        // setOffice("");
-        // setSelectedFile(null);
+        router.reload(window.location.pathname);
+        setLoading(false);
+        setIsOpen(false);
+        setIsAddLecturer(false);
+        setTitle("Mr");
+        setInitials("");
+        setFirstName("");
+        setSurname("");
+        setEmail("");
+        setTelephone("");
+        setOffice("");
+        setSelectedFile(null);
         
     }
 
@@ -138,7 +142,7 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Initials
              </span>
-             <input value={(initials)} onChange={(e) => setInitials(e.target.value)} type="text" name="initials" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
+             <input value={initials} onChange={(e) => setInitials(e.target.value)} type="text" name="initials" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
           </label>
          </div>
 
@@ -165,7 +169,7 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Staff Number
              </span>
-             <input value={staffNum} onChange={(e) => setStaffNum(e.target.value)} type="text" name="staffNum" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
+             <input disabled value={staffNum} onChange={(e) => setStaffNum(e.target.value)} type="text" name="staffNum" className=" rounded-md mt-1 w-full px-3 py-2 bg-[#F9FAFB] border shadow-sm border-slate-300" />
           </label>
          </div>
 

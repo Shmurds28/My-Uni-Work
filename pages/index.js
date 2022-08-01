@@ -11,11 +11,13 @@ import MenuIcon from '@heroicons/react/solid'
 import { BookOpenIcon } from '@heroicons/react/solid';
 import { modalState } from '../atoms/modalAtom';
 import { useRecoilState } from 'recoil';
+import { useRouter } from 'next/router';
 
 
 export default function Home() {
 
   const [isOpen, setIsOpen] = useRecoilState(modalState); 
+  const router = useRouter();
 
   return (
     <div className="h-screen">

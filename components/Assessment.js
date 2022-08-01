@@ -1,8 +1,8 @@
 import React from 'react'
 
-function Assessment({assessment}) {
+function Assessment({assessment, assessmentPage}) {
   return (
-        <div className=" border p-1 bg-white cursor-pointer">
+        <div className=" border p-1 bg-white cursor-pointer" >
             <h1 className="text-[#333] font-semibold text-base mb-1">
                 {assessment.moduleName} - {assessment.type}
             </h1>
