@@ -28,6 +28,7 @@ function AddAssessment() {
     const [error, setError] = useState(null);
     const router = useRouter();
   
+    //get modules from the database
     useEffect(
       () => 
         onSnapshot(
@@ -62,7 +63,7 @@ function AddAssessment() {
           duration = moduleDoc.data().duration;
         });
 
-        
+        //Repeat assessment addition weekly or every 2 weeks else add it once
         if(repeat == "Weekly"){
           for(var i = submissionWeek; i <  parseInt(duration); i++){
             await addDoc(collection(db, "modules", moduleCode, "assessments"), {
@@ -120,12 +121,12 @@ function AddAssessment() {
          <div>
            <label className="block">
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
-               Module Code
+               Module
              </span>
              <select value={moduleCode} onChange= {(e) => setModuleCode(e.target.value)} name="moduleCode" id="moduleCode" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
                <option value=""> </option>
                {modules.map(module => (
-                 <option value={module.data().moduleCode}>{module.data().moduleCode}</option>
+                 <option value={module.data().moduleCode}>{module.data().moduleCode} - {module.data().moduleName}</option>
                ))}
              </select>
           </label>
@@ -189,7 +190,7 @@ function AddAssessment() {
 
          <div className="m-1">
            <label className="block">
-             <button className="bg-red-400 w-full text-white font-semibold p-3 rounded-md hover:opacity-90
+             <button className="bg-[#F9FAFB] border border-gray-500 w-full text-black font-semibold p-3 rounded-md hover:opacity-90
                  " onClick={(e) =>{
                    setIsOpen(false);
                    setIsAddModule(false);

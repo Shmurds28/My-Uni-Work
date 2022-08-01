@@ -46,13 +46,13 @@ useEffect(
              </Link>
             )}
 
-            {!userInfo?.isAdmin && (
+            {/* {!userInfo?.isAdmin && (
                 <Link href="/dashboard/recommendations" >
                     <a className={`${recommendations && "bg-white"} lg:text-lg text-md m-0 p-2 rounded-sm lg:font-semibold font-semibold`}>
                         Recommendations
                     </a>
                 </Link>
-            )}
+            )} */}
 
             <Link href="/dashboard/lecturers" >
                   <a className={`${lecturers && "bg-white"} lg:text-lg text-md m-0 p-2 rounded-sm lg:font-semibold font-semibold`}>

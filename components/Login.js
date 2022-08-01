@@ -106,7 +106,7 @@ function Login() {
 
          <div className="m-1">
            <label className="block">
-             <button className="bg-red-400 w-full text-white font-semibold p-3 rounded-md hover:opacity-90
+             <button className="bg-[#F9FAFB] border border-gray-500 w-full text-black font-semibold p-3 rounded-md hover:opacity-90
                  " onClick={(e) =>{
                    setIsOpen(false);
                    setIsLogin(false);

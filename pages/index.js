@@ -3,10 +3,11 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import img from '../../logosamples/1.JPG' 
 import welcomeImg from "../public/welcome.png";
+import homeImg from '../public/home.png';
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import MenuIcon from '@heroicons/react/solid'
-import readingImg from '../public/reading.png'
+// import readingImg from '../public/reading.png'
 import { BookOpenIcon } from '@heroicons/react/solid';
 import { modalState } from '../atoms/modalAtom';
 import { useRecoilState } from 'recoil';
@@ -30,10 +31,10 @@ export default function Home() {
           </div>
       </div>
 
-      <div className=" lg:px-44 px-4 grid grid-col-1 lg:grid-cols-2 gap-10 lg:gap-40 bg-[#F9FAFB] py-10">
+      <div className=" lg:px-44 px-4 grid grid-col-1 lg:grid-cols-2 gap-10 lg:gap-4 bg-[#F9FAFB] py-10">
           <div className="flex flex-col space-y-5">
             <h1 className="text-[#000] text-3xl font-bold">
-              Choosing honours modules made easier.
+              Choosing Honours Modules Made Easier.
             </h1>
             <div className="flex items-center">
                 <div>
@@ -79,7 +80,14 @@ export default function Home() {
             </div>
           </div>
           <div className="">
-             Image Section
+            {/* <p>Image section</p> */}
+          <Image
+            src={homeImg}
+            alt="Picture of the author"
+            width={900}
+            height={900}
+            className="rounded-lg"
+          />
           </div>
       </div>
 

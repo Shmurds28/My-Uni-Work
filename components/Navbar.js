@@ -34,7 +34,7 @@ function Navbar() {
         }
     )
 
-    console.log(user);
+
 
     const doLogin = () => {
         setIsOpen(true);
@@ -121,7 +121,7 @@ function Navbar() {
 
                     {/* <Link href="/dashboard/schedule" className="navLink"> */}
                         <a className="navLink" onClick={doSignup}>
-                            Signup
+                            Register
                         </a>
                     {/* </Link> */}
 

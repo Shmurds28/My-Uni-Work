@@ -1,5 +1,5 @@
 const defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/myuniwork-b6880.appspot.com/o/lecturers%2Fdefault.png?alt=media&token=0964f992-c91c-4b10-9122-62240a88abef";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { db, storage } from "../firebase";
 import {
   addDoc,
@@ -9,7 +9,8 @@ import {
   updateDoc,
   onSnapshot,
   query,
-  setDoc
+  setDoc,
+  getDoc,
 } from "@firebase/firestore";
 import { useRecoilState } from 'recoil';
 import { addLecturer, modalState } from '../atoms/modalAtom';
@@ -17,23 +18,31 @@ import {defaultImage} from '../public/default.png'
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { Router, useRouter } from 'next/router';
 
-function AddLecturer() {
-    const [title, setTitle] = useState("Mr");
-    const [initials, setInitials] = useState(null);
-    const [firstName, setFirstName] = useState(null);
-    const [surname, setSurname] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [telephone, setTelephone] = useState(null);
-    const [office, setOffice] = useState(null);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [staffNum, setStaffNum] = useState(null);
+export const EditLecturer = ({lecturer, lecturerId}) => {
+    const [title, setTitle] = useState("");
+    const [initials, setInitials] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [surname, setSurname] = useState("");
+    const [email, setEmail] = useState("");
+    const [telephone, setTelephone] = useState("");
+    const [office, setOffice] = useState("");
+    const [selectedFile, setSelectedFile] = useState("");
+    const [staffNum, setStaffNum] = useState("");
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
     const [error, setError] = useState(null);
     const router = useRouter();
 
-    //add image to selected once the image has been selected
+    useEffect(() => {
+     
+      setStaffNum(lecturerId);
+      // getDoc(doc(db, 'lecturers', lecturerId)).then(lectDoc => {
+      //     console.log(lectDoc.data());
+      // });
+
+    });
+
     const addImage = (e) => {
       const reader = new FileReader();
       if(e.target.files[0]){
@@ -45,68 +54,64 @@ function AddLecturer() {
       }
     }
 
-    //Add lecturer to the database
     const postLecturer = async () => {
-        if(loading) return;
-        setLoading(true);
-        setError(null);
 
-        //check if the required fields are present
-        if(!title || !initials || !firstName || !surname || !email){
-          setLoading(false);
-          setError("Missing required fields");
-          return;
-        }
+        // alert(lecturerId);
+        console.log(lecturer);
+        // if(loading) return;
+        // setLoading(true);
+        // setError(null);
+
+        // if(!title || !initials || !firstName || !surname || !email){
+        //   setLoading(false);
+        //   setError("Missing required fields");
+        //   return;
+        // }
     
-        //add the lecturer to the database - staff number as the identifier
-        const docRef = await setDoc(doc(db, 'lecturers', staffNum), {
-          title: title,
-          initials: initials,
-          firstName: firstName,
-          surname: surname,
-          email: email,
-          telephone: telephone,
-          office: office,
-        });
+        // const docRef = await setDoc(doc(db, 'lecturers', staffNum), {
+        //   title: title,
+        //   initials: initials,
+        //   firstName: firstName,
+        //   surname: surname,
+        //   email: email,
+        //   telephone: telephone,
+        //   office: office,
+        // });
 
-        //storage image reference
-        const imageRef = ref(storage, `lecturers/${staffNum}/image`);
+        // const imageRef = ref(storage, `lecturers/${staffNum}/image`);
 
-        if(selectedFile){
-          //upload image to storage if selected
-          await uploadString(imageRef, selectedFile, 'data_url').then(async () => {
-            const downloadUrl = await getDownloadURL(imageRef);
+        // if(selectedFile){
+        //   await uploadString(imageRef, selectedFile, 'data_url').then(async () => {
+        //     const downloadUrl = await getDownloadURL(imageRef);
 
-            //update lecturer document to have image field
-            await updateDoc(doc(db, "lecturers", staffNum), {
-              image: downloadUrl,
-            });
-          });
-        }else{
-          //if no file selected update lecturer document to have default image field
-          await updateDoc(doc(db, 'lecturers', staffNum), {
-            image: defaultImageUrl,
-        });
-        }
+        //     await updateDoc(doc(db, "lecturers", staffNum), {
+        //       image: downloadUrl,
+        //     });
+        //   });
+        // }else{
+        //   await updateDoc(doc(db, 'lecturers', staffNum), {
+        //     image: defaultImageUrl,
+        // });
+        // }
     
-        router.reload(window.location.pathname);
-        setLoading(false);
-        setIsOpen(false);
-        setIsAddLecturer(false);
-        setTitle("Mr");
-        setInitials("");
-        setFirstName("");
-        setSurname("");
-        setEmail("");
-        setTelephone("");
-        setOffice("");
-        setSelectedFile(null);
+        // router.reload(window.location.pathname);
+        // setLoading(false);
+        // setIsOpen(false);
+        // setIsAddLecturer(false);
+        // setTitle("Mr");
+        // setInitials("");
+        // setFirstName("");
+        // setSurname("");
+        // setEmail("");
+        // setTelephone("");
+        // setOffice("");
+        // setSelectedFile(null);
         
     }
 
   return (
     <div className="">
-    <h1 className="text-xl font-bold flex items-center justify-center pb-8">Add Lecturer</h1>
+    <h1 className="text-xl font-bold flex items-center justify-center pb-8">Edit Lecturer</h1>
      <div className="lg:grid lg:grid-cols-2 lg:gap-3">
      {error && (
                 <div className="col-span-2 text-red-500 text-center rounded">
@@ -133,7 +138,7 @@ function AddLecturer() {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Initials
              </span>
-             <input value={initials} onChange={(e) => setInitials(e.target.value)} type="text" name="initials" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
+             <input value={(initials)} onChange={(e) => setInitials(e.target.value)} type="text" name="initials" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
           </label>
          </div>
 
@@ -206,7 +211,7 @@ function AddLecturer() {
            <label className="block">
              <button className="bg-[#103A5C] w-full text-white font-semibold p-3 rounded-md hover:opacity-90
                  " onClick={postLecturer} >
-                 Add Lecturer
+                 Update
              </button>   
           </label>
          </div>
@@ -227,5 +232,3 @@ function AddLecturer() {
   </div>
   )
 }
-
-export default AddLecturer

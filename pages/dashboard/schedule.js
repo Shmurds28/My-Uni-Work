@@ -82,7 +82,7 @@ export default function schedule() {
       <div className="lg:flex space-x-0 h-full">
           {/* sidebar area  */}
           <div>
-          <DashboardSidebar schedule />
+            <DashboardSidebar schedule />
           </div>
           
 

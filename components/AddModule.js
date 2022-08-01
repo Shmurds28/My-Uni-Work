@@ -34,7 +34,7 @@ function AddModule() {
     const router = useRouter();
     
   
-  
+  //Get modules from the database
     useEffect(
       () => 
         onSnapshot(
@@ -47,7 +47,7 @@ function AddModule() {
         [db]
     );
 
-  
+  //get lecturers from database
     useEffect(
       () => 
         onSnapshot(
@@ -59,10 +59,12 @@ function AddModule() {
         [db]
     )
   
+    //Add module to database
     const postModule = async () => {
       if(loading) return;
       setLoading(true);
 
+      //check if there is any pre requisites
       var pre = [];
       prerequisites.map(prerequisite => {
         pre.push(prerequisite.value);
@@ -225,7 +227,7 @@ function AddModule() {
 
          <div className="m-1">
            <label className="block">
-             <button className="bg-red-400 w-full text-white font-semibold p-3 rounded-md hover:opacity-90
+             <button className="bg-[#F9FAFB] border border-gray-500 w-full text-black font-semibold p-3 rounded-md hover:opacity-90
                  " onClick={(e) =>{
                    setIsOpen(false);
                    setIsAddModule(false);

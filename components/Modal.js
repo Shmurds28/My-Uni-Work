@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { addAssessment, addLecturer, addModule, login, modalState, signup, viewModule } from '../atoms/modalAtom'
+import { addAssessment, addLecturer, addModule, editLecturer, login, modalState, signup, viewModule } from '../atoms/modalAtom'
 import AddLecturer from './AddLecturer';
 import AddAssessment from './AddAssessment';
 import AddModule from './AddModule';
@@ -9,12 +9,14 @@ import Signup from './Signup';
 import Login from './Login';
 import {useRouter} from 'next/router'
 import { XIcon } from '@heroicons/react/solid';
+import { EditLecturer } from './EditLecturer';
 
-export default function MyModal({module}) {
+export default function MyModal({module, lecturer, lecturerId}) {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [isAddModule, setIsAddModule] = useRecoilState(addModule);
   const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
   const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
+  const [isEditLecturer, setIsEditLecturer] = useRecoilState(editLecturer);
   const [isSignup, setIsSignup] = useRecoilState(signup);
   const [isLogin, setIsLogin] = useRecoilState(login);
   const [isViewModule, setIsViewModule] = useRecoilState(viewModule);
@@ -100,6 +102,11 @@ export default function MyModal({module}) {
                  {/* Add Lecturer Modal Content  */}
                  {isAddLecturer && (
                     <AddLecturer />
+                 )}
+
+                 {/* Edit Lecturer Modal Content  */}
+                 {isEditLecturer && (
+                    <EditLecturer lecturerId={lecturerId} lecturer={lecturer}/>
                  )}
 
                  {isSignup && (

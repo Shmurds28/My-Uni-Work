@@ -36,17 +36,17 @@ function Signup() {
                         firstname: firstName,
                         lastName: lastName,
                         modules: modules,
-                        isAdmin: true,
+                        isAdmin: false,
                     });
-                    router.push("/dashboard/schedule");
-                    // ...
+                    setIsOpen(false);
+                    setIsSignup(false);
+                    setEmail("");
+                    setPassword("");
+                    setFirstName("");
+                    setLastName("");
+                    router.push("/");
                 });
-                setIsOpen(false);
-                setIsSignup(false);
-                setEmail("");
-                setPassword("");
-                setFirstName("");
-                setLastName("");
+                
 
       }catch(err){
         setError(err.code);
@@ -111,10 +111,10 @@ function Signup() {
 
          <div className="m-1">
            <label className="block">
-             <button className="bg-red-400 w-full text-white font-semibold p-3 rounded-md hover:opacity-90
+             <button className="bg-[#F9FAFB] border border-gray-500 w-full text-black font-semibold p-3 rounded-md hover:opacity-90
                  " onClick={(e) =>{
                    setIsOpen(false);
-                  //  Router.reload(window.location.pathname);
+                   router.reload(window.location.pathname);
                  }} >
                  Cancel
              </button>   

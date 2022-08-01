@@ -34,3 +34,8 @@ export const viewModule = atom({
     key: "viewModule",
     default: false,
 });
+
+export const editLecturer = atom({
+    key: "editLecturer",
+    default: false,
+});

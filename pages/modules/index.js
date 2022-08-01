@@ -24,14 +24,33 @@ import {
   onSnapshot,
   query,
   where,
+  orderBy,
+  startAt,
+  endAt,
 } from "@firebase/firestore";
+import { useUserAuth } from '../../context/UserAuthContext';
 
 export default function Modules() {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [isAddModule, setIsAddModule] = useRecoilState(addModule);
   const [modules, setModules] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const {user, userInfo, setUserInfo} = useUserAuth();
 
+  useEffect(
+    () => 
+    {
+        if(user){
+            onSnapshot(
+                query(doc(db, "users", user?.uid)),
+                (userSnapshot) => {
+                setUserInfo(userSnapshot.data());    
+                }
+            ),
+            [db]
+        }
+    }
+)
    // get modules form firebase
    useEffect( 
     () =>
@@ -47,15 +66,18 @@ export default function Modules() {
   const doSearch = (e) => {
     e.preventDefault();
     if(!searchInput) return;
+    // const ref = collection(db, 'modules'); 
 
-    const modCodeDoc = query(collection(db, 'modules'), where("moduleCode", "==", searchInput) );
-    const modNameDoc = query(collection(db, 'modules'), where("moduleName", "==", searchInput));
+    // const modCodeDoc = query(ref, orderBy("moduleCode"), startAt(searchInput), endAt(searchInput+'\uf8ff'));
+    // const modNameDoc = query(ref, orderBy("moduleName"), startAt(searchInput), endAt(searchInput+'\uf8ff'));
 
-    const mods = []; mods.push(modCodeDoc); mods.push(modNameDoc);
-    console.log(mods);
-    setModules(mods);
+    // console.log(modCodeDoc);
+
+    // const mods = []; mods.push(modCodeDoc); mods.push(modNameDoc);
+    // console.log(mods);
+    // setModules(modules => [...modules, modCodeDoc, modNameDoc]);
     // onSnapshot(
-    //   query(collection(db, 'modules'), where("moduleCode", "==", searchInput) ),
+    //   query(collection(db, 'modules'), where("moduleCode", "==", searchInput)),
     //   (snapshot) => {
     //     console.log("Done!");
     //     setModules(snapshot.docs);
@@ -86,7 +108,7 @@ export default function Modules() {
       <div className="mt-8 lg:px-24 px-2 flex flex-col lg:flex-row lg:items-center justify-between space-y-3">
           {/* Page heading */}
         <p className="text-lg lg:text-2xl font-semibold text-[#333]">
-           Browse honours modules offered.     
+           Browse Honours Modules Offered.     
         </p>
         {/* Search modulese section */}
         <form className="p-0 m-0" onSubmit={doSearch}>
@@ -108,19 +130,26 @@ export default function Modules() {
        
 
          {/* Buttons */}
-        <div className="flex items-center">
+        
 
-            <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
-                " onClick={(e) =>{
-                  // alert("Hello!");
-                  console.log("wtf is wrong here???!");
-                  setIsOpen(true);
-                  setIsAddModule(true);
-                  console.log("2: wtf is wrong here???!");
-                }} >
-                Add Module
-            </button>            
-        </div>
+
+          {userInfo?.isAdmin && (
+            <div className="flex items-center">
+              <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
+              " onClick={(e) =>{
+                // alert("Hello!");
+                console.log("wtf is wrong here???!");
+                setIsOpen(true);
+                setIsAddModule(true);
+                console.log("2: wtf is wrong here???!");
+              }} >
+              Add Module
+              </button>  
+            </div>
+          )}
+
+                      
+        
 
       </div>
       <div>

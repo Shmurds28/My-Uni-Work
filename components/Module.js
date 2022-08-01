@@ -1,7 +1,7 @@
 import { getDoc, doc, updateDoc, deleteDoc, onSnapshot, query, collection } from 'firebase/firestore';
 import React from 'react'
 import { useRecoilState } from 'recoil';
-import { addAssessment, login, modalState, viewModule } from '../atoms/modalAtom';
+import { login, modalState, viewModule } from '../atoms/modalAtom';
 import { useUserAuth } from '../context/UserAuthContext';
 import { db } from '../firebase';
 import MyModal from './Modal';
@@ -12,28 +12,35 @@ function Module({dashboardPage, module}) {
     const [isLogin, setIsLogin] = useRecoilState(login);
     const [isViewModule, setIsViewModule] = useRecoilState(viewModule);
     const {user, userInfo, setUserInfo} = useUserAuth();
-    const router = useRouter() 
+    const router = useRouter(); 
 
+    //Add module to user schedule
     const addToSchedule = async () => {
+        //check if logged in
         if(user == null) {
             setIsOpen(true);
             setIsLogin(true);
             return;
         }
+
+        //get the user data
         getDoc(doc(db, "users", user.uid)).then( async(userDoc) => {
             var userModules = userDoc.data().modules;
 
+            //check if module not added already
             if(userModules.indexOf(module.moduleCode) != -1) {
                 alert("Module already added");
                 return;
             }
 
+            //check if schedule has is not full and add the module
             if(userModules.length < 8) {
                 setUserInfo(userDoc.data());
                 userModules.push(module.moduleCode);
                 await updateDoc(doc(db, "users", user.uid),{
                     modules: userModules,
                 });
+                
                 router.reload(window.location.pathname);
             }
            
@@ -44,10 +51,13 @@ function Module({dashboardPage, module}) {
 
     // Remove module from Schedule
     const removeFromSchedule = async() =>{
+        //get user data
         getDoc(doc(db, "users", user.uid)).then( async(userDoc) => {
             var userModules = userDoc.data().modules;
+            //remove the modue
             const mods = (userModules.filter(mod => mod != module.moduleCode));
             console.log(mods);
+            //update user data with removed module
             await updateDoc(doc(db, "users", user.uid),{
                 modules: mods,
             });
@@ -60,7 +70,7 @@ function Module({dashboardPage, module}) {
     // Delete module 
     const deleteModule = async() => {
         await deleteDoc(doc(db, "modules", module.moduleCode));
-        router.reload(window.location.pathname);
+        // router.reload(window.location.pathname);
     }
 
   return (
@@ -117,13 +127,13 @@ function Module({dashboardPage, module}) {
         {viewModule && (
             <div className="mb-1">
             {(dashboardPage && !module.compulsory && !userInfo?.isAdmin) &&(
-                <button className="bg-red-400 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
+                <button className="bg-[#F9FAFB] border border-gray-500 mr-4 text-black font-semibold p-3 rounded-md hover:opacity-90"
                     onClick={removeFromSchedule}>
                     Remove
                 </button>
             )}
 
-            {(!dashboardPage && !module.compulsory) &&(
+            {(!dashboardPage && !module.compulsory && !userInfo?.isAdmin) &&(
                  <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                     onClick={addToSchedule}>
                     Add to schedule
@@ -137,7 +147,7 @@ function Module({dashboardPage, module}) {
             )}
 
            {userInfo?.isAdmin &&(
-            <button className="bg-red-400 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
+            <button className="bg-[#F9FAFB] border border-gray-500 mr-4 text-black font-semibold p-3 rounded-md hover:opacity-90"
                 onClick={deleteModule}>
                 Delete Module
             </button>
