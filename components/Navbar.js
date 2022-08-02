@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Image from 'next/image';
 import logo from '../../2.png';
 import Link from 'next/link';
-import {MenuIcon} from '@heroicons/react/solid';
+import {MenuIcon,} from '@heroicons/react/solid';
 import { modalState, signup, login } from '../atoms/modalAtom';
 import { useRecoilState } from 'recoil';
 import { useUserAuth } from '../context/UserAuthContext';

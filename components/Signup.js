@@ -1,3 +1,4 @@
+import { LockClosedIcon } from '@heroicons/react/outline';
 import { addDoc, doc, setDoc } from 'firebase/firestore';
 import { Router, useRouter } from 'next/router';
 import React, { useState } from 'react'
@@ -57,6 +58,9 @@ function Signup() {
 
   return (
     <div className="">
+      <div className=" flex items-center align-center w-14 h-14 mx-auto justify-center p-2 bg-[#103A5C] m-0 rounded-full ">
+      <LockClosedIcon className="w-10 h-10 text-white font-semibold text-lg hover:text-[#F9B42A]"/>
+      </div>
     <h1 className="text-4xl font-bold flex items-center justify-center pb-8">Signup</h1>
      <form className="lg:grid lg:grid-cols-1 lg:gap-3" onSubmit={doSignup}>
             {error && (

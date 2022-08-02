@@ -5,6 +5,7 @@ import { useUserAuth } from '../context/UserAuthContext';
 import Router, { useRouter } from "next/router";
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { LockClosedIcon } from '@heroicons/react/outline';
 
 
 function Login() {
@@ -69,7 +70,10 @@ function Login() {
 
   return (
     <div className="">
-    <h1 className="text-4xl font-bold flex items-center justify-center pb-4">Login</h1>
+      <div className=" flex items-center align-center w-14 h-14 mx-auto justify-center p-2 bg-[#103A5C] m-0 rounded-full ">
+      <LockClosedIcon className="w-10 h-10 text-white font-semibold text-lg hover:text-[#F9B42A]"/>
+      </div>
+    <h1 className="text-4xl font-bold flex items-center justify-center m-0 pb-4">Login</h1>
      <form className="lg:grid lg:grid-cols-1 lg:gap-3" onSubmit={doLogin}>
           {error && (
             <div className=" text-red-500 col-span-2 text-center rounded">
