@@ -39,3 +39,8 @@ export const editLecturer = atom({
     key: "editLecturer",
     default: false,
 });
+
+export const editModule = atom({
+    key: "editModule",
+    default: false,
+});

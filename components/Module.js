@@ -1,7 +1,7 @@
 import { getDoc, doc, updateDoc, deleteDoc, onSnapshot, query, collection } from 'firebase/firestore';
 import React from 'react'
 import { useRecoilState } from 'recoil';
-import { login, modalState, viewModule } from '../atoms/modalAtom';
+import { editModule, login, modalState, viewModule } from '../atoms/modalAtom';
 import { useUserAuth } from '../context/UserAuthContext';
 import { db } from '../firebase';
 import MyModal from './Modal';
@@ -11,6 +11,7 @@ function Module({dashboardPage, module, modulePage}) {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isLogin, setIsLogin] = useRecoilState(login);
     const [isViewModule, setIsViewModule] = useRecoilState(viewModule);
+    const [isEditModule, setIsEditModule] = useRecoilState(editModule);
     const {user, userInfo, setUserInfo} = useUserAuth();
     const router = useRouter(); 
 
@@ -78,6 +79,13 @@ function Module({dashboardPage, module, modulePage}) {
         <h1 className={`text-[#333] font-semibold mb-3 ${modulePage? "text-3xl text-center mb-8": "text-lg"}`}>
             {module.moduleCode} - {module.moduleName}
         </h1>
+        
+        {modulePage && (
+            <div className="m-2">
+                <p>{module.description}</p>
+            </div>
+        )}
+
         <p className="mb-1">
             <span className="text-[#333] font-semibold text-base mr-2">
                 Lecturer: 
@@ -112,18 +120,6 @@ function Module({dashboardPage, module, modulePage}) {
             </span>
             {module.compulsory ? "YES" : "NO"}
         </p>
-
-        {/* <div className="mb-1">
-            <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
-                onClick={() =>{
-                    setIsOpen(true);
-                    setIsViewModule(true);
-                } 
-                }>
-                View module
-            </button>
-        </div> */}
-
      
             <div className="mb-1">
             {(dashboardPage && !module.compulsory && !userInfo?.isAdmin) &&(
@@ -141,7 +137,11 @@ function Module({dashboardPage, module, modulePage}) {
             )}
 
             {userInfo?.isAdmin && modulePage && (
-                <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90">
+                <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
+                    onClick={() => {
+                        setIsOpen(true);
+                        setIsEditModule(true);
+                    }}>
                 Edit Module
                 </button>
             )}

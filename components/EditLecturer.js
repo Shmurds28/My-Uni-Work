@@ -18,33 +18,33 @@ import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { Router, useRouter } from 'next/router';
 
 export const EditLecturer = ({lecturer, lecturerId}) => {
-    const [title, setTitle] = useState("");
-    var [initials, setInitials] = useState("");
-    var [firstName, setFirstName] = useState("");
-    const [surname, setSurname] = useState("");
-    const [email, setEmail] = useState("");
-    const [telephone, setTelephone] = useState("");
-    const [office, setOffice] = useState("");
-    const [selectedFile, setSelectedFile] = useState("");
+    const [title, setTitle] = useState(lecturer?.title);
+    var [initials, setInitials] = useState(lecturer?.initials);
+    var [firstName, setFirstName] = useState(lecturer?.firstName);
+    const [surname, setSurname] = useState(lecturer?.surname);
+    const [email, setEmail] = useState(lecturer?.email);
+    const [telephone, setTelephone] = useState(lecturer?.telephone);
+    const [office, setOffice] = useState(lecturer?.office);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [staffNum, setStaffNum] = useState("");
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
     const [error, setError] = useState(null);
     const router = useRouter();
-    const [defaultImage, setDefaultImage] = useState(null);
+    const [defaultImage, setDefaultImage] = useState(lecturer?.defaultImage);
 
     useEffect(() => {
       if(!lecturer) return;
      
       setStaffNum(lecturerId);
-      setInitials(lecturer.initials);
-      setTitle(lecturer.title);
-      setFirstName(lecturer.firstName);
-      setSurname(lecturer.surname);
-      setEmail(lecturer.email);
-      setTelephone(lecturer.telephone);
-      setOffice(lecturer.office);
+      // setInitials(lecturer.initials);
+      // setTitle(lecturer.title);
+      // setFirstName(lecturer.firstName);
+      // setSurname(lecturer.surname);
+      // setEmail(lecturer.email);
+      // setTelephone(lecturer.telephone);
+      // setOffice(lecturer.office);
       setDefaultImage(lecturer.image);
 
     });
@@ -127,7 +127,7 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Title
              </span>
-             <select value={title} onChange={(e) => setTitle(e.target.value)} name="title" id="title" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
+             <select defaultValue={lecturer?.title} onChange={(e) => setTitle(e.target.value)} name="title" id="title" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
                <option value="Mr">Mr</option>
                <option value="Mrs">Mrs</option>
                <option value="Miss">Miss</option>
@@ -142,7 +142,7 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Initials
              </span>
-             <input value={initials} onChange={(e) => setInitials(e.target.value)} type="text" name="initials" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
+             <input defaultValue={lecturer?.initials} onChange={(e) => setInitials(e.target.value)} type="text" name="initials" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
           </label>
          </div>
 
@@ -151,7 +151,7 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                First Name
              </span>
-             <input value={firstName} onChange={(e) => setFirstName(e.target.value)} type="text" name="firstname" className=" rounded-md w-full mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300" />
+             <input defaultValue={lecturer?.firstName} onChange={(e) => setFirstName(e.target.value)} type="text" name="firstname" className=" rounded-md w-full mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300" />
           </label>
          </div>
 
@@ -160,7 +160,7 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Surname
              </span>
-             <input value={surname} onChange= {(e) => setSurname(e.target.value)}type="text" name="surname" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
+             <input defaultValue={lecturer?.surname} onChange= {(e) => setSurname(e.target.value)}type="text" name="surname" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
           </label>
          </div>
 
@@ -169,7 +169,7 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Staff Number
              </span>
-             <input disabled value={staffNum} onChange={(e) => setStaffNum(e.target.value)} type="text" name="staffNum" className=" rounded-md mt-1 w-full px-3 py-2 bg-[#F9FAFB] border shadow-sm border-slate-300" />
+             <input disabled defaultValue={lecturerId} onChange={(e) => setStaffNum(e.target.value)} type="text" name="staffNum" className=" rounded-md mt-1 w-full px-3 py-2 bg-[#F9FAFB] border shadow-sm border-slate-300" />
           </label>
          </div>
 
@@ -178,7 +178,7 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Email
              </span>
-             <input value={email} onChange= {(e) => setEmail(e.target.value)} type="email" name="email" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
+             <input defaultValue={lecturer?.email} onChange= {(e) => setEmail(e.target.value)} type="email" name="email" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
           </label>
          </div>
 
@@ -187,7 +187,7 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Telephone Number
              </span>
-             <input value={telephone} onChange={(e) => setTelephone(e.target.value)} type="text" name="tel" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
+             <input defaultValue={lecturer?.telephone} onChange={(e) => setTelephone(e.target.value)} type="text" name="tel" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
           </label>
          </div>
 
@@ -196,7 +196,7 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Office Number
              </span>
-             <input value={office} onChange= {(e) => setOffice(e.target.value)} type="text" name="office" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
+             <input defaultValue={lecturer?.office} onChange= {(e) => setOffice(e.target.value)} type="text" name="office" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
           </label>
          </div>
          

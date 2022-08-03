@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { addAssessment, addLecturer, addModule, editLecturer, login, modalState, signup, viewModule } from '../atoms/modalAtom'
+import { addAssessment, addLecturer, addModule, editLecturer, editModule, login, modalState, signup, viewModule } from '../atoms/modalAtom'
 import AddLecturer from './AddLecturer';
 import AddAssessment from './AddAssessment';
 import AddModule from './AddModule';
@@ -10,6 +10,7 @@ import Login from './Login';
 import {useRouter} from 'next/router'
 import { XIcon } from '@heroicons/react/solid';
 import { EditLecturer } from './EditLecturer';
+import EditModule from './EditModule';
 
 export default function MyModal({module, lecturer, lecturerId}) {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
@@ -17,6 +18,7 @@ export default function MyModal({module, lecturer, lecturerId}) {
   const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
   const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
   const [isEditLecturer, setIsEditLecturer] = useRecoilState(editLecturer);
+  const [isEditModule, setIsEditModule] = useRecoilState(editModule);
   const [isSignup, setIsSignup] = useRecoilState(signup);
   const [isLogin, setIsLogin] = useRecoilState(login);
   const [isViewModule, setIsViewModule] = useRecoilState(viewModule);
@@ -43,6 +45,8 @@ export default function MyModal({module, lecturer, lecturerId}) {
           setIsSignup(false);
           setIsLogin(false);
           setIsViewModule(false);
+          setIsEditLecturer(false);
+          setIsEditModule(false);
 
           router.reload(window.location.pathname);
         }} >
@@ -83,6 +87,8 @@ export default function MyModal({module, lecturer, lecturerId}) {
                       setIsSignup(false);
                       setIsLogin(false);
                       setIsViewModule(false);
+                      setIsEditLecturer(false);
+                      setIsEditModule(false);
                       router.reload(window.location.pathname)
                     }}
                   >
@@ -92,6 +98,11 @@ export default function MyModal({module, lecturer, lecturerId}) {
                  {/* Add module modal content */}
                  {isAddModule && (
                   <AddModule />
+                 )}
+
+                 {/* Edit module modal content */}
+                 {isEditModule && (
+                  <EditModule module={module} />
                  )}
 
                  {/* Add Assessment modal content */}
@@ -109,20 +120,17 @@ export default function MyModal({module, lecturer, lecturerId}) {
                     <EditLecturer lecturerId={lecturerId} lecturer={lecturer}/>
                  )}
 
+                  {/* Signup Modal content */}
                  {isSignup && (
                     <Signup />  
                  )}
 
+                  {/* Login Modal Content */}
                  {isLogin && (
                   <Login />
                  )}
 
-                 {isViewModule && (
-                  <div>
-                    <h1 className="text-center font-bold text-3xl">{module.moduleName}</h1>
-                  </div>
-                 )}
-
+              
                 </Dialog.Panel>
               </Transition.Child>
             </div>
