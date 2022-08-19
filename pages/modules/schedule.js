@@ -16,8 +16,7 @@ import { db } from '../../firebase';
 import { useEffect, useState } from 'react';
 import { collection, doc, getDocs, onSnapshot, orderBy, query } from 'firebase/firestore';
 
-
-export default function schedule() {
+function schedule() {
   const {user} = useUserAuth();
   const [semester1Ass, setsemester1Ass] = useState([]);
   const [semester2Ass, setsemester2Ass] = useState([]);
@@ -31,10 +30,10 @@ export default function schedule() {
   useEffect(
     () => 
       onSnapshot(
-        query(doc(db, "users", user.uid)), (userSnapshot) =>{
-          const userModules = userSnapshot.data().modules;
-          userModules.forEach(userModule =>{
-            getDocs(collection(db, 'modules', userModule, "assessments"), orderBy("submissionWeek")).then(assessments =>{
+        query(collection(db, "modules")), (userSnapshot) =>{
+          // const userModules = userSnapshot.data().modules;
+          userSnapshot.docs.map(userModule =>{
+            getDocs(collection(db, 'modules', userModule.data().moduleCode, "assessments"), orderBy("submissionWeek")).then(assessments =>{
                 assessments.forEach(assessment =>{
                   if(assessment.data().semester == "Semester 1"){
                     setsemester1Ass(semester1Ass => [...semester1Ass, assessment.data()]);
@@ -42,20 +41,17 @@ export default function schedule() {
                       setWeeks1(weeks1 => [...weeks1, Number(assessment.data().submissionWeek)]);
                      
                     }
-                    // bubbleSort(weeks1);
                     
 
                   }else if(assessment.data().semester == "Semester 2"){
                     setsemester2Ass(semester2Ass => [...semester2Ass, assessment.data()]);
                     if(weeks2.indexOf(assessment.data().submissionWeek) == -1){
                       setWeeks2(weeks2 => [...weeks2, assessment.data().submissionWeek]);
-                      // weeks2.sort();
                     }
                   }else{
                     setyearAss(yearAss => [...yearAss, assessment.data()]);
                     if(weeksY.indexOf(assessment.data().submissionWeek) == -1){
                       setWeeksY(weeksY => [...weeksY, assessment.data().submissionWeek]);
-                      // weeksY.sort();
                     }
                   }
                 });
@@ -90,7 +86,7 @@ export default function schedule() {
     return arr.filter((item,
         index) => arr.indexOf(item) == index).sort();
   }
-  
+
 
   return (
     <div className="h-full">
@@ -102,40 +98,27 @@ export default function schedule() {
 
       <Navbar />
       <div className="lg:flex space-x-0 h-full">
-          {/* sidebar area  */}
-          <div>
-            <DashboardSidebar schedule />
-          </div>
           
 
           {/* content area */}
           <div className="flex flex-col lg:px-10 mt-4 space-y-2 mb-6 w-full">
             <div className="lg:flex m-2 items-center justify-between">
               <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333] text-center">
-                  Personal Workload Schedule   
+                  Provisional Workload Schedule   
               </p>
 
-            <div>
-            <div className="flex items-center gap-3">
-              <label className="block">
-                <span className=" block text-sm font-semibold text-slate-700">
-                  Sort by Semester
-                </span>
-                <select value={semester} onChange= {(e) => setSemester(e.target.value)} name="semester" id="semester" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
-                  <option value="Semester 1">Semester 1</option>
-                  <option value="Semester 2">Semester 2</option>
-                  <option value="Year">Year</option>
-                </select>
-              </label>
-                  {/* <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90">
-                      <Link href="/modules/schedule" className="navLink">
-                              Workload Schedule
-                      </Link>
-                    
-                  </button> */}
-            </div>
-
-          </div>
+              <div>
+           <label className="block">
+             <span className=" block text-sm font-semibold text-slate-700">
+               Sort by Semester
+             </span>
+             <select value={semester} onChange= {(e) => setSemester(e.target.value)} name="semester" id="semester" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
+               <option value="Semester 1">Semester 1</option>
+               <option value="Semester 2">Semester 2</option>
+               <option value="Year">Year</option>
+             </select>
+          </label>
+         </div>
                 
             </div>
 
@@ -298,5 +281,8 @@ export default function schedule() {
 
       {/* <Footer /> */}
     </div>
-  )
+
+)
 }
+
+export default schedule

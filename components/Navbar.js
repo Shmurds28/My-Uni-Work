@@ -53,9 +53,9 @@ function Navbar() {
 
     const dashboardLink = () => {
         if(userInfo?.isAdmin){
-            return "dashboard/modules"
+            return "/dashboard/modules"
         }else{
-            return "dashboard/schedule"
+            return "/dashboard/schedule"
         }
     }
     
