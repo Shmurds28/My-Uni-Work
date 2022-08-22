@@ -60,6 +60,51 @@ a {
   display: none;
 }
 
+
+.searchcont li {
+  list-style-type: none!important;
+}
+
+.searchcont ul {
+  padding: 0;
+}
+
+/* .search input{
+  border: none;
+  padding: 10px 15px;
+  margin: 10px 5px;
+  outline: none;
+}
+
+.search button{
+  border: none;
+  padding: 10px 15px;
+  background: #eee;
+  font-size: 18px;
+} */
+
+.ais-SearchBox-form {
+  @apply relative p-0 rounded-md w-full border
+}
+
+.ais-SearchBox-input{
+  @apply bg-[#F9FAFB] p-3 block w-full pl-10 sm:text-sm border-gray-300 focus:ring-black focus:border-black rounded-md shadow-sm
+}
+
+.ais-SearchBox-submit{
+  @apply absolute inset-y-0 m-2 flex items-center pointer-events-none
+}
+
+.ais-SearchBox-submitIcon{
+  @apply h-6 w-6 text-gray-500
+}
+
+.ais-SearchBox-reset{
+  display:none;
+}
+
+
+
 @media (max-width: 790px) {
   .home{
     background: url("../public/nmu.jpg") no-repeat;

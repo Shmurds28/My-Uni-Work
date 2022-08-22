@@ -1,7 +1,5 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import img from '../../logosamples/1.JPG' 
 import welcomeImg from "../public/welcome.png";
 import homeImg from '../public/home.png';
 import Navbar from '../components/Navbar'

@@ -143,13 +143,13 @@ export default function schedule() {
                <div className="flex flex-col gap-8">
                <div className="flex flex-col border p-1 shadow">
                  <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 1</h1> 
-                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-1">
+                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-1">
                  {weeks1.length == 0 && (
                      <p className="ml-10 font-base text-md">No Submissions...</p>
                    )}
 
                    {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                       <Week week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                       <Week isDashboard week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
                    ))}
                  </div>
                
@@ -165,7 +165,7 @@ export default function schedule() {
                      <p className="ml-10 font-base text-md">No Submissions...</p>
                    )}
                    {bubbleSort(removeDuplicates(weeks2)).map(week => (
-                         <Week week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
+                         <Week isDashboard week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
                      ))}
                  </div>
                
@@ -179,7 +179,7 @@ export default function schedule() {
                      <p className="ml-10 font-base text-md">No Submissions...</p>
                    )}
                    {bubbleSort(removeDuplicates(weeksY)).map(week => (
-                         <Week week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
+                         <Week isDashboard week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
                      ))}
                  </div>
                
@@ -200,7 +200,7 @@ export default function schedule() {
                           <p className="ml-10 font-base text-md">No Submissions...</p>
                         )}
                         {bubbleSort(removeDuplicates(weeks2)).map(week => (
-                              <Week week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week isDashboard week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
                           ))}
                       </div>
                     
@@ -215,7 +215,7 @@ export default function schedule() {
                       )}
 
                       {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                          <Week week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                          <Week isDashboard week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
                       ))}
                     </div>
                   
@@ -229,7 +229,7 @@ export default function schedule() {
                           <p className="ml-10 font-base text-md">No Submissions...</p>
                         )}
                         {bubbleSort(removeDuplicates(weeksY)).map(week => (
-                              <Week week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week isDashboard week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
                           ))}
                       </div>
                     
@@ -248,7 +248,7 @@ export default function schedule() {
                             <p className="ml-10 font-base text-md">No Submissions...</p>
                           )}
                           {bubbleSort(removeDuplicates(weeksY)).map(week => (
-                                <Week week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
+                                <Week isDashboard week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
                             ))}
                         </div>
                       
@@ -263,7 +263,7 @@ export default function schedule() {
                    )}
 
                    {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                       <Week week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                       <Week isDashboard week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
                    ))}
                  </div>
                
@@ -279,7 +279,7 @@ export default function schedule() {
                         <p className="ml-10 font-base text-md">No Submissions...</p>
                       )}
                       {bubbleSort(removeDuplicates(weeks2)).map(week => (
-                            <Week week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
+                            <Week isDashboard week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
                         ))}
                     </div>
                   

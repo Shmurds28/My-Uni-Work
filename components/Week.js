@@ -1,7 +1,7 @@
 import React from 'react'
 import Assessment from './Assessment'
 
-function Week({week, assessments}) {
+function Week({week, assessments, isDashboard}) {
 
   return (
     <div className="border border-gray-700 p-0 bg-[#F9FAFB] rounded-md shadow">
@@ -13,7 +13,7 @@ function Week({week, assessments}) {
 
             {/* <p className="ml-10 font-base text-md">No submissions...</p> */}
             {assessments.map(assessment => (
-              <Assessment assessment={assessment}/>
+              <Assessment assessment={assessment} isDashboard={isDashboard}/>
             ))}
 
           
