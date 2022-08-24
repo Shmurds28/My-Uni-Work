@@ -9,8 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
     "@headlessui/react": "^1.6.5",
     "@heroicons/react": "^1.0.6",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@mui/material": "^5.10.2",
     "algolia-search": "^2.0.1",
     "firebase": "^9.9.0",
     "multiselect-react-dropdown": "^2.0.25",

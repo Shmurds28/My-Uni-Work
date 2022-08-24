@@ -1,7 +1,7 @@
 import { getDoc, doc, updateDoc, deleteDoc, onSnapshot, query, collection } from 'firebase/firestore';
 import React from 'react'
 import { useRecoilState } from 'recoil';
-import { editModule, login, modalState, viewModule } from '../atoms/modalAtom';
+import { editModule, isError, isSnackBar, login, modalState, notificationMessage, viewModule } from '../atoms/modalAtom';
 import { useUserAuth } from '../context/UserAuthContext';
 import { db } from '../firebase';
 import MyModal from './Modal';
@@ -14,6 +14,9 @@ function Module({dashboardPage, module, modulePage, hit}) {
     const [isEditModule, setIsEditModule] = useRecoilState(editModule);
     const {user, userInfo, setUserInfo} = useUserAuth();
     const router = useRouter(); 
+    const [isSnackBarOpen, setIsSnackBarOpen] = useRecoilState(isSnackBar);
+    const [isAnError, setIsAnError] = useRecoilState(isError);
+    const [notMessage, setNotMessage] = useRecoilState(notificationMessage);
 
     //Add module to user schedule
     const addToSchedule = async () => {
@@ -30,7 +33,9 @@ function Module({dashboardPage, module, modulePage, hit}) {
 
             //check if module not added already
             if(userModules.indexOf(module.moduleCode) != -1) {
-                alert("Module already added");
+                setNotMessage("Module Already Added.");
+                setIsAnError(true);
+                setIsSnackBarOpen(true);
                 return;
             }
 
@@ -41,8 +46,12 @@ function Module({dashboardPage, module, modulePage, hit}) {
                 await updateDoc(doc(db, "users", user.uid),{
                     modules: userModules,
                 });
+
+                setNotMessage("Module added successfully");
+                setIsAnError(false);
+                setIsSnackBarOpen(true);
                 
-                router.reload(window.location.pathname);
+                
             }
            
         });
@@ -63,15 +72,23 @@ function Module({dashboardPage, module, modulePage, hit}) {
                 modules: mods,
             });
             router.reload(window.location.pathname);
+            setNotMessage("Module removed successfully");
+            setIsAnError(false);
+            setIsSnackBarOpen(true);
         }).catch(err => {
-            console.log(err);
+            setNotMessage(err.message);
+            setIsAnError(false);
+            setIsSnackBarOpen(true);
         });
     }
 
     // Delete module 
     const deleteModule = async() => {
         await deleteDoc(doc(db, "modules", module.moduleCode));
-        // router.reload(window.location.pathname);
+        router.reload(window.location.pathname);
+        setNotMessage("Module Deleted");
+        setIsAnError(false);
+        setIsSnackBarOpen(true);
     }
 
   return (
@@ -104,7 +121,7 @@ function Module({dashboardPage, module, modulePage, hit}) {
                     <span className="text-[#333] font-semibold text-base mr-2">
                         Prerequisites: 
                     </span>
-                    {module.prerequisites}
+                    {module.prerequisites?.length === 0 ? "none": module.prerequisites?.join(", ")}
                 </p>
 
                 <p className="mb-1">
@@ -124,7 +141,10 @@ function Module({dashboardPage, module, modulePage, hit}) {
                     <div className="mb-1">
                     {(dashboardPage && !module.compulsory && !userInfo?.isAdmin) &&(
                         <button className="bg-[#F9FAFB] border border-gray-500 mr-4 text-black font-semibold p-3 rounded-md hover:opacity-90"
-                            onClick={removeFromSchedule}>
+                            onClick={(e) =>{
+                                e.stopPropagation();
+                                removeFromSchedule();
+                            }}>
                             Remove
                         </button>
                     )}
@@ -151,7 +171,10 @@ function Module({dashboardPage, module, modulePage, hit}) {
 
                 {userInfo?.isAdmin && modulePage &&(
                     <button className="bg-[#F9FAFB] border border-gray-500 mr-4 text-black font-semibold p-3 rounded-md hover:opacity-90"
-                        onClick={deleteModule}>
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            deleteModule();
+                        }}>
                         Delete Module
                     </button>
                 )}

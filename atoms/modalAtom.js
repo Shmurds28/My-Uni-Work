@@ -44,3 +44,18 @@ export const editModule = atom({
     key: "editModule",
     default: false,
 });
+
+export const isError = atom({
+    key: "isError",
+    default: false,
+});
+
+export const isSnackBar = atom({
+    key: "isSnackBar",
+    default: false,
+});
+
+export const notificationMessage = atom({
+    key: "notificationMessage",
+    default: ""
+});

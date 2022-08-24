@@ -81,9 +81,10 @@ function Login() {
             </div>
             
           )}
+
          <div>
            <label className="block">
-             <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
+             <span className="block text-sm font-semibold text-slate-700">
                Email
              </span>
              <input value={email} onChange= {(e) => setEmail(e.target.value)} type="email"className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
@@ -92,7 +93,7 @@ function Login() {
 
          <div>
            <label className="block">
-             <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
+             <span className=" block text-sm font-semibold text-slate-700">
                Password
              </span>
              <input value={password} onChange= {(e) => setPassword(e.target.value)} type="password" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />

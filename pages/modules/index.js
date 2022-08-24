@@ -10,7 +10,7 @@ import readingImg from '../../public/reading.png'
 import { BookOpenIcon } from '@heroicons/react/solid';
 import Module from '../../components/Module';
 import Link from 'next/link';
-import { modalState, addModule } from '../../atoms/modalAtom';
+import { modalState, addModule, isSnackBar, isError } from '../../atoms/modalAtom';
 import {useRecoilState} from 'recoil';
 import Modal from '../../components/Modal';
 import { useEffect, useState } from 'react';
@@ -45,6 +45,8 @@ export default function Modules() {
   const [modules, setModules] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const {user, userInfo, setUserInfo} = useUserAuth();
+  const [isSnackBarOpen, setIsSnackBarOpen] = useRecoilState(isSnackBar);
+  const [isAnError, setIsAnError] = useRecoilState(isError);
 
   useEffect(
     () => 
@@ -86,6 +88,10 @@ export default function Modules() {
 
   }
 
+  const handleClick = () => {
+    setIsSnackBarOpen(true);
+  };
+
 
   return (
       <InstantSearch searchClient={searchClient} indexName={"modules"}>
@@ -114,7 +120,7 @@ export default function Modules() {
                 
           </div>
        
-
+         
          {/* Buttons */}
          <div className="flex items-center">
           <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90">
@@ -123,6 +129,9 @@ export default function Modules() {
             </Link>
                
             </button>
+            {/* <button variant="outlined" onClick={handleClick}>
+            Open success snackbar
+          </button> */}
          </div>
          
 

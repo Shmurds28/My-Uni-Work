@@ -12,6 +12,7 @@ function Signup() {
     const [isSignup, setIsSignup] = useRecoilState(signup);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [error, setError] = useState(null);
@@ -25,6 +26,12 @@ function Signup() {
       e.preventDefault();
       setIsLoading(true);
       setError(null);
+
+      if(password !== confirmPassword){
+        setError("Passwords must match.");
+        setIsLoading(false);
+        return;
+      }
 
       try{
         await signUp(email, password)
@@ -50,7 +57,7 @@ function Signup() {
                 
 
       }catch(err){
-        setError(err.code);
+        setError(err.message);
       }
 
       // Router.reload(window.location.pathname)
@@ -68,6 +75,9 @@ function Signup() {
                 <span>{error}</span>
               </div>
             )}
+            <span className="before:content-['*'] before:mx-1 before:ml-0.5 before:text-red-500 block text-xs font-xs text-slate-700 ">
+              required fields
+            </span>
          <div>
            <label className="block">
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
@@ -101,6 +111,15 @@ function Signup() {
                Password
              </span>
              <input value={password} onChange= {(e) => setPassword(e.target.value)} type="password" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
+          </label>
+         </div>
+
+         <div>
+           <label className="block">
+             <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
+               Confirm Password
+             </span>
+             <input value={confirmPassword} onChange= {(e) => setConfirmPassword(e.target.value)} type="password" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
           </label>
          </div>
 

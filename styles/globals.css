@@ -92,11 +92,11 @@ a {
 }
 
 .ais-SearchBox-submit{
-  @apply absolute inset-y-0 m-2 flex items-center pointer-events-none
+  @apply absolute inset-y-0 m-2 flex items-center pointer-events-none cursor-pointer
 }
 
 .ais-SearchBox-submitIcon{
-  @apply h-6 w-6 text-gray-500
+  @apply h-6 w-6 text-gray-500 
 }
 
 .ais-SearchBox-reset{

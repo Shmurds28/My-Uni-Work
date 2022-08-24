@@ -119,6 +119,9 @@ function AddModule() {
   return (
     <div className="">
     <h1 className="text-xl font-bold flex items-center justify-center pb-8">Add Module</h1>
+    <span className="before:content-['*'] before:mx-1 before:ml-0.5 before:text-red-500 block text-xs font-xs text-slate-700 before:mb-6 mb-6">
+          required fields
+    </span>
      <div className="lg:grid lg:grid-cols-1 lg:gap-3">
         {error && (
                 <div className="col-span-2 text-red-500 text-center rounded">

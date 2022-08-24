@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getDoc, doc, updateDoc, deleteDoc, onSnapshot, query, collection } from 'firebase/firestore';
 import { useRecoilState } from 'recoil';
-import { editModule, login, modalState, viewModule } from '../atoms/modalAtom';
+import { editModule, isError, isSnackBar, login, modalState, notificationMessage, viewModule } from '../atoms/modalAtom';
 import { useUserAuth } from '../context/UserAuthContext';
 import { db } from '../firebase';
 import MyModal from './Modal';
@@ -14,7 +14,20 @@ function Hit({hit, onClick, modulePage, dashboardPage}) {
   const [isEditModule, setIsEditModule] = useRecoilState(editModule);
   const {user, userInfo, setUserInfo} = useUserAuth();
   const router = useRouter(); 
-  const module = hit;
+  const [module, setModule] = useState(null);
+  const [isSnackBarOpen, setIsSnackBarOpen] = useRecoilState(isSnackBar);
+  const [isAnError, setIsAnError] = useRecoilState(isError);
+  const [notMessage, setNotMessage] = useRecoilState(notificationMessage);
+
+  useEffect(
+    onSnapshot(
+        query(doc(db, "modules", hit.moduleCode)),
+        (userSnapshot) => {
+          setModule(userSnapshot.data());  
+        }
+    ),
+    [db]
+  )
 
    //Add module to user schedule
    const addToSchedule = async () => {
@@ -31,7 +44,9 @@ function Hit({hit, onClick, modulePage, dashboardPage}) {
 
         //check if module not added already
         if(userModules.indexOf(module.moduleCode) != -1) {
-            alert("Module already added");
+            setNotMessage("Module Already Added.");
+            setIsAnError(true); 
+            setIsSnackBarOpen(true);
             return;
         }
 
@@ -43,23 +58,24 @@ function Hit({hit, onClick, modulePage, dashboardPage}) {
                 modules: userModules,
             });
             
-            router.reload(window.location.pathname);
+            setNotMessage("Module added successfully.");
+            setIsAnError(false); 
+            setIsSnackBarOpen(true);
         }
        
     });
     
-
 }
 
   return (
     <div className={`${modulePage && "mx-4 md:mx-40 lg:mx-80 lg:my-8"} m-4 border p-3 bg-[#F9FAFB] cursor-pointer shadow`} onClick={() => router.push(`/modules/${hit.moduleCode}`)}>
                 <h1 className={`text-[#333] font-semibold mb-3 ${modulePage? "text-3xl text-center mb-8": "text-lg"}`}>
-                    {hit.moduleCode} - {hit.moduleName}
+                    {hit.moduleCode} - {module?.moduleName}
                 </h1>
                 
                 {modulePage && (
                     <div className="m-2">
-                        <p>{hit.description}</p>
+                        <p>{module?.description}</p>
                     </div>
                 )}
 
@@ -67,35 +83,35 @@ function Hit({hit, onClick, modulePage, dashboardPage}) {
                     <span className="text-[#333] font-semibold text-base mr-2">
                         Lecturer: 
                     </span>
-                    {hit.lecturer}
+                    {module?.lecturer}
                 </p>
 
                 <p className="mb-1">
                     <span className="text-[#333] font-semibold text-base mr-2">
                         Offered In: 
                     </span>
-                    {hit.semester}
+                    {module?.semester}
                 </p>
 
                 <p className="mb-1">
                     <span className="text-[#333] font-semibold text-base mr-2">
                         Prerequisites: 
                     </span>
-                    {hit.prerequisites}
+                    {module?.prerequisites}
                 </p>
 
                 <p className="mb-1">
                     <span className="text-[#333] font-semibold text-base mr-2">
                         Credit value: 
                     </span>
-                    {hit.credits}
+                    {module?.credits}
                 </p>
 
                 <p className="mb-1">
                     <span className="text-[#333] font-semibold text-base mr-2">
                         Core Module: 
                     </span>
-                    {hit.compulsory ? "YES" : "NO"}
+                    {module?.compulsory ? "YES" : "NO"}
                 </p>
             
                     {/* <div className="mb-1">
@@ -106,7 +122,7 @@ function Hit({hit, onClick, modulePage, dashboardPage}) {
                         </button>
                     )} */}
 
-                    {(!dashboardPage && !hit.compulsory && !userInfo?.isAdmin) &&(
+                    {(!dashboardPage && !module?.compulsory && !userInfo?.isAdmin) &&(
                         <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                             onClick={(e) => {
                                 e.stopPropagation();
@@ -138,7 +154,7 @@ function Hit({hit, onClick, modulePage, dashboardPage}) {
                     
 
                 {/* Modal */}
-            {isOpen && <MyModal key={hit.moduleCode} module={hit}/>}
+            {isOpen && <MyModal key={hit.moduleCode} module={module}/>}
             
         </div>
 

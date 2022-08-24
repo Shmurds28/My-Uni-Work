@@ -10,7 +10,7 @@ function Assessment({assessment, assessmentPage, isDashboard}) {
                 </h1>
                 {!isDashboard &&(
                     <div title="Add module to schedule.">
-                        <PlusCircleIcon className="h-6 w-6 text-[#333]" />
+                        {/* <PlusCircleIcon className="h-6 w-6 text-[#333]" /> */}
                     </div>
                 )}
                 
