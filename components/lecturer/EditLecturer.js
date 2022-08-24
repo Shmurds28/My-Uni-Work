@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { db, storage } from "../firebase";
+import { db, storage } from "../../firebase";
 import {
   addDoc,
   collection,
@@ -12,7 +12,7 @@ import {
   getDoc,
 } from "@firebase/firestore";
 import { useRecoilState } from 'recoil';
-import { addLecturer, modalState } from '../atoms/modalAtom';
+import { addLecturer, modalState } from '../../atoms/modalAtom';
 import {defaultImage} from '../public/default.png' 
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { Router, useRouter } from 'next/router';

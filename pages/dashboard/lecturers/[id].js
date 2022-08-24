@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil';
 import { modalState } from '../../../atoms/modalAtom';
-import Lecturer from '../../../components/Lecturer'
+import Lecturer from '../../../components/lecturer/Lecturer'
 import MyModal from '../../../components/Modal';
 import Navbar from '../../../components/Navbar'
 import { db } from '../../../firebase';

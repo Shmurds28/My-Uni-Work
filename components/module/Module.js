@@ -1,10 +1,10 @@
 import { getDoc, doc, updateDoc, deleteDoc, onSnapshot, query, collection } from 'firebase/firestore';
 import React from 'react'
 import { useRecoilState } from 'recoil';
-import { editModule, isError, isSnackBar, login, modalState, notificationMessage, viewModule } from '../atoms/modalAtom';
-import { useUserAuth } from '../context/UserAuthContext';
-import { db } from '../firebase';
-import MyModal from './Modal';
+import { editModule, isError, isSnackBar, login, modalState, notificationMessage, viewModule } from '../../atoms/modalAtom';
+import { useUserAuth } from '../../context/UserAuthContext';
+import { db } from '../../firebase';
+import MyModal from '../Modal';
 import { useRouter } from 'next/router';
 
 function Module({dashboardPage, module, modulePage, hit}) {

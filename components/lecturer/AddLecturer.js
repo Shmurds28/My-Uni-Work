@@ -1,6 +1,6 @@
 const defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/myuniwork-b6880.appspot.com/o/lecturers%2Fdefault.png?alt=media&token=0964f992-c91c-4b10-9122-62240a88abef";
 import React, { useState } from 'react';
-import { db, storage } from "../firebase";
+import { db, storage } from "../../firebase";
 import {
   addDoc,
   collection,
@@ -12,7 +12,7 @@ import {
   setDoc
 } from "@firebase/firestore";
 import { useRecoilState } from 'recoil';
-import { addLecturer, modalState } from '../atoms/modalAtom';
+import { addLecturer, modalState } from '../../atoms/modalAtom';
 import {defaultImage} from '../public/default.png' 
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { Router, useRouter } from 'next/router';

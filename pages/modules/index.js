@@ -8,7 +8,7 @@ import Footer from '../../components/Footer'
 import MenuIcon, { ChatIcon, SearchIcon, PlusCircleIcon } from '@heroicons/react/solid'
 import readingImg from '../../public/reading.png'
 import { BookOpenIcon } from '@heroicons/react/solid';
-import Module from '../../components/Module';
+import Module from '../../components/module/Module';
 import Link from 'next/link';
 import { modalState, addModule, isSnackBar, isError } from '../../atoms/modalAtom';
 import {useRecoilState} from 'recoil';
@@ -31,8 +31,7 @@ import {
 import { useUserAuth } from '../../context/UserAuthContext';
 import algoliasearch from 'algoliasearch/lite';
 import {InstantSearch, SearchBox, Hits} from 'react-instantsearch-dom';
-import Search from '../../components/Search';
-import Hit from '../../components/Hit';
+import Hit from '../../components/module/Hit';
 
 const searchClient = algoliasearch(
   'F1IS3BSDLF',

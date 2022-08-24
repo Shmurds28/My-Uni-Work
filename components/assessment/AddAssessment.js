@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { addAssessment, modalState } from '../atoms/modalAtom'
-import { db, storage } from "../firebase";
+import { addAssessment, modalState } from '../../atoms/modalAtom'
+import { db, storage } from "../../firebase";
 import {
   addDoc,
   collection,

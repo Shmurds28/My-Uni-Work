@@ -9,7 +9,7 @@ import MenuIcon from '@heroicons/react/solid'
 import readingImg from '../../public/reading.png'
 import { BookOpenIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
-import Week from '../../components/Week';
+import Week from '../../components/assessment/Week';
 import DashboardSidebar from '../../components/DashboardSidebar';
 import { useUserAuth } from '../../context/UserAuthContext';
 import { db } from '../../firebase';

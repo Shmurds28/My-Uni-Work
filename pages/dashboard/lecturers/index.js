@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Navbar from '../../../components/Navbar'
 import Footer from '../../../components/Footer'
-import Lecturer from '../../../components/Lecturer';
+import Lecturer from '../../../components/lecturer/Lecturer';
 import { useRecoilState } from 'recoil';
 import { addLecturer, modalState } from '../../../atoms/modalAtom';
 import MyModal from '../../../components/Modal';

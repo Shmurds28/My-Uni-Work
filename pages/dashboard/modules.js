@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer';
 import Link from 'next/link';
-import Module from '../../components/Module';
+import Module from '../../components/module/Module';
 import { addAssessment, addModule, modalState } from '../../atoms/modalAtom';
 import { useRecoilState } from 'recoil';
 import MyModal from '../../components/Modal';

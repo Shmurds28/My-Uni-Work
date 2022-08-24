@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil';
 import { modalState } from '../../atoms/modalAtom';
-import Module from '../../components/Module';
+import Module from '../../components/module/Module';
 import Navbar from '../../components/Navbar'
 import { db } from '../../firebase';
 
@@ -35,10 +35,6 @@ function modulePage() {
 
       <Module key={id} module={module} modulePage/>
 
-      {/* <Lecturer id={id} key={id} lecturer={lecturer} lecturerPage/> */}
-
-      {/* Modal */}
-      {/* {isOpen && <MyModal lecturerId={id} lecturer={lecturer}/>} */}
 
     </div>
   )
