@@ -12,8 +12,8 @@ import {
   setDoc
 } from "@firebase/firestore";
 import { useRecoilState } from 'recoil';
-import { addLecturer, modalState } from '../../atoms/modalAtom';
-import {defaultImage} from '../public/default.png' 
+import { addLecturer, isError, isSnackBar, modalState, notificationMessage } from '../../atoms/modalAtom';
+import {defaultImage} from '../../public/default.png' 
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { Router, useRouter } from 'next/router';
 
@@ -30,6 +30,9 @@ function AddLecturer() {
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
+    const [isSnackBarOpen, setIsSnackBarOpen] = useRecoilState(isSnackBar);
+    const [isAnError, setIsAnError] = useRecoilState(isError);
+    const [notMessage, setNotMessage] = useRecoilState(notificationMessage);
     const [error, setError] = useState(null);
     const router = useRouter();
 
@@ -88,10 +91,13 @@ function AddLecturer() {
             image: defaultImageUrl,
         });
         }
-    
-        router.reload(window.location.pathname);
-        setLoading(false);
         setIsOpen(false);
+        router.reload(window.location.pathname);
+        setNotMessage("Lecturer successfully added!");
+        setIsAnError(false);
+        setIsSnackBarOpen(true);
+        setLoading(false);
+        
         setIsAddLecturer(false);
         setTitle("Mr");
         setInitials("");
@@ -107,8 +113,7 @@ function AddLecturer() {
   return (
     <div className="">
     <h1 className="text-xl font-bold flex items-center justify-center pb-8">Add Lecturer</h1>
-     <div className="lg:grid lg:grid-cols-2 lg:gap-3">
-     {error && (
+    {error && (
                 <div className="col-span-2 text-red-500 text-center rounded">
                   <span>{error}</span>
                 </div>
@@ -116,6 +121,8 @@ function AddLecturer() {
         <span className="before:content-['*'] before:mx-1 before:ml-0.5 before:text-red-500 block text-xs font-xs text-slate-700 before:mb-6 mb-6">
           required fields
         </span>
+     <div className="lg:grid lg:grid-cols-2 lg:gap-3">
+   
          <div>
            <label className="block">
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">

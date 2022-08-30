@@ -279,7 +279,7 @@ function schedule() {
       </div>
         
 
-      {/* <Footer /> */}
+      <Footer />
     </div>
 
 )

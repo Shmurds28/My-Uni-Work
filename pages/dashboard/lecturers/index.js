@@ -80,7 +80,7 @@ export default function lecturers({id}) {
          {/* Modal */}
       {isOpen && <MyModal/>}
 
-      {/* <Footer /> */}
+      <Footer />
     </div>
   )
 }

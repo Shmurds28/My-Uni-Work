@@ -97,7 +97,7 @@ function Hit({hit, onClick, modulePage, dashboardPage}) {
                     <span className="text-[#333] font-semibold text-base mr-2">
                         Prerequisites: 
                     </span>
-                    {module?.prerequisites}
+                    {module?.prerequisites.length === 0? "none" : module?.prerequisites.join(", ")}
                 </p>
 
                 <p className="mb-1">

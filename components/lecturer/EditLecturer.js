@@ -12,8 +12,8 @@ import {
   getDoc,
 } from "@firebase/firestore";
 import { useRecoilState } from 'recoil';
-import { addLecturer, modalState } from '../../atoms/modalAtom';
-import {defaultImage} from '../public/default.png' 
+import { addLecturer, isError, isSnackBar, modalState, notificationMessage } from '../../atoms/modalAtom';
+import {defaultImage} from '../../public/default.png' 
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { Router, useRouter } from 'next/router';
 
@@ -30,6 +30,9 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
+    const [isSnackBarOpen, setIsSnackBarOpen] = useRecoilState(isSnackBar);
+    const [isAnError, setIsAnError] = useRecoilState(isError);
+    const [notMessage, setNotMessage] = useRecoilState(notificationMessage);
     const [error, setError] = useState(null);
     const router = useRouter();
     const [defaultImage, setDefaultImage] = useState(lecturer?.defaultImage);
@@ -99,6 +102,9 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
         }
     
         router.reload(window.location.pathname);
+        setNotMessage("Lecturer successfully updated!");
+        setIsAnError(false);
+        setIsSnackBarOpen(true);
         setLoading(false);
         setIsOpen(false);
         setIsAddLecturer(false);
@@ -115,16 +121,16 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
 
   return (
     <div className="">
-    <h1 className="text-xl font-bold flex items-center justify-center pb-8">Edit Lecturer</h1>
-     <div className="lg:grid lg:grid-cols-2 lg:gap-3">
-     {error && (
+    <h1 className="text-xl font-bold flex items-center justify-center pb-8">Edit Lecturer</h1>  {error && (
                 <div className="col-span-2 text-red-500 text-center rounded">
                   <span>{error}</span>
                 </div>
-        )}
+      )}
         <span className="before:content-['*'] before:mx-1 before:ml-0.5 before:text-red-500 block text-xs font-xs text-slate-700 before:mb-6 mb-6">
           required fields
         </span>
+     <div className="lg:grid lg:grid-cols-2 lg:gap-3">
+   
          <div>
            <label className="block">
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">

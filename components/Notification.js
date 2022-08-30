@@ -27,7 +27,7 @@ function Notification() {
 
   return (
     <Fragment>
-        <Snackbar open={isSnackBarOpen} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal:"center" }}>
+        <Snackbar open={isSnackBarOpen} autoHideDuration={4000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal:"center" }}>
             {isAnError ? (
                 <Alert onClose={handleClose} severity="error">{notMessage}</Alert>
             ): (

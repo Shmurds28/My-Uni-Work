@@ -7,6 +7,7 @@ import { modalState } from '../../atoms/modalAtom';
 import Module from '../../components/module/Module';
 import Navbar from '../../components/Navbar'
 import { db } from '../../firebase';
+import Footer from '../../components/Footer';
 
 function modulePage() {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
@@ -35,6 +36,7 @@ function modulePage() {
 
       <Module key={id} module={module} modulePage/>
 
+      <Footer />
 
     </div>
   )

@@ -169,7 +169,7 @@ export default function Modules() {
       <br />
      
       {isOpen && <Modal/>}
-       {/* <Footer /> */}
+       <Footer />
 
 
 

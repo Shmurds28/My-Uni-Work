@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { addAssessment, addLecturer, addModule, editLecturer, editModule, login, modalState, signup, viewModule } from '../atoms/modalAtom'
+import { addAssessment, addLecturer, addModule, confirm, editLecturer, editModule, login, modalState, signup, viewModule } from '../atoms/modalAtom'
 import AddLecturer from './lecturer/AddLecturer';
 import AddAssessment from './assessment/AddAssessment';
 import AddModule from './module/AddModule';
@@ -9,8 +9,9 @@ import Signup from './Signup';
 import Login from './Login';
 import {useRouter} from 'next/router'
 import { XIcon } from '@heroicons/react/solid';
-import { EditLecturer } from './EditLecturer';
+import { EditLecturer } from './lecturer/EditLecturer';
 import EditModule from './module/EditModule';
+import Confirmation from './Confirmation';
 
 export default function MyModal({module, lecturer, lecturerId}) {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
@@ -22,6 +23,7 @@ export default function MyModal({module, lecturer, lecturerId}) {
   const [isSignup, setIsSignup] = useRecoilState(signup);
   const [isLogin, setIsLogin] = useRecoilState(login);
   const [isViewModule, setIsViewModule] = useRecoilState(viewModule);
+  const [isConfirm, setIsConfirm] = useRecoilState(confirm);
   const router = useRouter();
 
   return (
@@ -47,6 +49,7 @@ export default function MyModal({module, lecturer, lecturerId}) {
           setIsViewModule(false);
           setIsEditLecturer(false);
           setIsEditModule(false);
+          setIsConfirm(false);
 
           router.reload(window.location.pathname);
         }} >
@@ -89,6 +92,7 @@ export default function MyModal({module, lecturer, lecturerId}) {
                       setIsViewModule(false);
                       setIsEditLecturer(false);
                       setIsEditModule(false);
+                      setIsConfirm(false);
                       router.reload(window.location.pathname)
                     }}
                   >
@@ -128,6 +132,11 @@ export default function MyModal({module, lecturer, lecturerId}) {
                   {/* Login Modal Content */}
                  {isLogin && (
                   <Login />
+                 )}
+
+                 {/* Confirm modal content */}
+                 {isConfirm && (
+                  <Confirmation />
                  )}
 
               

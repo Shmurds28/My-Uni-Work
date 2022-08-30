@@ -70,7 +70,7 @@ function AddModule() {
         pre.push(prerequisite.value);
       });
 
-      if(!description || !moduleName || !moduleCode ){
+      if(!description || !moduleName || !moduleCode || !semester || lecturer || credits ){
         setError("Missing required fields!");
         setLoading(false);
         return;
@@ -98,7 +98,10 @@ function AddModule() {
       setCredits(-1);
       setDescription("");
       setPrerequisites(null);
-      router.reload(window.location.pathname)
+      router.reload(window.location.pathname);
+      setNotMessage("Module Added successfully!");
+      setIsAnError(flase);
+      setIsSnackBarOpen(true);
     };
 
     const options = () => {
@@ -196,7 +199,7 @@ function AddModule() {
 
          <div>
            <label className="block">
-             <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
+             <span className=" block text-sm font-semibold text-slate-700">
                Prerequisites
              </span>
              <MultiSelect

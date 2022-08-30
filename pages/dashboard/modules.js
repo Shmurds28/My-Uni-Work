@@ -106,7 +106,7 @@ export default function modules() {
       {/* Modal */}
       {isOpen && <MyModal/>}
 
-      {/* <Footer /> */}
+      <Footer />
     </div>
   )
 }

@@ -59,3 +59,13 @@ export const notificationMessage = atom({
     key: "notificationMessage",
     default: ""
 });
+
+export const confirm = atom({
+    key: "confirm",
+    default: false,
+});
+
+export const confirmed = atom({
+    key: "isConfirmed",
+    default: false,
+})

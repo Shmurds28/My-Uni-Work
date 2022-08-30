@@ -4,10 +4,12 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil';
 import { modalState } from '../../../atoms/modalAtom';
+import Footer from '../../../components/Footer';
 import Lecturer from '../../../components/lecturer/Lecturer'
 import MyModal from '../../../components/Modal';
 import Navbar from '../../../components/Navbar'
 import { db } from '../../../firebase';
+
 
 function lecturerPage() {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
@@ -38,6 +40,8 @@ function lecturerPage() {
 
       {/* Modal */}
       {isOpen && <MyModal lecturerId={id} lecturer={lecturer}/>}
+
+      <Footer />
 
     </div>
   )
