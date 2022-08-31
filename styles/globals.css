@@ -69,19 +69,7 @@ a {
   padding: 0;
 }
 
-/* .search input{
-  border: none;
-  padding: 10px 15px;
-  margin: 10px 5px;
-  outline: none;
-}
 
-.search button{
-  border: none;
-  padding: 10px 15px;
-  background: #eee;
-  font-size: 18px;
-} */
 
 .ais-SearchBox-form {
   @apply relative p-0 rounded-md w-full border
