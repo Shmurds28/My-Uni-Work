@@ -91,6 +91,10 @@ a {
   display:none;
 }
 
+p{
+  @apply text-sm text-[#333]
+}
+
 
 
 @media (max-width: 790px) {

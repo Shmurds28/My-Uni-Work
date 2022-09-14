@@ -31,7 +31,7 @@ export default function Home() {
           </div>
       </div>
 
-      <div className=" lg:px-44 px-4 grid grid-col-1 lg:grid-cols-2 gap-10 lg:gap-4 bg-[#F9FAFB] py-10">
+      <div className=" lg:px-24 px-4 grid grid-col-1 lg:grid-cols-2 gap-10 lg:gap-4 bg-[#F9FAFB] py-10">
           <div className="flex flex-col space-y-5">
             <h1 className="text-[#000] text-3xl font-bold">
               Choosing Honours Modules Made Easier.
@@ -70,7 +70,7 @@ export default function Home() {
                     <Image src={readingImg} width={70} height={70} className="rounded"/> */}
                 </div>
                 <div className="flex flex-col space-y-2">
-                    <h1 className="text-[#333] text-2xl font-bold">Personalised Workload Schedule</h1>
+                    <h1 className="text-[#333] text-2xl font-bold">Personalised workload schedule</h1>
                     <p className="text-md">
                       A personalised workload schedule is created for you from the modules you have selected with mandatory
                       modules already selected for you.

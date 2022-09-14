@@ -3,7 +3,7 @@ import Image from 'next/image'
 import React from 'react'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
-import sideImg from '../public/reading.png'
+import sideImg from '../public/Picture1.jpg'
 
 function about() {
   return (
@@ -16,7 +16,7 @@ function about() {
 
       <Navbar />
 
-      <div className="px-1 grid grid-col-1 lg:grid-cols-2 gap-10 lg:gap-40 bg-[#F9FAFB] py-10">
+      <div className="px-1 pr-10 grid grid-col-1 lg:grid-cols-2 gap-4 lg:gap-20 bg-[#F9FAFB] py-10">
           <div className="">
             {/* <p>Image section</p> */}
           <Image
@@ -27,7 +27,7 @@ function about() {
             className="rounded-md object-fit"
           />
           </div>
-          <div className="flex flex-col space-y-2 py-16">
+          <div className="flex flex-col space-y-2 py-4">
             <h1 className="text-[#103A5C] text-xl font-bold">
               ABOUT
             </h1>
@@ -36,28 +36,26 @@ function about() {
               MyUniWork
             </h1>
             
-              <p className="text-md pb-8">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias aut, repellat 
-                  ipsum facere voluptate dicta obcaecati deserunt nobis suscipit eaque?
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias aut, repellat 
-                  ipsum facere voluptate dicta obcaecati deserunt nobis suscipit eaque?
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias aut, repellat 
-                  ipsum facere voluptate dicta obcaecati deserunt nobis suscipit eaque?
+              <p className="text-sm pb-4">
+                  Each year, all full-time honours students at Nelson Mandela University are required to register eight modules for the academic year.
+                  Each honours module has a set number of assignments that needs to be submitted over the semester which are weighted and
+                  prioritized differently, and there is no restriction on any number of assignments each module would require to be
+                  submitted each week.
               </p>  
 
-              <p>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias aut, repellat 
-                  ipsum facere voluptate dicta obcaecati deserunt nobis suscipit eaque?
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias aut, repellat 
-                  ipsum facere voluptate dicta obcaecati deserunt nobis suscipit eaque?
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias aut, repellat 
-                  ipsum facere voluptate dicta obcaecati deserunt nobis suscipit eaque?
+              <p className="text-sm pb-4">
+                  Our aim is to provide an interface that allows honours students to select a set of elective modules and display
+                  a schedule which indicates the workload and submissions required for all the selected modules. 
               </p>  
 
-              <p>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias aut, repellat 
-                  ipsum facere voluptate dicta obcaecati deserunt nobis suscipit eaque?
-              </p>  
+              <p className="text-sm pb-4">
+                 We have collected information of all modules offered at Nelson Mandela University and administered all module 
+                 assessments to display to the student a schedule indicating workload and submissions for all modules.
+              </p >  
+
+              <p className="text-sm pb-4">
+                 Questions? Send us an email at <a className="font-semibold text-[#103A5C]" href="mailto:myuniwork22@gmail.com">myuniwork22@gmail.com</a>
+              </p> 
             
           </div>
           

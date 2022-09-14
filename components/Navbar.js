@@ -10,6 +10,7 @@ import MyModal from './Modal';
 import { Router, useRouter } from 'next/router';
 import { doc, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../firebase';
+import Dropdown from './Dropdown';
 
 function Navbar() {
     const [isOpen, setIsOpen]= useRecoilState(modalState); 
@@ -62,15 +63,17 @@ function Navbar() {
 
   return (
     <div className="mt-2 px-4 flex items-center justify-between h-20 border-b border-gray-100">
+        
         <div className="cursor-pointer">
             <Link href="/">
-                <Image src={logo} height={70} width={200} className="object-fit"/>
+                <Image alt='Logo' src={logo} height={70} width={200} className="object-fit"/>
             </Link>
             
         </div>
 
         <div className="menu-icon">
-            <MenuIcon className="w-10 h-10 text-[#000] font-semibold text-lg hover:text-[#F9B42A]"/>
+            {/* <MenuIcon className="w-10 h-10 text-[#000] font-semibold text-lg hover:text-[#F9B42A]"/> */}
+            <Dropdown />
         </div>
 
         <div className=" flex space-x-5 middle-nav">
