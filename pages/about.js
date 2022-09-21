@@ -38,7 +38,7 @@ function about() {
             
               <p className="text-sm pb-4">
                   Each year, all full-time honours students at Nelson Mandela University are required to register eight modules for the academic year.
-                  Each honours module has a set number of assignments that needs to be submitted over the semester which are weighted and
+                  Each honours module has a set number of assessments that need to be submitted over the semester which are weighted and
                   prioritized differently, and there is no restriction on any number of assignments each module would require to be
                   submitted each week.
               </p>  
@@ -61,10 +61,6 @@ function about() {
           
       </div>
 
-      {/* Most chosen modules section */}
-
-        
-      
       <Footer />
     </div>
   )

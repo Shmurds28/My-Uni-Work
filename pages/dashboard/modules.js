@@ -71,7 +71,8 @@ export default function modules() {
           <div className="flex flex-col lg:px-10 mt-4 space-y-2 mb-6 w-full">
               <div className="lg:flex m-2 items-center justify-between">
                 <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">
-                    Selected Modules     
+                    {userInfo?.isAdmin ? "Modules Offered" : "Selected Modules  "}
+                       
                 </p>
                  {userInfo?.isAdmin && (
                     <div className="flex flex-col lg:flex-row lg:items-center justify-end gap-1">

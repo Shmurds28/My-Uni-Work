@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { addAssessment, modalState, isSnackBar, notificationMessage, isError } from '../../atoms/modalAtom'
+import { addAssessment, modalState, assessmentInfo, assessmentId, assCode } from '../../atoms/modalAtom'
 import { db, storage } from "../../firebase";
 import {
   addDoc,
@@ -15,20 +15,20 @@ import {
 } from "@firebase/firestore";
 import { Router, useRouter } from 'next/router';
 
-function AddAssessment() {
+function EditAssessment() {
     const [moduleCode, setModuleCode] = useState("");
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
+    const [assInfo, setAssInfo] = useRecoilState(assessmentInfo);
+    const [assId, setAssId] = useRecoilState(assessmentId);
+    const [assModuleCode, setAssModuleCode] = useRecoilState(assCode);
     const [modules, setModules] = useState([]);
-    const [submissionWeek, setSubmissionWeek] = useState(1);
-    const [weighting, setWeighting] = useState(0);
-    const [assessmentType, setAssessmentType] = useState("Quizz");
-    const [repeat, setRepeat] = useState("Once");
+    const [submissionWeek, setSubmissionWeek] = useState(assInfo.submissionWeek);
+    const [weighting, setWeighting] = useState(assInfo.weighting);
+    const [assessmentType, setAssessmentType] = useState(assInfo?.type);
+    const [repeat, setRepeat] = useState(assInfo?.repeat);
     const [error, setError] = useState(null);
-    const [isSnackBarOpen, setIsSnackBarOpen] = useRecoilState(isSnackBar);
-    const [isAnError, setIsAnError] = useRecoilState(isError);
-    const [notMessage, setNotMessage] = useRecoilState(notificationMessage);
     const router = useRouter();
   
     //get modules from the database
@@ -43,68 +43,40 @@ function AddAssessment() {
         [db]
     );
 
+
     const postAssessment = async (e) =>{
         // e.preventDefault();
 
-    
         if(loading) return;
         setLoading(true);
         setError(null);
 
-        if(!moduleCode || !assessmentType || !weighting){
+        if(!assessmentType || !weighting){
           setError("Missing required Fields");
           setLoading(false);
           return;
         }
 
-        var semester = "";      
+        var semester = "";
         var moduleName = "";
         var duration = 0;
-        await getDoc(doc(db, 'modules', moduleCode)).then(moduleDoc => {
+        await getDoc(doc(db, 'modules', assModuleCode)).then(moduleDoc => {
           semester = moduleDoc.data().semester;
           moduleName = moduleDoc.data().moduleName;
           duration = moduleDoc.data().duration;
         });
-
-        //Repeat assessment addition weekly or every 2 weeks else add it once
-        if(repeat == "Weekly"){
-          for(var i = submissionWeek; i <  parseInt(duration); i++){
-            await addDoc(collection(db, "modules", moduleCode, "assessments"), {
+        
+        const docRef = await setDoc(doc(db, 'modules', assModuleCode, "assessments", assId), {
               moduleName: moduleName,
               type: assessmentType,
               repeat: repeat,
-              submissionWeek: parseInt(i),
+              submissionWeek: parseInt(submissionWeek),
               weighting: weighting,
               semester: semester,
-            });
-          }
-        }else if(repeat == "Every two weeks"){
-          for(var i = submissionWeek; i < parseInt(duration); i += 2){
-            await addDoc(collection(db, "modules", moduleCode, "assessments"), {
-              moduleName: moduleName,
-              type: assessmentType,
-              repeat: repeat,
-              submissionWeek: parseInt(i),
-              weighting: weighting,
-              semester: semester,
-            });
-          }
+        });
 
-        }else{
-          await addDoc(collection(db, "modules", moduleCode, "assessments"), {
-            moduleName: moduleName,
-            type: assessmentType,
-            repeat: repeat,
-            submissionWeek: parseInt(submissionWeek),
-            weighting: weighting,
-            semester: semester,
-          });
-        }
-
-        router.reload(window.location.pathname);
-        setNotMessage("Assessment successfully added!");
-        setIsAnError(false);
-        setIsSnackBarOpen(true);
+        router.reload(window.location.pathname); 
+        setNotMessage("Assessment successfully updated!");
         setLoading(false);
         setIsOpen(false);
         setIsAddAssessment(false);
@@ -113,11 +85,12 @@ function AddAssessment() {
         setAssessmentType("");
         setSubmissionWeek("");
         
-      }
+    }
+
 
   return (
     <div className="">
-    <h1 className="text-xl font-bold flex items-center justify-center pb-8">Add Module Assessment</h1>
+    <h1 className="text-xl font-bold flex items-center justify-center pb-8">Edit Module Assessment</h1>
      <div className="lg:grid lg:grid-cols-2 lg:gap-3">
         {error && (
                 <div className="col-span-2 text-red-500 text-center rounded">
@@ -125,10 +98,10 @@ function AddAssessment() {
                 </div>
         )}
         <span className="before:content-['*'] before:mx-1 before:ml-0.5 before:text-red-500 block text-xs font-xs text-slate-700 before:mb-6 mb-6">
-          required fields
+          required fields {assId}
         </span>
         <div></div>
-         <div>
+         {/* <div>
            <label className="block">
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Module
@@ -136,18 +109,18 @@ function AddAssessment() {
              <select value={moduleCode} onChange= {(e) => setModuleCode(e.target.value)} name="moduleCode" id="moduleCode" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
                <option value=""> </option>
                {modules.map(module => (
-                 <option value={module.data().moduleCode}>{module.data().moduleCode} - {module.data().moduleName}</option>
+                 <option key={module.data().moduleCode} value={module.data().moduleCode}>{module.data().moduleCode} - {module.data().moduleName}</option>
                ))}
              </select>
           </label>
-         </div>
+         </div> */}
 
          <div>
            <label className="block">
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Submission Week
              </span>
-             <input value={submissionWeek} onChange= {(e) => setSubmissionWeek(e.target.value)} type="number" name="submissionWeek" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
+             <input defaultValue={submissionWeek} onChange= {(e) => setSubmissionWeek(e.target.value)} type="number" name="submissionWeek" className=" rounded-md mt-1 w-full px-3 py-2 bg-white border shadow-sm border-slate-300" />
           </label>
          </div>
 
@@ -168,8 +141,6 @@ function AddAssessment() {
              <select value={assessmentType} onChange= {(e) => setAssessmentType(e.target.value)} name="type" id="type" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
                <option value="Quizz">Quizz</option>
                <option value="Tutorial">Tutorial</option>
-               <option value="Tutorial">Class test</option>
-               <option value="Tutorial">Semester test</option>
                <option value="Practical">Practical</option>
                <option value="Assignment">Assignment</option>
              </select>
@@ -181,7 +152,7 @@ function AddAssessment() {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Repeat assessment
              </span>
-             <select value={repeat} onChange= {(e) => setRepeat(e.target.value)} name="repeat" id="repeat" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
+             <select disabled value={repeat} onChange= {(e) => setRepeat(e.target.value)} name="repeat" id="repeat" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
                <option value="Once">Once</option>
                <option value="Weekly">Weekly</option>
                <option value="Every two weeks">Every two weeks</option>
@@ -190,12 +161,13 @@ function AddAssessment() {
          </div>
 
          <div></div>
+         <div></div>
 
          <div className="m-1">
            <label className="block">
              <button className="bg-[#103A5C] w-full text-white font-semibold p-3 rounded-md hover:opacity-90
                  " onClick={postAssessment} >
-                 Add Module Assessment
+                 Update Assessment
              </button>   
           </label>
          </div>
@@ -217,4 +189,5 @@ function AddAssessment() {
   )
 }
 
-export default AddAssessment
+export default EditAssessment
+

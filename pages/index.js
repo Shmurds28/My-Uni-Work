@@ -70,6 +70,20 @@ export default function Home() {
                     <Image src={readingImg} width={70} height={70} className="rounded"/> */}
                 </div>
                 <div className="flex flex-col space-y-2">
+                    <h1 className="text-[#333] text-2xl font-bold">Workload schedule</h1>
+                    <p className="text-md">
+                      View the workload schedule of all modules offered to determine the impact a particular selection of modules
+                       will have on your work schedule.
+                    </p>
+                </div>
+                
+            </div>
+            <div className="flex items-center">
+                <div>
+                    {/* <BookOpenIcon className="w-9 h-9 text-[#F9B42A]"/>
+                    <Image src={readingImg} width={70} height={70} className="rounded"/> */}
+                </div>
+                <div className="flex flex-col space-y-2">
                     <h1 className="text-[#333] text-2xl font-bold">Personalised workload schedule</h1>
                     <p className="text-md">
                       A personalised workload schedule is created for you from the modules you have selected with mandatory

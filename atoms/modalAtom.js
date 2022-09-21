@@ -45,6 +45,12 @@ export const editModule = atom({
     default: false,
 });
 
+export const editAssessment = atom({
+    key: "editAssessment",
+    default: false,
+
+});
+
 export const isError = atom({
     key: "isError",
     default: false,
@@ -68,4 +74,19 @@ export const confirm = atom({
 export const confirmed = atom({
     key: "isConfirmed",
     default: false,
+});
+
+export const assessmentInfo = atom({
+    key: "assessmentInfo",
+    default: null
+});
+
+export const assessmentId = atom({
+    key: "assessmentId",
+    default: null
+});
+
+export const assCode = atom({
+    key: "assCode",
+    default: null
 })

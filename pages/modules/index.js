@@ -121,17 +121,20 @@ export default function Modules() {
        
          
          {/* Buttons */}
-         <div className="flex items-center">
-          <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90">
-            <Link href="/modules/schedule" className="navLink">
-                    Workload Schedule
-            </Link>
-               
-            </button>
-            {/* <button variant="outlined" onClick={handleClick}>
-            Open success snackbar
-          </button> */}
-         </div>
+         {!userInfo?.isAdmin &&(
+           <div className="flex items-center">
+           <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90">
+             <Link href="/modules/schedule" className="navLink">
+                     Workload Schedule
+             </Link>
+                
+             </button>
+             {/* <button variant="outlined" onClick={handleClick}>
+             Open success snackbar
+           </button> */}
+          </div>
+         )}
+         
          
 
 

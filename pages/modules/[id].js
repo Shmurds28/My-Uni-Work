@@ -1,4 +1,4 @@
-import { doc, onSnapshot, query } from 'firebase/firestore';
+import { doc, onSnapshot, query, collection, orderBy } from 'firebase/firestore';
 import Head from 'next/head'
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
@@ -8,10 +8,12 @@ import Module from '../../components/module/Module';
 import Navbar from '../../components/Navbar'
 import { db } from '../../firebase';
 import Footer from '../../components/Footer';
+import Assessment from './../../components/assessment/Assessment';
 
 function modulePage() {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [module, setModule] = useState("");
+    const [assessments, setAssessments] = useState(null);
     const router = useRouter();
     const {id} = router.query; 
 
@@ -22,6 +24,16 @@ function modulePage() {
           }),
         [db]
     );
+    
+    useEffect(
+      () =>  onSnapshot(
+        query(collection(db, "modules", id, "assessments"), orderBy("submissionWeek")),
+        (snapshot) => {
+        setAssessments(snapshot.docs);    
+        }
+    ),
+    [db]
+    )
 
 
   return (
@@ -33,8 +45,22 @@ function modulePage() {
       </Head>
 
       <Navbar />
+      <div className=" flex flex-col">
+        <div className="">
+           <Module key={id} module={module} modulePage/></div>
+         
+         <div className=' px-4 md:px-40 lg:px-80 lg:py-8'> 
+            <h1 className='text-[#333] font-semibold mb-3 text-3xl text-center'>Assessments</h1>
+            <div className="flex flex-col gap-4">
+              {assessments?.map(assessment => (
+                <Assessment moduleId={id} Id={assessment.id} key={assessment.id} assessment={assessment.data()} modulePage/>
+              ))}
+            </div>
+            
+        </div>
+      </div>
 
-      <Module key={id} module={module} modulePage/>
+      
 
       <Footer />
 

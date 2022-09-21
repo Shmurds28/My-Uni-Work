@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { addAssessment, addLecturer, addModule, modalState } from '../../atoms/modalAtom'
+import { addAssessment, addLecturer, addModule, modalState, isSnackBar, isError, notificationMessage } from '../../atoms/modalAtom'
 import { db, storage } from "../../firebase";
 import {Multiselect} from 'multiselect-react-dropdown';
 import {
@@ -32,7 +32,9 @@ function AddModule() {
     const [lecturers, setLecturers] = useState([]);
     const [error, setError] = useState(null);
     const router = useRouter();
-    
+    const [isSnackBarOpen, setIsSnackBarOpen] = useRecoilState(isSnackBar);
+    const [isAnError, setIsAnError] = useRecoilState(isError);
+    const [notMessage, setNotMessage] = useRecoilState(notificationMessage);
   
   //Get modules from the database
     useEffect(
@@ -70,7 +72,7 @@ function AddModule() {
         pre.push(prerequisite.value);
       });
 
-      if(!description || !moduleName || !moduleCode || !semester || lecturer || credits ){
+      if(!description || !moduleName || !moduleCode || !semester || !lecturer || !credits ){
         setError("Missing required fields!");
         setLoading(false);
         return;

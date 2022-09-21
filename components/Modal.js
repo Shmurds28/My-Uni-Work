@@ -1,9 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { addAssessment, addLecturer, addModule, confirm, editLecturer, editModule, login, modalState, signup, viewModule } from '../atoms/modalAtom'
+import { addAssessment, addLecturer, addModule, confirm, editLecturer, editModule, editAssessment, login, modalState, signup, viewModule } from '../atoms/modalAtom'
 import AddLecturer from './lecturer/AddLecturer';
 import AddAssessment from './assessment/AddAssessment';
+import EditAssessment from './assessment/EditAssessment';
 import AddModule from './module/AddModule';
 import Signup from './Signup';
 import Login from './Login';
@@ -13,13 +14,14 @@ import { EditLecturer } from './lecturer/EditLecturer';
 import EditModule from './module/EditModule';
 import Confirmation from './Confirmation';
 
-export default function MyModal({module, lecturer, lecturerId}) {
+export default function MyModal({module, lecturer, lecturerId, assessment, assessmentId}) {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [isAddModule, setIsAddModule] = useRecoilState(addModule);
   const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
   const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
   const [isEditLecturer, setIsEditLecturer] = useRecoilState(editLecturer);
   const [isEditModule, setIsEditModule] = useRecoilState(editModule);
+  const [isEditAssessment, setIsEditAssessment] = useRecoilState(editAssessment);
   const [isSignup, setIsSignup] = useRecoilState(signup);
   const [isLogin, setIsLogin] = useRecoilState(login);
   const [isViewModule, setIsViewModule] = useRecoilState(viewModule);
@@ -49,6 +51,7 @@ export default function MyModal({module, lecturer, lecturerId}) {
           setIsViewModule(false);
           setIsEditLecturer(false);
           setIsEditModule(false);
+          setIsEditAssessment(false);
           setIsConfirm(false);
 
           router.reload(window.location.pathname);
@@ -84,14 +87,15 @@ export default function MyModal({module, lecturer, lecturerId}) {
                     className="w-9 h-9 flex items-center justify-end xl:px-0"
                     onClick={() => {
                       setIsOpen(false);
-                      setIsAddModule(false);
+                      setIsAddModule(false);      
                       setIsAddAssessment(false);
                       setIsAddLecturer(false);
                       setIsSignup(false);
                       setIsLogin(false);
                       setIsViewModule(false);
                       setIsEditLecturer(false);
-                      setIsEditModule(false);
+                      setIsEditModule(false); 
+                      setIsEditAssessment(false);                        
                       setIsConfirm(false);
                       router.reload(window.location.pathname)
                     }}
@@ -112,6 +116,11 @@ export default function MyModal({module, lecturer, lecturerId}) {
                  {/* Add Assessment modal content */}
                  {isAddAssessment && (
                   <AddAssessment />
+                 )}
+                 
+                 {/* Edit Assessment modal content */}
+                 {isEditAssessment && (
+                    <EditAssessment assessment={assessment} assessmentId={assessmentId}/>
                  )}
 
                  {/* Add Lecturer Modal Content  */}

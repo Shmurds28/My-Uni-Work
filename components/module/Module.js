@@ -57,6 +57,11 @@ function Module({dashboardPage, module, modulePage, hit}) {
                 setIsSnackBarOpen(true);
                 
                 
+            }else{
+                setNotMessage("You may only add atmost 8 modules to your schedule.");
+                setIsAnError(true);
+                setIsSnackBarOpen(true);
+                return;
             }
            
         });
@@ -65,6 +70,7 @@ function Module({dashboardPage, module, modulePage, hit}) {
     }
 
     // Remove module from Schedule
+    
     const removeFromSchedule = async() =>{
         //get user data
         getDoc(doc(db, "users", user.uid)).then( async(userDoc) => {
@@ -137,7 +143,7 @@ function Module({dashboardPage, module, modulePage, hit}) {
     }
 
   return (
-        <div className={`${modulePage && "mx-4 md:mx-40 lg:mx-80 lg:my-8"} border p-3 bg-[#F9FAFB] cursor-pointer shadow`} onClick={() => router.push(`/modules/${module?.moduleCode}`)}>
+        <div className={`${modulePage && "mx-4 md:mx-40 lg:mx-80 lg:mt-8 mb-0"} border p-3 bg-[#F9FAFB] cursor-pointer shadow`} onClick={() => router.push(`/modules/${module?.moduleCode}`)}>
                 <h1 className={`text-[#333] font-semibold mb-3 ${modulePage? "text-3xl text-center mb-8": "text-lg"}`}>
                     {module?.moduleCode} - {module?.moduleName}
                 </h1>
