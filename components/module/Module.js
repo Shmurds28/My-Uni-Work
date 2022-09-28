@@ -1,7 +1,7 @@
 import { getDoc, doc, updateDoc, deleteDoc, onSnapshot, query, collection } from 'firebase/firestore';
 import React from 'react'
 import { useRecoilState } from 'recoil';
-import { confirm, confirmed, editModule, isError, isSnackBar, login, modalState, notificationMessage, viewModule } from '../../atoms/modalAtom';
+import { confirm, confirmed, editModule, isError, isSnackBar, login, modalState, addAssessment, notificationMessage, viewModule } from '../../atoms/modalAtom';
 import { useUserAuth } from '../../context/UserAuthContext';
 import { db } from '../../firebase';
 import MyModal from '../Modal';
@@ -13,6 +13,7 @@ import Confirmation from '../Confirmation';
 function Module({dashboardPage, module, modulePage, hit}) {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isLogin, setIsLogin] = useRecoilState(login);
+    const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
     const [isViewModule, setIsViewModule] = useRecoilState(viewModule);
     const [isEditModule, setIsEditModule] = useRecoilState(editModule);
     const {user, userInfo, setUserInfo} = useUserAuth();
@@ -219,7 +220,16 @@ function Module({dashboardPage, module, modulePage, hit}) {
                         Edit Module
                         </button>
                     )}
-
+                {userInfo?.isAdmin && modulePage &&(
+                    <button className="bg-[#103A5C] border border-gray-500 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsOpen(true);
+                            setIsAddAssessment(true);
+                        }}>
+                        Add assessment
+                    </button>
+                )}
                 {userInfo?.isAdmin && modulePage &&(
                     <button className="bg-[#F9FAFB] border border-gray-500 mr-4 text-black font-semibold p-3 rounded-md hover:opacity-90"
                         onClick={(e) => {
@@ -229,7 +239,7 @@ function Module({dashboardPage, module, modulePage, hit}) {
                         Delete Module
                     </button>
                 )}
-        
+                 
                 </div>
 
                     

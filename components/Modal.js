@@ -115,7 +115,7 @@ export default function MyModal({module, lecturer, lecturerId, assessment, asses
 
                  {/* Add Assessment modal content */}
                  {isAddAssessment && (
-                  <AddAssessment />
+                  <AddAssessment module={module}/>
                  )}
                  
                  {/* Edit Assessment modal content */}

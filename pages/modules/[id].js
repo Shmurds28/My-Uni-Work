@@ -3,15 +3,17 @@ import Head from 'next/head'
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil';
-import { modalState } from '../../atoms/modalAtom';
+import { modalState, addAssessment } from '../../atoms/modalAtom';
 import Module from '../../components/module/Module';
 import Navbar from '../../components/Navbar'
 import { db } from '../../firebase';
 import Footer from '../../components/Footer';
 import Assessment from './../../components/assessment/Assessment';
+import MyModal from '../../components/Modal';
 
 function modulePage() {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
+    const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
     const [module, setModule] = useState("");
     const [assessments, setAssessments] = useState(null);
     const router = useRouter();
@@ -60,7 +62,7 @@ function modulePage() {
         </div>
       </div>
 
-      
+      {isOpen && <MyModal module={module}/>}
 
       <Footer />
 

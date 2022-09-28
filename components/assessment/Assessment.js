@@ -20,6 +20,7 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
     const [isAnError, setIsAnError] = useRecoilState(isError);
     const [notMessage, setNotMessage] = useRecoilState(notificationMessage);
     const router = useRouter();
+    const bg = "bg-[" + assessment.color + "]";
     
     const confirmation = () => {
         confirmAlert({
@@ -66,33 +67,28 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
         confirmation();
         // router.reload(window.location.pathname);
     }
-    
+    console.log(bg);
     
   return (
-        <div className="flex flex-col gap-4 border p-1 bg-white cursor-pointer" >
+        <div className={`bg-white text-[#333] flex flex-col gap-4 border p-1 m-0 cursor-pointer rounded-md`} >
             <div className="flex items-center justify-between">
-                <h1 className="text-[#333] font-bold text-base mb-1">
+                <h1 className="font-bold text-base ">
                     {assessment.moduleName} - {assessment.type}
                 </h1>
-                {!isDashboard &&(
-                    <div title="Add module to schedule.">
-                        {/* <PlusCircleIcon className="h-6 w-6 text-[#333]" /> */}
-                    </div>
-                )}
+
                 
             </div>
-
-           
-            <p className="mb-1">
-                <span className="text-[#333] font-semibold text-sm mr-2">
+            
+            <p className=" text-[#333]">
+                <span className="font-semibold text-sm mr-2">
                     Weighting: 
                 </span>
                   {assessment.weighting}%
             </p>
             
             {modulePage && (
-                <p className="mb-1">
-                <span className="text-[#333] font-semibold text-sm mr-2">
+                <p className="">
+                <span className="font-semibold text-sm mr-2">
                     Submisson Week: 
                 </span>
                   {assessment.submissionWeek}

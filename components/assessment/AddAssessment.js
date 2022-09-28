@@ -15,7 +15,7 @@ import {
 } from "@firebase/firestore";
 import { Router, useRouter } from 'next/router';
 
-function AddAssessment() {
+function AddAssessment({module}) {
     const [moduleCode, setModuleCode] = useState("");
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(modalState);
@@ -45,12 +45,10 @@ function AddAssessment() {
 
     const postAssessment = async (e) =>{
         // e.preventDefault();
-
-    
         if(loading) return;
         setLoading(true);
         setError(null);
-
+         if(module){moduleCode = module.moduleCode}
         if(!moduleCode || !assessmentType || !weighting){
           setError("Missing required Fields");
           setLoading(false);
@@ -60,12 +58,15 @@ function AddAssessment() {
         var semester = "";      
         var moduleName = "";
         var duration = 0;
+        var color = "";
         await getDoc(doc(db, 'modules', moduleCode)).then(moduleDoc => {
           semester = moduleDoc.data().semester;
           moduleName = moduleDoc.data().moduleName;
           duration = moduleDoc.data().duration;
-        });
-
+          color = moduleDoc.data().color;
+        }); 
+         
+         
         //Repeat assessment addition weekly or every 2 weeks else add it once
         if(repeat == "Weekly"){
           for(var i = submissionWeek; i <  parseInt(duration); i++){
@@ -76,6 +77,7 @@ function AddAssessment() {
               submissionWeek: parseInt(i),
               weighting: weighting,
               semester: semester,
+              color: color,
             });
           }
         }else if(repeat == "Every two weeks"){
@@ -87,6 +89,7 @@ function AddAssessment() {
               submissionWeek: parseInt(i),
               weighting: weighting,
               semester: semester,
+              color: color,
             });
           }
 
@@ -98,10 +101,11 @@ function AddAssessment() {
             submissionWeek: parseInt(submissionWeek),
             weighting: weighting,
             semester: semester,
+            color: color,
           });
         }
 
-        router.reload(window.location.pathname);
+        // router.reload(window.location.pathname);
         setNotMessage("Assessment successfully added!");
         setIsAnError(false);
         setIsSnackBarOpen(true);
@@ -133,12 +137,23 @@ function AddAssessment() {
              <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
                Module
              </span>
-             <select value={moduleCode} onChange= {(e) => setModuleCode(e.target.value)} name="moduleCode" id="moduleCode" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
-               <option value=""> </option>
-               {modules.map(module => (
-                 <option value={module.data().moduleCode}>{module.data().moduleCode} - {module.data().moduleName}</option>
+             
+             {module && (
+                  <select defaultValue={module.moduleCode} disabled name="moduleCode" id="moduleCode" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
+                    <option value={module.moduleCode}> {module.moduleCode} - {module.moduleName}</option>
+                  </select>
+              )}
+             {!module && (
+               <select value={moduleCode} onChange= {(e) => setModuleCode(e.target.value)} name="moduleCode" id="moduleCode" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
+                  <option value=""> </option>
+                  {modules.map(mod => (
+                  <option key={mod.id} value={mod.data().moduleCode}> {mod.data().moduleCode} - {mod.data().moduleName}</option>
                ))}
-             </select>
+               </select>
+             
+             )}
+             
+             
           </label>
          </div>
 
@@ -166,7 +181,7 @@ function AddAssessment() {
                Assessment Type
              </span>
              <select value={assessmentType} onChange= {(e) => setAssessmentType(e.target.value)} name="type" id="type" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
-               <option value="Quizz">Quizz</option>
+               <option value="Quizz">Quiz</option>
                <option value="Tutorial">Tutorial</option>
                <option value="Tutorial">Class test</option>
                <option value="Tutorial">Semester test</option>

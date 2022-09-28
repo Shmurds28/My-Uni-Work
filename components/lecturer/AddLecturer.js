@@ -59,8 +59,22 @@ function AddLecturer() {
           setLoading(false);
           setError("Missing required fields");
           return;
+        }    
+        var mailformat = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+        if(!email.match(mailformat))
+        {
+          setError("Invalid email address.");
+          setIsLoading(false); 
+          return;
         }
-    
+        
+        var regEx = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+        if(telephone.match(regEx))
+        {
+          setError("Invalid telephone number.");
+          setIsLoading(false);
+          return;
+        }
         //add the lecturer to the database - staff number as the identifier
         const docRef = await setDoc(doc(db, 'lecturers', staffNum), {
           title: title,
