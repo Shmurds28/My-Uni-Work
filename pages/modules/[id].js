@@ -1,4 +1,4 @@
-import { doc, onSnapshot, query, collection, orderBy } from 'firebase/firestore';
+import { doc, onSnapshot, query, collection, orderBy, getDocs } from 'firebase/firestore';
 import Head from 'next/head'
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
@@ -9,13 +9,14 @@ import Navbar from '../../components/Navbar'
 import { db } from '../../firebase';
 import Footer from '../../components/Footer';
 import Assessment from './../../components/assessment/Assessment';
-import MyModal from '../../components/Modal';
+import MyModal from '../../components/Modal';import Week from '../../components/assessment/Week';
 
 function modulePage() {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
     const [module, setModule] = useState("");
-    const [assessments, setAssessments] = useState(null);
+    const [assessments, setAssessments] = useState([]);
+    const [weeks, setWeeks] = useState([]);
     const router = useRouter();
     const {id} = router.query; 
 
@@ -28,15 +29,46 @@ function modulePage() {
     );
     
     useEffect(
-      () =>  onSnapshot(
-        query(collection(db, "modules", id, "assessments"), orderBy("submissionWeek")),
-        (snapshot) => {
-        setAssessments(snapshot.docs);    
-        }
-    ),
-    [db]
-    )
+        () => {
+            getDocs(collection(db, "modules", id, "assessments")).then(assessmentDocs => {
+              assessmentDocs.forEach(ass => {
+                 setAssessments(assessments => [...assessments, ass.data()]);
+                 if(weeks.indexOf(ass.data().submissionWeek) == -1){
+                  setWeeks(weeks => [...weeks, Number(ass.data().submissionWeek)]);
+                 
+                }
 
+              });
+            });
+        
+          },
+      [db]
+    )
+    
+    function bubbleSort(arr){
+
+      //Outer pass
+      for(let i = 0; i < arr.length; i++){
+  
+          //Inner pass
+          for(let j = 0; j < arr.length - i - 1; j++){
+  
+              //Value comparison using ascending order
+  
+              if(arr[j + 1] < arr[j]){
+  
+                  //Swapping
+                  [arr[j + 1],arr[j]] = [arr[j],arr[j + 1]]
+              }
+          }
+      };
+      return arr;
+  };
+    
+    const removeDuplicates = (arr) =>  {
+      return arr.filter((item,
+          index) => arr.indexOf(item) == index).sort();
+    }
 
   return (
     <div className="lg:h-full">
@@ -53,11 +85,15 @@ function modulePage() {
          
          <div className=' px-4 md:px-40 lg:px-80 lg:py-8'> 
             <h1 className='text-[#333] font-semibold mb-3 text-3xl text-center'>Assessments</h1>
-            <div className="flex flex-col gap-4">
-              {assessments?.map(assessment => (
-                <Assessment moduleId={id} Id={assessment.id} key={assessment.id} assessment={assessment.data()} modulePage/>
-              ))}
-            </div>
+                <div className="gap-1">
+                  {weeks.length == 0 && (
+                     <p className="ml-10 font-base text-md">No Assessments available...</p>
+                   )}
+
+                   {bubbleSort(removeDuplicates(weeks)).map(week => (
+                       <Week key={week} modulePage week={week} assessments={assessments.filter(ass => (ass.submissionWeek == week))}/>
+                   ))}
+                 </div>
             
         </div>
       </div>

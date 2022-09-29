@@ -86,9 +86,9 @@ function Login() {
     <h1 className="text-4xl font-bold flex items-center justify-center m-0 pb-4">Login</h1>
      <form className="lg:grid lg:grid-cols-1 lg:gap-3" onSubmit={doLogin}>
           {error && (
-            <div className=" text-red-500 col-span-2 text-center rounded">
+            <p className=" text-red-500 col-span-2 text-center rounded">
               <span>{error}</span>
-            </div>
+            </p>
             
           )}
 

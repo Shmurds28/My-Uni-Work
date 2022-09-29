@@ -1,7 +1,9 @@
 import React from 'react'
 import Assessment from './Assessment'
+import { useUserAuth } from '../../context/UserAuthContext';
 
-function Week({week, assessments, isDashboard}) {
+function Week({week, assessments, isDashboard, modulePage}) {
+  const {user, userInfo, setUserInfo} = useUserAuth();
 
   return (
     <div className="flex border border-gray-700 p-0 bg-[#F9FAFB] rounded-md shadow w-full">
@@ -9,11 +11,11 @@ function Week({week, assessments, isDashboard}) {
             Week {week}
         </h1>
 
-        <div className="flex p-1 m-1 gap-2 w-full">
+        <div className={`grid ${userInfo?.isAdmin ? "grid-cols-1" : "grid-cols-3"}  p-1 m-1 gap-2 w-full`}>
 
             {/* <p className="ml-10 font-base text-md">No submissions...</p> */}
             {assessments.map(assessment => (
-              <Assessment assessment={assessment} isDashboard={isDashboard}/>
+              <Assessment assessment={assessment} isDashboard={isDashboard} modulePage/>
             ))}
 
           

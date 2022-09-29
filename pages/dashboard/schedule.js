@@ -143,7 +143,7 @@ export default function schedule() {
                <div className="flex flex-col gap-8">
                <div className="flex flex-col border p-1 shadow">
                  <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 1</h1> 
-                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-1">
+                 <div className="gap-1">
                  {weeks1.length == 0 && (
                      <p className="ml-10 font-base text-md">No Submissions...</p>
                    )}
@@ -160,7 +160,7 @@ export default function schedule() {
              {/* Semester 2 */}
              <div className="flex flex-col border p-1 shadow">
                <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 2</h1> 
-                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-1">
+                 <div className="gap-1">
                  {weeks2.length == 0 && (
                      <p className="ml-10 font-base text-md">No Submissions...</p>
                    )}
@@ -174,7 +174,7 @@ export default function schedule() {
              {/* Year */}
              <div className="flex flex-col border p-1 shadow">
                <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Year</h1> 
-                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-1">
+                 <div className="gap-1">
                    {weeksY.length == 0 && (
                      <p className="ml-10 font-base text-md">No Submissions...</p>
                    )}
@@ -195,7 +195,7 @@ export default function schedule() {
                   {/* Semester 2 */}
                   <div className="flex flex-col border p-1 shadow">
                     <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 2</h1> 
-                      <div className="grid grid-cols-1 lg:grid-cols-4 gap-1">
+                      <div className="gap-1">
                       {weeks2.length == 0 && (
                           <p className="ml-10 font-base text-md">No Submissions...</p>
                         )}
@@ -209,7 +209,7 @@ export default function schedule() {
                   {/* Semester 1 */}
                   <div className="flex flex-col border p-1 shadow">
                     <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 1</h1> 
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-1">
+                    <div className="gap-1">
                     {weeks1.length == 0 && (
                         <p className="ml-10 font-base text-md">No Submissions...</p>
                       )}
@@ -224,7 +224,7 @@ export default function schedule() {
                   {/* Year */}
                   <div className="flex flex-col border p-1 shadow">
                     <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Year</h1> 
-                      <div className="grid grid-cols-1 lg:grid-cols-4 gap-1">
+                      <div className="gap-1">
                         {weeksY.length == 0 && (
                           <p className="ml-10 font-base text-md">No Submissions...</p>
                         )}
@@ -243,7 +243,7 @@ export default function schedule() {
                   {/* Year */}
                     <div className="flex flex-col border p-1 shadow">
                       <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Year</h1> 
-                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-1">
+                        <div className="gap-1">
                           {weeksY.length == 0 && (
                             <p className="ml-10 font-base text-md">No Submissions...</p>
                           )}
@@ -257,7 +257,7 @@ export default function schedule() {
                 {/* Semester 1 */}
                <div className="flex flex-col border p-1 shadow">
                  <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 1</h1> 
-                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-1">
+                 <div className="gap-1">
                  {weeks1.length == 0 && (
                      <p className="ml-10 font-base text-md">No Submissions...</p>
                    )}
@@ -274,7 +274,7 @@ export default function schedule() {
                 {/* Semester 2 */}
                 <div className="flex flex-col border p-1 shadow">
                   <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 2</h1> 
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-1">
+                    <div className="gap-1">
                     {weeks2.length == 0 && (
                         <p className="ml-10 font-base text-md">No Submissions...</p>
                       )}

@@ -108,7 +108,7 @@ export default function Modules() {
       <div className="mt-8 lg:px-24 px-2 flex flex-col lg:flex-row lg:items-center justify-between space-y-3">
           {/* Page heading */}
         <p className="text-lg lg:text-2xl font-semibold text-[#333]">
-           Browse Honours Modules Offered.     
+           Browse Honours Modules Offered     
         </p>
         {/* Search modulese section */}
         

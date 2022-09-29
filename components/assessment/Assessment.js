@@ -70,12 +70,13 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
     console.log(bg);
     
   return (
-        <div className={`bg-white text-[#333] flex flex-col gap-4 border p-1 m-0 cursor-pointer rounded-md`} >
+        <div className={`bg-white w-full text-[#333] flex flex-col gap-4 border p-1 m-0 cursor-pointer rounded-md`} >
             <div className="flex items-center justify-between">
                 <h1 className="font-bold text-base ">
-                    {assessment.moduleName} - {assessment.type}
+                    {modulePage ? assessment.type: assessment.moduleName + " - "+ assessment.type}
+                    {/* {assessment.moduleName} - {assessment.type} */}
                 </h1>
-
+                
                 
             </div>
             
@@ -86,16 +87,16 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
                   {assessment.weighting}%
             </p>
             
-            {modulePage && (
+            {/* {modulePage && (
                 <p className="">
                 <span className="font-semibold text-sm mr-2">
                     Submisson Week: 
                 </span>
                   {assessment.submissionWeek}
             </p>
-            )}
+            )} */}
             
-            <div>
+            <div className="flex">
                 {userInfo?.isAdmin && (
                     <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                     onClick={(e) => {
