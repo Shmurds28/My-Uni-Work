@@ -101,6 +101,7 @@ export default function Home() {
             width={900}
             height={900}
             className="rounded-lg"
+            object-cover
           />
           </div>
       </div>

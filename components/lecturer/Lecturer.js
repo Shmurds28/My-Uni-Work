@@ -33,7 +33,7 @@ function Lecturer({id, lecturer, lecturerPage}) {
                     </svg>
                     Warning!
                 </h1>
-                <p className="text-base m-8">This action cannot be undone. Are you sure you want to continue?</p>
+                <p className="text-base m-8">This action cannot be undone. Are you sure you want to delete this lecturer?</p>
                 <button className="bg-[#F9B42A] border px-10 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                   onClick={async() => {
                     const docRef = doc(db, "lecturers", id);
@@ -91,7 +91,7 @@ function Lecturer({id, lecturer, lecturerPage}) {
         {lecturerPage && (
           <div className="mx-4 md:mx-40 lg:mx-80 lg:my-8 gap-4 lg:p-6 p-2 bg-[#F9FAFB] cursor-pointer rounded-md shadow mb-4">
             <div className="flex flex-col gap-4">
-              <img src={lecturer?.image} className=" rounded-md object-fill max-h-[450px]"/>
+              <img src={lecturer?.image} className=" rounded-md object-cover max-h-[450px]"/>
               <div>
                   <h1 className="text-lg font-bold text-[#333]">
                       {lecturer?.title} {lecturer?.initials} {lecturer?.surname}

@@ -106,7 +106,7 @@ function Module({dashboardPage, module, modulePage, hit}) {
                         </svg>
                         Warning!
                     </h1>
-                    <p className="text-base m-8">This action cannot be undone. Are you sure you want to continue?</p>
+                    <p className="text-base m-8">This action cannot be undone. Are you sure you want to delete this module?</p>
                     <button className="bg-[#F9B42A] border px-10 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                       onClick={async() => {
                         await deleteDoc(doc(db, "modules", module.moduleCode));

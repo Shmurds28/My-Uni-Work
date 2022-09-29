@@ -105,7 +105,7 @@ function AddAssessment({module}) {
           });
         }
 
-        // router.reload(window.location.pathname);
+        router.reload(window.location.pathname);
         setNotMessage("Assessment successfully added!");
         setIsAnError(false);
         setIsSnackBarOpen(true);
