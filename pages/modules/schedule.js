@@ -121,7 +121,19 @@ function schedule() {
          </div>
                 
             </div>
-
+             
+             {user && (
+                <div className="flex items-center">
+                <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90">
+                  <Link href="/dashboard/schedule" className="navLink">
+                          Personal workload schedule
+                  </Link>
+                      
+                  </button>
+              </div>
+             )}
+                       
+            
             {semester === "Semester 1" && (
                <div className="flex flex-col gap-8">
                <div className="flex flex-col border p-1 shadow">

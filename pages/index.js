@@ -34,7 +34,7 @@ export default function Home() {
       <div className=" lg:px-24 px-4 grid grid-col-1 lg:grid-cols-2 gap-10 lg:gap-4 bg-[#F9FAFB] py-10">
           <div className="flex flex-col space-y-5">
             <h1 className="text-[#000] text-3xl font-bold">
-              Choosing Honours Modules Made Easier.
+              Choosing Honours Modules Made Easier
             </h1>
             <div className="flex items-center">
                 <div>

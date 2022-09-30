@@ -11,6 +11,7 @@ import { Router, useRouter } from 'next/router';
 import { doc, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../firebase';
 import Dropdown from './Dropdown';
+import SignoutDropdown from './SignoutDropdown';
 
 function Navbar() {
     const [isOpen, setIsOpen]= useRecoilState(modalState); 
@@ -101,16 +102,13 @@ function Navbar() {
                 <div className="flex space-x-5 end-nav">
                      <Link href={dashboardLink()}>
                         <a className="navLink">
-                            Dashboard   
+                            My Dashboard   
                         </a>
         
                     </Link>
-
-                    {/* <Link href="/" className="navLink"> */}
-                        <a className="navLink" onClick={doSignOut}>
-                            SignOut
-                        </a>
-                    {/* </Link> */}
+ 
+                   <SignoutDropdown />
+    
                 </div>
             )} 
 
