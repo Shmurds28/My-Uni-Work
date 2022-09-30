@@ -16,6 +16,8 @@ import {
 import { Router, useRouter } from 'next/router';
 import { MultiSelect } from 'react-multi-select-component';
 
+const randomColors = ["#90bad7", "#3dca27", "#815dc0", "#988b5e", "#6950d1", "#72672d", "#1c1d5f", "#d17317", "#e8150e", "#368256", "#8414e4", "#6997a0", "#cfd20d", "#f072c4", "#611406", "#f6067f", "#b47d76", "#A7AAA4", "#C5E6A6", "#F1DEDC", "#FFE4FA", "#9C9C9C", "#9D9101", " #4C2F27", "#1E213D", " #E1CC4F", "#E1CC4F", "#E1CC4F"]
+
 function AddModule() {
     const [moduleName, setModuleName] = useState(null);
     const [moduleCode, setModuleCode] = useState(null);
@@ -77,8 +79,24 @@ function AddModule() {
         setLoading(false);
         return;
       }
+
+      //Get random color
+      var colors = [];
+      modules.forEach(mod => {
+        colors.push(mod.data().color);
+
+      });
+      var uniqueColors = [];
+
+      randomColors.forEach(c => {
+          if(colors.indexOf(c) == -1){
+            uniqueColors.push(randomColors[randomColors.indexOf(c)]);
+          }
+      });
+
+      const color = uniqueColors[Math.floor(Math.random() * uniqueColors.length)];
   
-      const docRef = await setDoc(doc(db, 'modules', moduleCode), {
+      await setDoc(doc(db, 'modules', moduleCode), {
           moduleCode: moduleCode,
           moduleName: moduleName,
           semester: semester,
@@ -87,6 +105,7 @@ function AddModule() {
           credits: credits,
           prerequisites: pre,
           description: description,
+          color: color,
       }); 
   
       setLoading(false);

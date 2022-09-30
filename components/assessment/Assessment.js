@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Fragment, useEffect, useState, useRef } from 'react'
 import { useUserAuth } from '../../context/UserAuthContext';
 import { useRouter } from 'next/router';
 import { deleteDoc, doc } from 'firebase/firestore';
@@ -20,7 +21,7 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
     const [isAnError, setIsAnError] = useRecoilState(isError);
     const [notMessage, setNotMessage] = useRecoilState(notificationMessage);
     const router = useRouter();
-    const bg = "bg-[" + assessment.color + "]";
+    const ref = useRef();
     
     const confirmation = () => {
         confirmAlert({
@@ -67,34 +68,37 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
         confirmation();
         // router.reload(window.location.pathname);
     }
-    console.log(bg);
+
+    useEffect(() => {
+      const element = ref.current;
+
+       if(element){
+         element.style.backgroundColor = assessment?.color;
+       }
+
+
+    },[]);
+
+
     
   return (
-        <div className={`bg-white w-full text-[#333] flex flex-col gap-4 border p-1 m-0 cursor-pointer rounded-md`} >
+        <div ref={ref} className={` text-white flex flex-col gap-4 border p-1 m-0 cursor-pointer rounded-md`} >
             <div className="flex items-center justify-between">
                 <h1 className="font-bold text-base ">
                     {viewModulePage ? assessment.type : assessment.moduleName + " - "+ assessment.type}
-                    {/* {assessment.moduleName} - {assessment.type} */}
+
                 </h1>
                 
                 
             </div>
-            
-            <p className=" text-[#333]">
+        
+            <p className=" text-white">
                 <span className="font-semibold text-sm mr-2">
                     Weighting: 
                 </span>
                   {assessment.weighting}%
             </p>
             
-            {/* {modulePage && (
-                <p className="">
-                <span className="font-semibold text-sm mr-2">
-                    Submisson Week: 
-                </span>
-                  {assessment.submissionWeek}
-            </p>
-            )} */}
             
             <div className="flex">
                 {userInfo?.isAdmin && (
