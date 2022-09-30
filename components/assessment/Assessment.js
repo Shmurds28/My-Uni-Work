@@ -9,7 +9,7 @@ import MyModal from '../Modal';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
 
-function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, moduleId}) {
+function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, moduleId, viewModulePage}) {
     const {user, userInfo, setUserInfo} = useUserAuth();
     const [isOpen, setIsOpen] = useRecoilState(modalState);
     const [isEditAssessment, setIsEditAssessment] = useRecoilState(editAssessment);
@@ -73,7 +73,7 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
         <div className={`bg-white w-full text-[#333] flex flex-col gap-4 border p-1 m-0 cursor-pointer rounded-md`} >
             <div className="flex items-center justify-between">
                 <h1 className="font-bold text-base ">
-                    {modulePage ? assessment.type: assessment.moduleName + " - "+ assessment.type}
+                    {viewModulePage ? assessment.type : assessment.moduleName + " - "+ assessment.type}
                     {/* {assessment.moduleName} - {assessment.type} */}
                 </h1>
                 

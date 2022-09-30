@@ -91,7 +91,7 @@ function modulePage() {
                    )}
 
                    {bubbleSort(removeDuplicates(weeks)).map(week => (
-                       <Week key={week} modulePage week={week} assessments={assessments.filter(ass => (ass.submissionWeek == week))}/>
+                       <Week key={week} viewModulePage week={week} assessments={assessments.filter(ass => (ass.submissionWeek == week))}/>
                    ))}
                  </div>
             

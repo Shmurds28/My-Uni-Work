@@ -2,7 +2,7 @@ import React from 'react'
 import Assessment from './Assessment'
 import { useUserAuth } from '../../context/UserAuthContext';
 
-function Week({week, assessments, isDashboard, modulePage}) {
+function Week({week, assessments, isDashboard, modulePage, viewModulePage}) {
   const {user, userInfo, setUserInfo} = useUserAuth();
 
   return (
@@ -15,7 +15,7 @@ function Week({week, assessments, isDashboard, modulePage}) {
 
             {/* <p className="ml-10 font-base text-md">No submissions...</p> */}
             {assessments.map(assessment => (
-              <Assessment assessment={assessment} isDashboard={isDashboard} modulePage/>
+              <Assessment viewModulePage={viewModulePage} assessment={assessment} isDashboard={isDashboard} modulePage/>
             ))}
 
           
