@@ -72,8 +72,11 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
     useEffect(() => {
       const element = ref.current;
 
-       if(element){
+       if(element && !viewModulePage){
          element.style.backgroundColor = assessment?.color;
+       }else if(element && viewModulePage){
+         element.style.backgroundColor = "#ffff";
+         element.style.color = "#000";
        }
 
 
@@ -92,7 +95,7 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
                 
             </div>
         
-            <p className=" text-white">
+            <p className= {` ${viewModulePage ? "text-[#333]" : "text-white"} `}>
                 <span className="font-semibold text-sm mr-2">
                     Weighting: 
                 </span>
