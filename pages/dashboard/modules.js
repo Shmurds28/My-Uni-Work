@@ -6,7 +6,7 @@ import Module from '../../components/module/Module';
 import { addAssessment, addModule, modalState } from '../../atoms/modalAtom';
 import { useRecoilState } from 'recoil';
 import MyModal from '../../components/Modal';
-import { collection, doc, getDoc, onSnapshot, query } from 'firebase/firestore';
+import { collection, doc, getDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useEffect, useState } from 'react';
 import { useUserAuth } from '../../context/UserAuthContext';
@@ -19,7 +19,9 @@ export default function modules() {
   const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
   const [modules, setModules] = useState([]);
   const {user, userInfo, setUser, setUserInfo} = useUserAuth();
-  // var modules = [];
+  const [sortValue, setSortValue] = useState(null);
+  const [sort, setSort] = useState(false);
+  const [sortData, setSortData] = useState([]);
 
   // get modules form firebase  
 
@@ -49,7 +51,19 @@ export default function modules() {
       }
     ),
     [db]
-  )
+  );
+
+  const handleSort = (e) => {
+    if(e.target.value == "") {setSort(false); return};
+    setSort(true);
+    setSortValue(e.target.value);  
+    onSnapshot(
+        query(collection(db, 'modules'), orderBy(e.target.value)),
+        (snapshot) => {
+          setSortData(snapshot.docs);
+        }
+      )
+  };
 
   return (
     <div className="lg:h-full">
@@ -74,6 +88,24 @@ export default function modules() {
                     {userInfo?.isAdmin ? "Modules Offered" : "Selected Modules  "}
                        
                 </p>
+
+                {userInfo?.isAdmin && (
+                  <label className="">
+                  <span className=" block text-sm font-semibold text-slate-700 m-0">
+                    Sort by
+                  </span>
+                  <select value={sortValue} onChange= {(e) => handleSort(e)} name="semester" id="semester" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
+                    <option value="">Select</option>
+                    <option value="moduleName">Module name</option>
+                    <option value="moduleCode">Module code</option>
+                    <option value="semester">Semester</option>
+                    <option value="credits">Credit value</option>
+                    {/* <option value="Year">Year</option> */}
+                  </select>
+                    </label>
+                )}
+
+                
                  {userInfo?.isAdmin && (
                     <div className="flex flex-col lg:flex-row lg:items-center justify-end gap-1">
                     <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
@@ -96,10 +128,20 @@ export default function modules() {
               </div>
               
               {/* <h1>{modules.length}</h1> */}
+              {(sort && userInfo?.isAdmin) && (
+                  sortData.map(module =>(
+                    <Module dashboardPage key={module.data().moduleCode} module={module.data()} />
+                  ))
 
-              {modules.map(module =>(
-                <Module dashboardPage key={module.data().moduleCode} module={module.data()} />
-              ))}
+              )}
+
+              {(!sort || !userInfo.isAdmin) && (
+                 modules.map(module =>(
+                  <Module dashboardPage key={module.data().moduleCode} module={module.data()} />
+                ))
+              )}
+
+             
             </div>
             
         </div>
