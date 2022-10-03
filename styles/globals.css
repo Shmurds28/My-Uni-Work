@@ -132,3 +132,17 @@ p{
     @apply cursor-pointer text-[#000] font-semibold text-sm hover:text-[#F9B42A] hover:font-bold
   }
 }
+
+.scroll-to-top .icon{
+  animation: scrollTop 0.5s alternate ease infinite; 
+}
+
+@keyframes scrollTop{
+  from{
+    transform: translateY(2px);
+    
+  }
+  to{
+    transform: translateY(-1px);
+  }
+}

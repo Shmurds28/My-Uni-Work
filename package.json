@@ -31,6 +31,7 @@
     "react-instantsearch-dom": "^6.32.0",
     "react-multi-select-component": "^4.3.0",
     "react-router-dom": "^6.3.0",
+    "react-use": "^17.4.0",
     "recoil": "^0.7.4",
     "typesense": "^1.4.1",
     "typesense-instantsearch-adapter": "^2.4.2"
