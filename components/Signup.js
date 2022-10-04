@@ -3,7 +3,7 @@ import { addDoc, doc, setDoc } from 'firebase/firestore';
 import { Router, useRouter } from 'next/router';
 import React, { useState } from 'react'
 import { useRecoilState } from 'recoil';
-import { modalState, signup } from '../atoms/modalAtom';
+import { modalState, signup, isError, isSnackBar, notificationMessage } from '../atoms/modalAtom';
 import {useUserAuth } from '../context/UserAuthContext';
 import { db } from '../firebase';
 import {EyeIcon } from '@heroicons/react/solid';
@@ -23,6 +23,9 @@ function Signup() {
     const [modules, setModules] = useState(["WHPV400","WRHV411"]);
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
+    const [isSnackBarOpen, setIsSnackBarOpen] = useRecoilState(isSnackBar);
+    const [isAnError, setIsAnError] = useRecoilState(isError);
+    const [notMessage, setNotMessage] = useRecoilState(notificationMessage);
 
     const doSignup = async (e) => {
       e.preventDefault();
@@ -55,20 +58,26 @@ function Signup() {
                     // Signed in 
                     user = userCredential.user;                     
                       
-                    userInfo = setDoc(doc(db, "users", user.uid),{
+                    setDoc(doc(db, "users", user.uid),{
                         email: email,
                         firstname: firstName,
                         lastName: lastName,
                         modules: modules,
                         isAdmin: false,
+                    }).then(newUser => {
+                      setIsOpen(false);
+                      setIsSignup(false);
+                      setEmail("");
+                      setPassword("");
+                      setFirstName("");
+                      setLastName("");
+                      router.push("/");
+                      setNotMessage("Registered successfully!");
+                      setIsAnError(false);
+                      setIsSnackBarOpen(true);
+                      router.reload(window.location.pathname);
                     });
-                    setIsOpen(false);
-                    setIsSignup(false);
-                    setEmail("");
-                    setPassword("");
-                    setFirstName("");
-                    setLastName("");
-                    router.push("/");
+                    
                 });
                 
 

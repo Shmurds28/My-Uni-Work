@@ -8,6 +8,7 @@ import {
 } from 'firebase/auth';
 import auth, { db } from '../firebase';
 import { doc, onSnapshot, query } from 'firebase/firestore';
+import { useRouter } from 'next/router';
 
 const userAuthContext = createContext();
 
@@ -17,6 +18,7 @@ export function UserAuthContextProvider({children}){
     const [userInfo, setUserInfo] = useState(null);
     const [loading, setLoading] = useState(true);
     const auth = getAuth();
+    const router = useRouter();
 
     function signUp(email, password, isAdmin){
         return createUserWithEmailAndPassword(auth, email, password);
@@ -33,9 +35,12 @@ export function UserAuthContextProvider({children}){
         console.log("Sign-out successful");
         setUser(null);
         setUserInfo(null);
+        router.push("/");
+        router.reload(window.location.pathname);
 
         }).catch((error) => {
         // An error happened.
+           console.log(error);
         });
     }
 

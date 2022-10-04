@@ -183,10 +183,11 @@ function AddAssessment({module}) {
              <select value={assessmentType} onChange= {(e) => setAssessmentType(e.target.value)} name="type" id="type" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
                <option value="Quizz">Quiz</option>
                <option value="Tutorial">Tutorial</option>
-               <option value="Tutorial">Class test</option>
+               <option value="Class test">Class test</option>
                <option value="Tutorial">Semester test</option>
                <option value="Practical">Practical</option>
                <option value="Assignment">Assignment</option>
+               <option value="Tutorial Test">Tutorial test</option>
              </select>
           </label>
          </div>

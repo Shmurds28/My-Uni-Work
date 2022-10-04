@@ -38,7 +38,7 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
                     <p className="text-base m-8">This action cannot be undone. Are you sure you want to delete this assessment?</p>
                     <button className="bg-[#F9B42A] border px-10 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                       onClick={async() => {
-                        const docRef = doc(db, "modules", moduleId, "assessments", Id);
+                        const docRef = doc(db, "modules", moduleId, "assessments", assessment.id);
                         console.log(docRef);
                         await deleteDoc(docRef);
                         onClose();

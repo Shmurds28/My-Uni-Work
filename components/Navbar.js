@@ -51,6 +51,7 @@ function Navbar() {
     const doSignOut = () => {
         SignOut();
         router.push("/");
+        router.reload(window.location.pathname);
     }
 
     const dashboardLink = () => {

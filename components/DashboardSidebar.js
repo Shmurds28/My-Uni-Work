@@ -7,10 +7,12 @@ import { db } from '../firebase';
 function DashboardSidebar({lecturers, schedule, recommendations, modules}) {
     const {user, userInfo, setUserInfo} = useUserAuth();
 
+    
+
 useEffect(
     () => 
     onSnapshot(
-        query(doc(db, "users", user.uid)),
+        query(doc(db, "users", user?.uid)),
         (userSnapshot) => {
         const userModules = userSnapshot.data().modules;
         setUserInfo(userSnapshot.data());    

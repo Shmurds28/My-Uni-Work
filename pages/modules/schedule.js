@@ -25,6 +25,24 @@ function schedule() {
   const [weeks2, setWeeks2] = useState([]);
   const [weeksY, setWeeksY] = useState([]);
   const [semester, setSemester] = useState("Semester 1");
+  const [modules, setModules] = useState([]);
+  const [showModule, setShowModule] = useState(""); 
+  const [isShow, setIsShow] = useState(false);
+  const [showSemester1, setShowSemester1] = useState([]);
+  const [showSemester2, setShowSemester2] = useState([]);
+  const [showSemesterY, setShowSemesterY] = useState([]);
+
+  //get modules from the database
+  useEffect(
+    () => 
+      onSnapshot(
+        query(collection(db, 'modules')),
+        (snapshot) =>{
+          setModules(snapshot.docs);  
+        },
+      ),
+      [db]
+  );
   
   //Get distinct weeks 
   useEffect(
@@ -87,6 +105,20 @@ function schedule() {
         index) => arr.indexOf(item) == index).sort();
   }
 
+  const handleShowModule = (e) =>{
+    setShowModule(e.target.value);
+    if(e.target.value == "All" ){
+      setIsShow(false);
+      return;
+    }
+    setIsShow(true);
+    setShowSemester1(semester1Ass.filter(ass => (ass.moduleName == e.target.value)));
+    setShowSemester2(semester2Ass.filter(ass => (ass.moduleName == e.target.value)));
+    setShowSemesterY(yearAss.filter(ass => (ass.moduleName == e.target.value)));
+    
+    
+  }
+
 
   return (
     <div className="h-full">
@@ -102,23 +134,52 @@ function schedule() {
 
           {/* content area */}
           <div className="flex flex-col lg:px-10 mt-4 space-y-2 mb-6 w-full">
-            <div className="lg:flex m-2 items-center justify-between">
-              <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333] text-center">
+             <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333] text-center mb-8">
                   Provisional Workload Schedule   
               </p>
+            <div className="lg:flex m-2 items-center justify-between">
+              
 
               <div>
-           <label className="block">
-             <span className=" block text-sm font-semibold text-slate-700">
-               Sort by Semester
-             </span>
-             <select value={semester} onChange= {(e) => setSemester(e.target.value)} name="semester" id="semester" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
-               <option value="Semester 1">Semester 1</option>
-               <option value="Semester 2">Semester 2</option>
-               <option value="Year">Year</option>
-             </select>
-          </label>
-         </div>
+                 <span className="block text-sm font-semibold text-slate-700">
+                    Show schedule for: 
+                 </span>
+                 <select value={showModule} onChange= {(e) => handleShowModule(e)} name="semester" id="semester" className="m-1 max-w-sm rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
+                    <option value="All">All</option>
+                    {modules.map(mod => (
+                      <option key={mod.id} value={mod.data().moduleName}> {mod.data().moduleCode} - {mod.data().moduleName}</option>
+                    ))}
+                  </select>
+              </div>
+
+              {/* <div>
+                 <span className="block text-sm font-semibold text-slate-700">
+                    Filter by assessment: 
+                 </span>
+                 <select value={semester} onChange= {(e) => setSemester(e.target.value)} name="semester" id="semester" className="m-1 max-w-sm rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
+                    <option value="All">All</option>
+                    <option value="Quizz">Quiz</option>
+                    <option value="Tutorial">Tutorial</option>
+                    <option value="Class test">Class test</option>
+                    <option value="Tutorial">Semester test</option>
+                    <option value="Practical">Practical</option>
+                    <option value="Assignment">Assignment</option>
+                    <option value="Tutorial Test">Tutorial test</option>
+                  </select>
+              </div> */}
+
+              <div>
+                <label className="block">
+                  <span className=" block text-sm font-semibold text-slate-700">
+                    Sort by Semester
+                  </span>
+                  <select value={semester} onChange= {(e) => setSemester(e.target.value)} name="semester" id="semester" className="m-1 max-w-sm rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
+                    <option value="Semester 1">Semester 1</option>
+                    <option value="Semester 2">Semester 2</option>
+                    <option value="Year">Year</option>
+                  </select>
+                </label>
+             </div>
                 
             </div>
              
@@ -137,46 +198,93 @@ function schedule() {
             {semester === "Semester 1" && (
                <div className="flex flex-col gap-8">
                <div className="flex flex-col border p-1 shadow">
-                 <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 1</h1> 
-                 <div className="gap-1">
-                 {weeks1.length == 0 && (
-                     <p className="ml-10 font-base text-md">No Submissions...</p>
-                   )}
+                 <h1 className=" text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 1</h1> 
 
-                   {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                       <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
-                   ))}
-                 </div>
-               
+                  {(!isShow) && (
+                    <div className="gap-1">
+                        {weeks1.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                        )}
+      
+                          {bubbleSort(removeDuplicates(weeks1)).map(week => (
+                              <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
+
+                  {(isShow) && (
+                    <div className="gap-1">
+                        {weeks1.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                          )}
+      
+                          {bubbleSort(removeDuplicates(weeks1)).map(week => (
+                              <Week key={week} week={week} assessments={showSemester1.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
+                                  
+              
                </div>
              
             
 
              {/* Semester 2 */}
-             <div className="flex flex-col border p-1 shadow">
+             <div className="flex flex-col border p-1 shadow"> 
                <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 2</h1> 
-                 <div className="gap-1 w-full">
-                 {weeks2.length == 0 && (
-                     <p className="ml-10 font-base text-md">No Submissions...</p>
-                   )}
-                   {bubbleSort(removeDuplicates(weeks2)).map(week => (
-                         <Week key={week} week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
-                     ))}
-                 </div>
+               {(!isShow) && (
+                    <div className="gap-1">
+                        {weeks2.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                        )}
+      
+                          {bubbleSort(removeDuplicates(weeks2)).map(week => (
+                              <Week key={week} week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
+
+                  {(isShow) && (
+                    <div className="gap-1">
+                        {weeks2.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                          )}
+      
+                          {bubbleSort(removeDuplicates(weeks2)).map(week => (
+                              <Week key={week} week={week} assessments={showSemester2.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
                
+             
              </div>
 
              {/* Year */}
              <div className="flex flex-col border p-1 shadow">
                <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Year</h1> 
-                 <div className=" gap-1">
-                   {weeksY.length == 0 && (
-                     <p className="ml-10 font-base text-md">No Submissions...</p>
-                   )}
-                   {bubbleSort(removeDuplicates(weeksY)).map(week => (
-                         <Week key={week} week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
-                     ))}
-                 </div>
+               {(!isShow) && (
+                    <div className="gap-1">
+                        {weeksY.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                        )}
+      
+                          {bubbleSort(removeDuplicates(weeksY)).map(week => (
+                              <Week key={week} week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
+
+                  {(isShow) && (
+                    <div className="gap-1">
+                        {weeksY.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                          )}
+      
+                          {bubbleSort(removeDuplicates(weeksY)).map(week => (
+                              <Week key={week} week={week} assessments={showSemesterY.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
                
               </div>
 
@@ -190,43 +298,87 @@ function schedule() {
                   {/* Semester 2 */}
                   <div className="flex flex-col border p-1 shadow">
                     <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 2</h1> 
-                      <div className="gap-1">
-                      {weeks2.length == 0 && (
-                          <p className="ml-10 font-base text-md">No Submissions...</p>
+                    {(!isShow) && (
+                    <div className="gap-1">
+                        {weeks2.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
                         )}
-                        {bubbleSort(removeDuplicates(weeks2)).map(week => (
+      
+                          {bubbleSort(removeDuplicates(weeks2)).map(week => (
                               <Week key={week} week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
                           ))}
-                      </div>
+                    </div>
+                  )}
+
+                  {(isShow) && (
+                    <div className="gap-1">
+                        {weeks2.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                          )}
+      
+                          {bubbleSort(removeDuplicates(weeks2)).map(week => (
+                              <Week key={week} week={week} assessments={showSemester2.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
                     
                   </div>
 
                   {/* Semester 1 */}
                   <div className="flex flex-col border p-1 shadow">
                     <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 1</h1> 
+                    {(!isShow) && (
                     <div className="gap-1">
-                    {weeks1.length == 0 && (
-                        <p className="ml-10 font-base text-md">No Submissions...</p>
-                      )}
-
-                      {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                          <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
-                      ))}
+                        {weeks1.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                        )}
+      
+                          {bubbleSort(removeDuplicates(weeks1)).map(week => (
+                              <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
                     </div>
+                  )}
+
+                  {(isShow) && (
+                    <div className="gap-1">
+                        {weeks1.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                          )}
+      
+                          {bubbleSort(removeDuplicates(weeks1)).map(week => (
+                              <Week key={week} week={week} assessments={showSemester1.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
                   
                   </div>
 
                   {/* Year */}
                   <div className="flex flex-col border p-1 shadow">
                     <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Year</h1> 
-                      <div className="gap-1">
+                    {(!isShow) && (
+                    <div className="gap-1">
                         {weeksY.length == 0 && (
-                          <p className="ml-10 font-base text-md">No Submissions...</p>
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
                         )}
-                        {bubbleSort(removeDuplicates(weeksY)).map(week => (
+      
+                          {bubbleSort(removeDuplicates(weeksY)).map(week => (
                               <Week key={week} week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
                           ))}
-                      </div>
+                    </div>
+                  )}
+
+                  {(isShow) && (
+                    <div className="gap-1">
+                        {weeksY.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                          )}
+      
+                          {bubbleSort(removeDuplicates(weeksY)).map(week => (
+                              <Week key={week} week={week} assessments={showSemesterY.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
                     
                     </div>
 
@@ -238,29 +390,58 @@ function schedule() {
                   {/* Year */}
                     <div className="flex flex-col border p-1 shadow">
                       <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Year</h1> 
-                        <div className="gap-1">
-                          {weeksY.length == 0 && (
+                      {(!isShow) && (
+                    <div className="gap-1">
+                        {weeksY.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                        )}
+      
+                          {bubbleSort(removeDuplicates(weeksY)).map(week => (
+                              <Week key={week} week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
+
+                  {(isShow) && (
+                    <div className="gap-1">
+                        {weeksY.length == 0 && (
                             <p className="ml-10 font-base text-md">No Submissions...</p>
                           )}
+      
                           {bubbleSort(removeDuplicates(weeksY)).map(week => (
-                                <Week key={week} week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
-                            ))}
-                        </div>
+                              <Week key={week} week={week} assessments={showSemesterY.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
                       
                       </div>
 
                 {/* Semester 1 */}
                <div className="flex flex-col border p-1 shadow">
                  <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 1</h1> 
-                 <div className="gap-1">
-                 {weeks1.length == 0 && (
-                     <p className="ml-10 font-base text-md">No Submissions...</p>
-                   )}
+                 {(!isShow) && (
+                    <div className="gap-1">
+                        {weeks1.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                        )}
+      
+                          {bubbleSort(removeDuplicates(weeks1)).map(week => (
+                              <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
 
-                   {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                       <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
-                   ))}
-                 </div>
+                  {(isShow) && (
+                    <div className="gap-1">
+                        {weeks1.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                          )}
+      
+                          {bubbleSort(removeDuplicates(weeks1)).map(week => (
+                              <Week key={week} week={week} assessments={showSemester1.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
                
                </div>
              
@@ -269,14 +450,29 @@ function schedule() {
                 {/* Semester 2 */}
                 <div className="flex flex-col border p-1 shadow">
                   <h1 className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">Semester 2</h1> 
+                  {(!isShow) && (
                     <div className="gap-1">
-                    {weeks2.length == 0 && (
-                        <p className="ml-10 font-base text-md">No Submissions...</p>
-                      )}
-                      {bubbleSort(removeDuplicates(weeks2)).map(week => (
-                            <Week key={week} week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
-                        ))}
+                        {weeks2.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                        )}
+      
+                          {bubbleSort(removeDuplicates(weeks2)).map(week => (
+                              <Week key={week} week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
                     </div>
+                  )}
+
+                  {(isShow) && (
+                    <div className="gap-1">
+                        {weeks2.length == 0 && (
+                            <p className="ml-10 font-base text-md">No Submissions...</p>
+                          )}
+      
+                          {bubbleSort(removeDuplicates(weeks2)).map(week => (
+                              <Week key={week} week={week} assessments={showSemester2.filter(ass => (ass.submissionWeek == week))}/>
+                          ))}
+                    </div>
+                  )}
                   
                 </div>
 
