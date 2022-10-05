@@ -78,14 +78,14 @@ export const EditLecturer = ({lecturer, lecturerId}) => {
         if(!email.match(mailformat))
         {
           setError("Invalid email address.");
-          setIsLoading(false); 
+          setLoading(false); 
           return;
         }
         var regEx = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
-        if(telephone.match(regEx))
+        if(!telephone.match(regEx))
         {
           setError("Invalid telephone number.");
-          setIsLoading(false);
+          setLoading(false);
           return;
         }
         const docRef = await setDoc(doc(db, 'lecturers', staffNum), {

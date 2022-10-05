@@ -35,8 +35,7 @@ export function UserAuthContextProvider({children}){
         console.log("Sign-out successful");
         setUser(null);
         setUserInfo(null);
-        router.push("/");
-        router.reload(window.location.pathname);
+        
 
         }).catch((error) => {
         // An error happened.

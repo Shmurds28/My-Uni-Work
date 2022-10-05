@@ -75,19 +75,19 @@ function AddAssessment({module}) {
               type: assessmentType,
               repeat: repeat,
               submissionWeek: parseInt(i),
-              weighting: weighting,
+              weighting: Math.round(weighting / (Math.floor( ((duration - submissionWeek) + 1)))),
               semester: semester,
               color: color,
             });
           }
         }else if(repeat == "Every two weeks"){
-          for(var i = submissionWeek; i < parseInt(duration); i += 2){
+          for(var j = submissionWeek; j < parseInt(duration); j = j + 2){
             await addDoc(collection(db, "modules", moduleCode, "assessments"), {
               moduleName: moduleName,
               type: assessmentType,
               repeat: repeat,
-              submissionWeek: parseInt(i),
-              weighting: weighting,
+              submissionWeek: parseInt(j),
+              weighting: Math.round(weighting / (Math.floor( ((duration - submissionWeek) + 1) / 2 ))),
               semester: semester,
               color: color,
             });

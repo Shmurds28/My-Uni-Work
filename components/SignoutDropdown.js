@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/solid';
-import { modalState, signup, login } from '../atoms/modalAtom';
+import { modalState, signup, login, isSnackBar, isError, notificationMessage } from '../atoms/modalAtom';
 import { useRecoilState } from 'recoil';
 import { useUserAuth } from '../context/UserAuthContext';
 import { Router, useRouter } from 'next/router';
@@ -14,13 +14,18 @@ function SignoutDropdown() {
   const {user, userInfo, setUserInfo} = useUserAuth();
   const {SignOut} = useUserAuth();
   const router = useRouter();
+  const [isSnackBarOpen, setIsSnackBarOpen] = useRecoilState(isSnackBar);
+  const [isAnError, setIsAnError] = useRecoilState(isError);
+  const [notMessage, setNotMessage] = useRecoilState(notificationMessage);
   
 
 
   const doSignOut = () => {
-    SignOut();
     router.push("/");
-    router.reload(window.location.pathname);
+    SignOut();    
+    setNotMessage("Logged out successfully!");
+    setIsAnError(false);
+    setIsSnackBarOpen(true);
   }
 
 
