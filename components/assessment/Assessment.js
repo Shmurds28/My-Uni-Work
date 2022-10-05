@@ -38,15 +38,16 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
                     <p className="text-base m-8">This action cannot be undone. Are you sure you want to delete this assessment?</p>
                     <button className="bg-[#F9B42A] border px-10 mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                       onClick={async() => {
+                        console.log(assessment);
                         const docRef = doc(db, "modules", moduleId, "assessments", assessment.id);
                         console.log(docRef);
                         await deleteDoc(docRef);
                         onClose();
-                        // router.back();
+                      
                         setNotMessage("Assessment successfully deleted!");
                         setIsAnError(false);
                         setIsSnackBarOpen(true);
-                        
+                        router.reload();
                       }}
                       
                     >
@@ -73,7 +74,7 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
       const element = ref.current;
 
        if(element && !viewModulePage){
-         element.style.backgroundColor = assessment?.color;
+         element.style.backgroundColor = assessment?.data().color;
        }else if(element && viewModulePage){
          element.style.backgroundColor = "#ffff";
          element.style.color = "#000";
@@ -88,7 +89,7 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
         <div ref={ref} className={` text-white flex flex-col gap-4 border p-1 m-0 cursor-pointer rounded-md`} >
             <div className="flex items-center justify-between">
                 <h1 className="font-bold text-base ">
-                    {viewModulePage ? assessment.type : assessment.moduleName + " - "+ assessment.type}
+                    {viewModulePage ? assessment.data().type : assessment.data().moduleName + " - "+ assessment.data().type}
 
                 </h1>
                 
@@ -99,7 +100,7 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
                 <span className="font-semibold text-sm mr-2">
                     Weighting: 
                 </span>
-                  {assessment.weighting}%
+                  {assessment.data().weighting}%
             </p>
             
             
@@ -108,8 +109,8 @@ function Assessment({assessment, Id, assessmentPage, isDashboard, modulePage, mo
                     <button className="bg-[#F9B42A] mr-4 text-white font-semibold p-3 rounded-md hover:opacity-90"
                     onClick={(e) => {
                         setIsOpen(true);
-                        setAssInfo(assessment);
-                        setAssId(Id);
+                        setAssInfo(assessment.data());
+                        setAssId(assessment.id);
                         setAssModuleCode(moduleId);
                         setIsEditAssessment(true);
                    

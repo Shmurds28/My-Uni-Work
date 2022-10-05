@@ -15,9 +15,10 @@ import { useUserAuth } from '../../context/UserAuthContext';
 import { db } from '../../firebase';
 import { useEffect, useState } from 'react';
 import { collection, doc, getDocs, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { useRouter } from 'next/router';
 
 function schedule() {
-  const {user} = useUserAuth();
+  const {user, userInfo} = useUserAuth();
   const [semester1Ass, setsemester1Ass] = useState([]);
   const [semester2Ass, setsemester2Ass] = useState([]);
   const [yearAss, setyearAss] = useState([]);
@@ -31,6 +32,7 @@ function schedule() {
   const [showSemester1, setShowSemester1] = useState([]);
   const [showSemester2, setShowSemester2] = useState([]);
   const [showSemesterY, setShowSemesterY] = useState([]);
+  const router = useRouter();
 
   //get modules from the database
   useEffect(
@@ -54,7 +56,7 @@ function schedule() {
             getDocs(collection(db, 'modules', userModule.data().moduleCode, "assessments"), orderBy("submissionWeek")).then(assessments =>{
                 assessments.forEach(assessment =>{
                   if(assessment.data().semester == "Semester 1"){
-                    setsemester1Ass(semester1Ass => [...semester1Ass, assessment.data()]);
+                    setsemester1Ass(semester1Ass => [...semester1Ass, assessment]);
                     if(weeks1.indexOf(assessment.data().submissionWeek) == -1){
                       setWeeks1(weeks1 => [...weeks1, Number(assessment.data().submissionWeek)]);
                      
@@ -62,12 +64,12 @@ function schedule() {
                     
 
                   }else if(assessment.data().semester == "Semester 2"){
-                    setsemester2Ass(semester2Ass => [...semester2Ass, assessment.data()]);
+                    setsemester2Ass(semester2Ass => [...semester2Ass, assessment]);
                     if(weeks2.indexOf(assessment.data().submissionWeek) == -1){
                       setWeeks2(weeks2 => [...weeks2, assessment.data().submissionWeek]);
                     }
                   }else{
-                    setyearAss(yearAss => [...yearAss, assessment.data()]);
+                    setyearAss(yearAss => [...yearAss, assessment]);
                     if(weeksY.indexOf(assessment.data().submissionWeek) == -1){
                       setWeeksY(weeksY => [...weeksY, assessment.data().submissionWeek]);
                     }
@@ -112,13 +114,17 @@ function schedule() {
       return;
     }
     setIsShow(true);
-    setShowSemester1(semester1Ass.filter(ass => (ass.moduleName == e.target.value)));
-    setShowSemester2(semester2Ass.filter(ass => (ass.moduleName == e.target.value)));
-    setShowSemesterY(yearAss.filter(ass => (ass.moduleName == e.target.value)));
+    setShowSemester1(semester1Ass.filter(ass => (ass.data().moduleName == e.target.value)));
+    setShowSemester2(semester2Ass.filter(ass => (ass.data().moduleName == e.target.value)));
+    setShowSemesterY(yearAss.filter(ass => (ass.data().moduleName == e.target.value)));
     
     
   }
 
+  if(!user || userInfo?.isAdmin){
+    // router.back();
+    // return;
+  }
 
   return (
     <div className="h-full">
@@ -152,21 +158,6 @@ function schedule() {
                   </select>
               </div>
 
-              {/* <div>
-                 <span className="block text-sm font-semibold text-slate-700">
-                    Filter by assessment: 
-                 </span>
-                 <select value={semester} onChange= {(e) => setSemester(e.target.value)} name="semester" id="semester" className="m-1 max-w-sm rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
-                    <option value="All">All</option>
-                    <option value="Quizz">Quiz</option>
-                    <option value="Tutorial">Tutorial</option>
-                    <option value="Class test">Class test</option>
-                    <option value="Tutorial">Semester test</option>
-                    <option value="Practical">Practical</option>
-                    <option value="Assignment">Assignment</option>
-                    <option value="Tutorial Test">Tutorial test</option>
-                  </select>
-              </div> */}
 
               <div>
                 <label className="block">
@@ -207,7 +198,7 @@ function schedule() {
                         )}
       
                           {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                              <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -219,7 +210,7 @@ function schedule() {
                           )}
       
                           {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                              <Week key={week} week={week} assessments={showSemester1.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={showSemester1.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -239,7 +230,7 @@ function schedule() {
                         )}
       
                           {bubbleSort(removeDuplicates(weeks2)).map(week => (
-                              <Week key={week} week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={semester2Ass.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -251,7 +242,7 @@ function schedule() {
                           )}
       
                           {bubbleSort(removeDuplicates(weeks2)).map(week => (
-                              <Week key={week} week={week} assessments={showSemester2.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={showSemester2.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -269,7 +260,7 @@ function schedule() {
                         )}
       
                           {bubbleSort(removeDuplicates(weeksY)).map(week => (
-                              <Week key={week} week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={yearAss.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -281,7 +272,7 @@ function schedule() {
                           )}
       
                           {bubbleSort(removeDuplicates(weeksY)).map(week => (
-                              <Week key={week} week={week} assessments={showSemesterY.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={showSemesterY.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -305,7 +296,7 @@ function schedule() {
                         )}
       
                           {bubbleSort(removeDuplicates(weeks2)).map(week => (
-                              <Week key={week} week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={semester2Ass.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -317,7 +308,7 @@ function schedule() {
                           )}
       
                           {bubbleSort(removeDuplicates(weeks2)).map(week => (
-                              <Week key={week} week={week} assessments={showSemester2.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={showSemester2.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -334,7 +325,7 @@ function schedule() {
                         )}
       
                           {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                              <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -346,7 +337,7 @@ function schedule() {
                           )}
       
                           {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                              <Week key={week} week={week} assessments={showSemester1.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={showSemester1.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -363,7 +354,7 @@ function schedule() {
                         )}
       
                           {bubbleSort(removeDuplicates(weeksY)).map(week => (
-                              <Week key={week} week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={yearAss.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -375,7 +366,7 @@ function schedule() {
                           )}
       
                           {bubbleSort(removeDuplicates(weeksY)).map(week => (
-                              <Week key={week} week={week} assessments={showSemesterY.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={showSemesterY.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -397,7 +388,7 @@ function schedule() {
                         )}
       
                           {bubbleSort(removeDuplicates(weeksY)).map(week => (
-                              <Week key={week} week={week} assessments={yearAss.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={yearAss.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -409,7 +400,7 @@ function schedule() {
                           )}
       
                           {bubbleSort(removeDuplicates(weeksY)).map(week => (
-                              <Week key={week} week={week} assessments={showSemesterY.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={showSemesterY.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -426,7 +417,7 @@ function schedule() {
                         )}
       
                           {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                              <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={semester1Ass.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -438,7 +429,7 @@ function schedule() {
                           )}
       
                           {bubbleSort(removeDuplicates(weeks1)).map(week => (
-                              <Week key={week} week={week} assessments={showSemester1.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={showSemester1.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -457,7 +448,7 @@ function schedule() {
                         )}
       
                           {bubbleSort(removeDuplicates(weeks2)).map(week => (
-                              <Week key={week} week={week} assessments={semester2Ass.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={semester2Ass.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -469,7 +460,7 @@ function schedule() {
                           )}
       
                           {bubbleSort(removeDuplicates(weeks2)).map(week => (
-                              <Week key={week} week={week} assessments={showSemester2.filter(ass => (ass.submissionWeek == week))}/>
+                              <Week key={week} week={week} assessments={showSemester2.filter(ass => (ass.data().submissionWeek == week))}/>
                           ))}
                     </div>
                   )}
@@ -478,14 +469,11 @@ function schedule() {
 
               </div>
             )}
-
-           
-          
+  
           </div>
             
             
       </div>
-        
 
       <Footer />
     </div>

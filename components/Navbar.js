@@ -115,17 +115,13 @@ function Navbar() {
 
             {user == null && (
                 <div className="flex space-x-5 end-nav">
-                    {/* <Link href="/dashboard/schedule" className="navLink"> */}
                         <a className="navLink" onClick={doLogin}>
                             Login
                         </a>
-                    {/* </Link> */}
 
-                    {/* <Link href="/dashboard/schedule" className="navLink"> */}
                         <a className="navLink" onClick={doSignup}>
                             Register
                         </a>
-                    {/* </Link> */}
 
                    
                 </div>

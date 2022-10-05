@@ -32,7 +32,7 @@ function modulePage() {
         () => {
             getDocs(collection(db, "modules", id, "assessments")).then(assessmentDocs => {
               assessmentDocs.forEach(ass => {
-                 setAssessments(assessments => [...assessments, ass.data()]);
+                 setAssessments(assessments => [...assessments, ass]);
                  if(weeks.indexOf(ass.data().submissionWeek) == -1){
                   setWeeks(weeks => [...weeks, Number(ass.data().submissionWeek)]);
                  
@@ -91,7 +91,7 @@ function modulePage() {
                    )}
 
                    {bubbleSort(removeDuplicates(weeks)).map(week => (
-                       <Week key={week} viewModulePage week={week} assessments={assessments.filter(ass => (ass.submissionWeek == week))}/>
+                       <Week moduleId={id} key={week} viewModulePage week={week} assessments={assessments.filter(ass => (ass.data().submissionWeek == week))}/>
                    ))}
                  </div>
             
