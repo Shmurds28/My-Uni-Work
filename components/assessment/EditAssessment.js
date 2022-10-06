@@ -98,22 +98,9 @@ function EditAssessment() {
                 </div>
         )}
         <span className="before:content-['*'] before:mx-1 before:ml-0.5 before:text-red-500 block text-xs font-xs text-slate-700 before:mb-6 mb-6">
-          required fields {assId}
+          required fields
         </span>
         <div></div>
-         {/* <div>
-           <label className="block">
-             <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-semibold text-slate-700">
-               Module
-             </span>
-             <select value={moduleCode} onChange= {(e) => setModuleCode(e.target.value)} name="moduleCode" id="moduleCode" className=" rounded-md mt-1 px-3 py-2 bg-white border w-full shadow-sm border-slate-300">
-               <option value=""> </option>
-               {modules.map(module => (
-                 <option key={module.data().moduleCode} value={module.data().moduleCode}>{module.data().moduleCode} - {module.data().moduleName}</option>
-               ))}
-             </select>
-          </label>
-         </div> */}
 
          <div>
            <label className="block">
