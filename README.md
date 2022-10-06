@@ -7,15 +7,22 @@ The aim of this research project is to build a tool that provides prospective ho
 
 ### Dependencies
 
-* Nodejs, NPM, Firebase, Nextjs, TailwindCSS, react-icons, heroicons, headless-ui, react-confirm-alert, react-dom, material-ui, recoil, 
+* VS code, Nodejs, NPM, Firebase, Nextjs, TailwindCSS, react-icons, heroicons, headless-ui, react-confirm-alert, react-dom, material-ui, recoil, 
 
 ### Installing
-
+* Download the source code compressed folder
+* Install Vs code - (https://code.visualstudio.com/download)
+* Install Nodejs - (https://nodejs.org/en/download/)
+* Install NPM - (https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 
 ### Executing program
 
-* Go to the terminal and write the following commands
+* Unzip the source code folder
+* Open visual studio code - if not installed, install using the following link (https://code.visualstudio.com/download)
+* Go to file and select open folder.
+* Browse to the source code folder and open 'myuniwork' folder inside the subfolder.
+* Open the terminal (Ctrl+Shift+` ) and write the following commands 
 
 ```
 npm install
