@@ -43,7 +43,7 @@ function AddModule() {
     useEffect(
       () => 
         onSnapshot(
-          query(collection(db, 'modules')),
+          query(collection(db, 'prerequisites')),
           (snapshot) =>{
             setModules(snapshot.docs);
             

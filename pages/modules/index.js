@@ -30,13 +30,6 @@ import {
 } from "@firebase/firestore";
 import { useUserAuth } from '../../context/UserAuthContext';
 import algoliasearch from 'algoliasearch/lite';
-import {InstantSearch, SearchBox, Hits} from 'react-instantsearch-dom';
-import Hit from '../../components/module/Hit';
-
-const searchClient = algoliasearch(
-  'F1IS3BSDLF',
-  '0d790405d16390b0a38d4657c7fb6b72'
-);
 
 function index() {
     const [isOpen, setIsOpen] = useRecoilState(modalState);
