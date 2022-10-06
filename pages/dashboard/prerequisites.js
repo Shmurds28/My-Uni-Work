@@ -2,8 +2,8 @@ import Head from 'next/head'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer';
 import Link from 'next/link';
-import Module from '../../components/module/Module';
-import { addAssessment, addModule, modalState } from '../../atoms/modalAtom';
+import Prerequisite from '../../components/module/Prerequisite';
+import { addAssessment, addPrerequisite, modalState } from '../../atoms/modalAtom';
 import { useRecoilState } from 'recoil';
 import MyModal from '../../components/Modal';
 import { collection, doc, getDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
@@ -13,9 +13,9 @@ import { useUserAuth } from '../../context/UserAuthContext';
 import DashboardSidebar from '../../components/DashboardSidebar';
 
 
-export default function modules() {
+export default function prerequisites() {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
-  const [isAddModule, setIsAddModule] = useRecoilState(addModule);
+  const [isAddPrerequisite, setIsAddPrerequisite] = useRecoilState(addPrerequisite);
   const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
   const [modules, setModules] = useState([]);
   const {user, userInfo, setUser, setUserInfo} = useUserAuth();
@@ -28,27 +28,10 @@ export default function modules() {
   useEffect(
     () => 
     onSnapshot(
-      query(doc(db, "users", user.uid)),
-      (userSnapshot) => {
-        const userModules = userSnapshot.data().modules;
-        setUserInfo(userSnapshot.data());
-        if(userSnapshot.data().isAdmin){
-          onSnapshot(
-            query(collection(db, 'modules')),
-            (snapshot) => {
-              setModules(snapshot.docs);
-            }
-          )
-        }else{
-          userModules.forEach(userModule => {
-            getDoc(doc(db, 'modules', userModule)).then(moduleDoc => {
-                setModules(modules => [...modules, moduleDoc]);
-            });
-  
-          });
+        query(collection(db, 'prerequisites')),
+        (snapshot) => {
+            setModules(snapshot.docs);
         }
-
-      }
     ),
     [db]
   );
@@ -58,7 +41,7 @@ export default function modules() {
     setSort(true);
     setSortValue(e.target.value);  
     onSnapshot(
-        query(collection(db, 'modules'), orderBy(e.target.value)),
+        query(collection(db, 'prerequisites'), orderBy(e.target.value)),
         (snapshot) => {
           setSortData(snapshot.docs);
         }
@@ -77,7 +60,7 @@ export default function modules() {
       <div className="lg:flex space-x-0 h-full">
           {/* sidebar area  */}
           <div>
-          <DashboardSidebar modules />
+          <DashboardSidebar prerequisites />
           </div>
           
 
@@ -85,8 +68,7 @@ export default function modules() {
           <div className="flex flex-col lg:px-10 mt-4 space-y-2 mb-6 w-full">
               <div className="lg:flex m-2 items-center justify-between">
                 <p className="text-lg lg:text-2xl m-2 font-semibold text-[#333]">
-                    {userInfo?.isAdmin ? "Modules Offered" : "Selected Modules  "}
-                       
+                    Prerequisite Modules                       
                 </p>
 
                 {userInfo?.isAdmin && (
@@ -111,35 +93,26 @@ export default function modules() {
                     <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
                         " onClick={(e) =>{
                           setIsOpen(true);
-                          setIsAddModule(true);
+                          setIsAddPrerequisite(true);
                         }} >
-                        Add Module
-                    </button> 
-                    <button className="bg-[#103A5C] text-white font-semibold p-3 rounded-md hover:opacity-90
-                        " onClick={(e) =>{
-                          setIsOpen(true);
-                          setIsAddAssessment(true);
-                        }} >
-                        Add assessment
-                    </button> 
+                        Add Prerequisite
+                    </button>  
                     
                     </div>
                  )}
               </div>
-
-              <p className="text-xs pl-4 m-4 font-semibold">Compulsory modules have been pre-selected for you</p>
               
               {/* <h1>{modules.length}</h1> */}
               {(sort && userInfo?.isAdmin) && (
                   sortData.map(module =>(
-                    <Module dashboardPage key={module.data().moduleCode} module={module.data()} />
+                    <Prerequisite dashboardPage key={module.data().moduleCode} module={module.data()} />
                   ))
 
               )}
 
               {(!sort || !userInfo.isAdmin) && (
                  modules.map(module =>(
-                  <Module dashboardPage key={module.data().moduleCode} module={module.data()} />
+                  <Prerequisite dashboardPage key={module.data().moduleCode} module={module.data()} />
                 ))
               )}
 

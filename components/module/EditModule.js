@@ -24,6 +24,7 @@ function EditModule({module}) {
     const [lecturer, setLecturer] = useState(module?.lecturer);
     const [credits, setCredits] = useState(module?.credits);
     const [prerequisites, setPrerequisites] = useState(module?.prerequisites);
+    const [compulsory, setCompulsory] = useState(false);
     const [description, setDescription] = useState(module?.description);
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(modalState);
@@ -84,6 +85,7 @@ function EditModule({module}) {
             credits: credits,
             prerequisites: pre,
             description: description,
+            compulsory: compulsory,
         }); 
     
         setLoading(false);
@@ -204,6 +206,16 @@ function EditModule({module}) {
                 onChange={setPrerequisites}
                 labelledBy="Select"
               />
+          </label>
+         </div>
+
+         <div></div>
+         
+         <div>
+           <label className="block">
+            <input type="checkbox" id="compulsory" name="compulsory" value={compulsory} onChange= {(e) => setCompulsory(e.target.checked)}  className="rounded-md mt-2 px-3 py-2 bg-white border shadow-sm border-slate-300"/>
+            <label for="compulsory"> Compulsory Module</label>
+             
           </label>
          </div>
        

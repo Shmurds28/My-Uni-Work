@@ -130,8 +130,15 @@ export default function schedule() {
             </div>
 
           </div>
+
+          
+
+          
                 
             </div>
+          
+             <p className="text-xs pl-4 m-4 font-semibold">Compulsory modules have been pre-added to your schedule</p>
+          
 
             {semester === "Semester 1" && (
                <div className="flex flex-col gap-8">

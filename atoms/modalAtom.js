@@ -10,6 +10,11 @@ export const addModule = atom({
     default: false,
 });
 
+export const addPrerequisite = atom({
+    key: "addPrerequisite",
+    default: false,
+});
+
 export const addAssessment = atom({
     key: "addAssessment",
     default: false,

@@ -1,11 +1,12 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { addAssessment, addLecturer, addModule, confirm, editLecturer, editModule, editAssessment, login, modalState, signup, viewModule } from '../atoms/modalAtom'
+import { addAssessment, addLecturer, addModule, confirm, addPrerequisite, editLecturer, editModule, editAssessment, login, modalState, signup, viewModule } from '../atoms/modalAtom'
 import AddLecturer from './lecturer/AddLecturer';
 import AddAssessment from './assessment/AddAssessment';
 import EditAssessment from './assessment/EditAssessment';
 import AddModule from './module/AddModule';
+import AddPrerequisite from './module/AddPrerequisite';
 import Signup from './Signup';
 import Login from './Login';
 import {useRouter} from 'next/router'
@@ -17,6 +18,7 @@ import Confirmation from './Confirmation';
 export default function MyModal({module, lecturer, lecturerId, assessment, assessmentId}) {
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [isAddModule, setIsAddModule] = useRecoilState(addModule);
+  const [isAddPrerequisite, setIsAddPrerequisite] = useRecoilState(addPrerequisite);
   const [isAddAssessment, setIsAddAssessment] = useRecoilState(addAssessment);
   const [isAddLecturer, setIsAddLecturer] = useRecoilState(addLecturer);
   const [isEditLecturer, setIsEditLecturer] = useRecoilState(editLecturer);
@@ -106,6 +108,11 @@ export default function MyModal({module, lecturer, lecturerId, assessment, asses
                  {/* Add module modal content */}
                  {isAddModule && (
                   <AddModule />
+                 )}
+
+                  {/* Add module modal content */}
+                  {isAddPrerequisite && (
+                  <AddPrerequisite />
                  )}
 
                  {/* Edit module modal content */}

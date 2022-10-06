@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
 import { db } from '../firebase';
 
-function DashboardSidebar({lecturers, schedule, recommendations, modules}) {
+function DashboardSidebar({lecturers, schedule, recommendations, modules, prerequisites}) {
     const {user, userInfo, setUserInfo} = useUserAuth();
 
     
@@ -48,13 +48,13 @@ useEffect(
              </Link>
             )}
 
-            {/* {!userInfo?.isAdmin && (
-                <Link href="/dashboard/recommendations" >
-                    <a className={`${recommendations && "bg-white"} lg:text-lg text-md m-0 p-2 rounded-sm lg:font-semibold font-semibold`}>
-                        Recommendations
-                    </a>
-                </Link>
-            )} */}
+            {userInfo?.isAdmin && (
+                 <Link href="/dashboard/prerequisites" >
+                 <a className={`${prerequisites && "bg-white"} lg:text-lg text-md m-0 p-2 rounded-sm lg:font-semibold font-semibold`}>
+                     Prerequisite Modules
+                 </a>
+             </Link>
+            )}
 
             <Link href="/dashboard/lecturers" >
                   <a className={`${lecturers && "bg-white"} lg:text-lg text-md m-0 p-2 rounded-sm lg:font-semibold font-semibold`}>
